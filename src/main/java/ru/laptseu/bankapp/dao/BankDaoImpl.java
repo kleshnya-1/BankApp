@@ -9,7 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class BankDaoImpl implements IMaintainableDAO {
-    private Connection connection = new ConnectionMaker().makeConnection();
+    private final Connection connection = new ConnectionMaker().makeConnection();
 
     @Override
     public int create(Object obj) {
@@ -25,15 +25,15 @@ public class BankDaoImpl implements IMaintainableDAO {
             preparedStatement.setDouble(4, bank.getUSDrate());
             preparedStatement.setDouble(5, bank.getEURrate());
             preparedStatement.executeUpdate();
-            System.out.println("Банк " + bank.getName() + " добавлен");
-
-
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
+        //todo have to be fixed
         return 0;
     }
 
+
+    //todo have to be realised
     @Override
     public Object read(int key) {
         return null;
@@ -69,13 +69,13 @@ public class BankDaoImpl implements IMaintainableDAO {
         return bank;
     }
 
-    //must be updated later(?)
+    //todo must be updated later(?)
     @Override
     public boolean update(Object obj) {
         return false;
     }
 
-    //must be updated later(?)
+    //todo must be updated later(?)
     @Override
     public boolean delete(int key) {
         return false;
@@ -91,18 +91,5 @@ public class BankDaoImpl implements IMaintainableDAO {
             throwables.printStackTrace();
         }
         return resultSet;
-
-    }
-
-    public void showAllNames() {
-        ResultSet resultSet = getAllNames();
-        while (true) {
-            try {
-                if (!resultSet.next()) break;
-                System.out.println(resultSet.getString("name"));
-            } catch (SQLException throwables) {
-                throwables.printStackTrace();
-            }
-        }
     }
 }

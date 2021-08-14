@@ -9,31 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class ClientDaoImpl implements IMaintainableDAO {
-    private  Connection connection = new ConnectionMaker().makeConnection();
-
-    public void showAccountsByName(String name) {
-        ResultSet resultSet = null;
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(
-                    "select * from accounts where client_name = ?");
-            preparedStatement.setString(1, name);
-            resultSet = preparedStatement.executeQuery();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-        System.out.println("Аккаунты на имя " + name);
-        System.out.println("Банк валюта остаток");
-        while (true) {
-            try {
-                if (!resultSet.next()) break;
-                System.out.print(resultSet.getString("bank_name") + "   ");
-                System.out.print(resultSet.getString("currency") + "   ");
-                System.out.print(resultSet.getDouble("amount") + "   \n");
-            } catch (SQLException throwables) {
-                throwables.printStackTrace();
-            }
-        }
-    }
+    private final Connection connection = new ConnectionMaker().makeConnection();
 
     @Override
     public int create(Object obj) {
@@ -49,11 +25,11 @@ public class ClientDaoImpl implements IMaintainableDAO {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-
-
         return 0;
     }
 
+
+    //todo have to be fixed
     @Override
     public Object read(int key) {
         return null;
@@ -65,27 +41,25 @@ public class ClientDaoImpl implements IMaintainableDAO {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(
                     "select * from banks where name =?");
-
             preparedStatement.setString(1, name);
             resultSet = preparedStatement.executeQuery();
-
-
             client.setName(resultSet.getString("name"));
             client.setNaturalPerson(resultSet.getBoolean("is_natural_person"));
             client.setId(resultSet.getInt("id"));
-
-
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
         return client;
     }
 
+
+    //todo have to be fixed
     @Override
     public boolean update(Object obj) {
         return false;
     }
 
+    //todo have to be fixed
     @Override
     public boolean delete(int key) {
         return false;

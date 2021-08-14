@@ -28,9 +28,13 @@ public class AccountDaoImpl implements IMaintainableDAO {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
+
+        //todo have to be fixed
         return 0;
     }
 
+
+    //todo have to be fixed
     @Override
     public Object read(int key) {
         return new Object();
@@ -83,9 +87,12 @@ public class AccountDaoImpl implements IMaintainableDAO {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
+
+        //todo have to be fixed
         return false;
     }
 
+    //todo in progress
     @Override
     public boolean delete(int key) {
         return false;
