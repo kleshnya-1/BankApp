@@ -1,4 +1,4 @@
-package ru.laptseu.bankApp.dao;
+package ru.laptseu.bankapp.dao;
 
 public class RateStorageDAO {
 

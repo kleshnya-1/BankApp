@@ -1,7 +1,7 @@
-package ru.laptseu.bankApp.dao;
+package ru.laptseu.bankapp.dao;
 
-import ru.laptseu.bankApp.models.TransferHistory;
-import ru.laptseu.bankApp.utilities.ConnectionMaker;
+import ru.laptseu.bankapp.models.TransferHistory;
+import ru.laptseu.bankapp.utilities.ConnectionMaker;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -12,7 +12,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class TransferHistoryDAO implements IMaintainableDAO {
-    Connection connection = new ConnectionMaker().makeConnection();
+    private Connection connection = new ConnectionMaker().makeConnection();
 
     @Override
     public int create(Object obj) {

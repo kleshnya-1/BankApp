@@ -1,12 +1,12 @@
-package ru.laptseu.bankApp.models;
+package ru.laptseu.bankapp.models;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class TransferHistory {
-    //этот класс нужен для отображения истории переводов.
-    //по логике запись должна содержать: дату, аккаунтЫ, валюту и сумму
+    //todo этот класс нужен для отображения истории переводов.
+    // по логике запись должна содержать: дату, аккаунтЫ, валюту и сумму
     // перевода, а такде банки, в которых эти аккаунты открыты.
 
 
@@ -32,7 +32,6 @@ public class TransferHistory {
     }
 
     public Calendar getDate() {
-
         return date;
     }
 

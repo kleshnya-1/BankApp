@@ -1,9 +1,8 @@
-package ru.laptseu.bankApp.dao;
+package ru.laptseu.bankapp.dao;
 
 public interface IMaintainableDAO {
 
-    //здесь появятся дженерики
-    // остальное пока без изменений
+    //todo generics
 
     int create(Object obj);
 

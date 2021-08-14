@@ -1,8 +1,7 @@
-package ru.laptseu.bankApp.models;
+package ru.laptseu.bankapp.models;
 
 public class Client {
 
-    //тут мне все нравится
     private int id;
     private String name;
     private boolean isNaturalPerson;

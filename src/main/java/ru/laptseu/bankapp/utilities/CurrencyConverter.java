@@ -1,17 +1,17 @@
-package ru.laptseu.bankApp.utilities;
+package ru.laptseu.bankapp.utilities;
 
-import ru.laptseu.bankApp.dao.BankDaoImpl;
-import ru.laptseu.bankApp.models.Bank;
-import ru.laptseu.bankApp.models.Currency;
+import ru.laptseu.bankapp.dao.BankDaoImpl;
+import ru.laptseu.bankapp.models.Bank;
+import ru.laptseu.bankapp.models.Currency;
 
 public class CurrencyConverter {
 
-    // можно реализовать конвертер в БД. но тогда мы более от нее зависимы.
-    // реализовать можно тут. но иначе. я спешил просто там.
-    // по моему пониманию транзакция ВСЕГДА будет вызывать конвертер, а
-    // вот уже конвертер внутри себя будет дергать утилиту проверки валюты на
-    // идентичность и, если они не идентичны, возвращать пересчет в формате класса остатка,
-    // а не примитива double
+    // todo можно реализовать конвертер в БД. но тогда мы более от нее зависимы.
+    //  реализовать можно тут. но иначе. я спешил просто там.
+    //  по моему пониманию транзакция ВСЕГДА будет вызывать конвертер,
+    //  вот уже конвертер внутри себя будет дергать утилиту проверки валюты на идентичность и,
+    //  если они не идентичны, возвращать пересчет в формате класса остатка,
+    //  а не примитива double
 
     private final BankDaoImpl bankDaoImpl = new BankDaoImpl();
 
@@ -36,10 +36,6 @@ public class CurrencyConverter {
             if (target == Currency.USD)
                 rate = bank.getUSDrate() / bank.getEURrate();
         }
-
-
         return rate;
     }
-
-
 }

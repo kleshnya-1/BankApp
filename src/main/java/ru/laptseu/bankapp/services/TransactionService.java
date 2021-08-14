@@ -1,9 +1,9 @@
-package ru.laptseu.bankApp.services;
+package ru.laptseu.bankapp.services;
 
-import ru.laptseu.bankApp.dao.TransferHistoryDAO;
+import ru.laptseu.bankapp.dao.TransferHistoryDAO;
 
 public class TransactionService {
-    TransferHistoryDAO transferHistoryDAO = new TransferHistoryDAO();
+    private   TransferHistoryDAO transferHistoryDAO = new TransferHistoryDAO();
 
 
     public void showTransactionByNameAndDate(String name, int days) {

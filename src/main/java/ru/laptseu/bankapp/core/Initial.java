@@ -1,13 +1,13 @@
-package ru.laptseu.bankApp.core;
+package ru.laptseu.bankapp.core;
 
-import ru.laptseu.bankApp.dao.AccountDaoImpl;
-import ru.laptseu.bankApp.dao.ClientDaoImpl;
-import ru.laptseu.bankApp.models.Account;
-import ru.laptseu.bankApp.services.AccountService;
-import ru.laptseu.bankApp.services.BankService;
-import ru.laptseu.bankApp.services.ClientService;
-import ru.laptseu.bankApp.services.TransactionService;
-import ru.laptseu.bankApp.utilities.Commands;
+import ru.laptseu.bankapp.dao.AccountDaoImpl;
+import ru.laptseu.bankapp.dao.ClientDaoImpl;
+import ru.laptseu.bankapp.models.Account;
+import ru.laptseu.bankapp.services.AccountService;
+import ru.laptseu.bankapp.services.BankService;
+import ru.laptseu.bankapp.services.ClientService;
+import ru.laptseu.bankapp.services.TransactionService;
+import ru.laptseu.bankapp.utilities.Commands;
 
 import java.util.Arrays;
 import java.util.InputMismatchException;
@@ -27,7 +27,6 @@ public class Initial {
         String input;
         String[] commands;
         while (true) {
-
             Scanner sc1 = new Scanner(System.in);
             try {
                 input = sc1.nextLine();
@@ -45,7 +44,6 @@ public class Initial {
                     Commands.demo();
                     startApp();
                     break;
-
 
                 case "Добавить":
                     switch (commands[1]) {
@@ -107,22 +105,18 @@ public class Initial {
                             break;
                     }
                     break;
-
                 case "Перевести":
                     Account fromA = (Account) accountDaoImpl.readByName(commands[1], commands[2]);
                     Account toA = (Account) accountDaoImpl.readByName(commands[3], commands[4]);
                     double amount = Double.parseDouble((commands[5]));
                     accountService.transferAmount(fromA, toA, amount);
                     break;
-
                 case "Вывести":
                     clientService.showAccountsByName(commands[1]);
                     break;
-
                 case "Транзакции":
                     transactionService.showTransactionByNameAndDate(commands[1], Integer.parseInt(commands[2]));
                     break;
-
                 default:
                     System.out.print("Невозможно понять команду ");
                     Arrays.stream(commands).map(s -> s + " ").forEach(System.out::print);
@@ -130,12 +124,10 @@ public class Initial {
                     startApp();
                     break;
             }
-
         } catch (ArrayIndexOutOfBoundsException e) {
             System.out.println("Ошибка ввода (не хватает аргументов)");
             startApp();
         }
-
     }
 }
 

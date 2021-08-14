@@ -1,4 +1,4 @@
-package ru.laptseu.bankApp.utilities;
+package ru.laptseu.bankapp.utilities;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -11,29 +11,15 @@ public class ConnectionMaker {
     private static Connection connection;
 
     public Connection makeConnection() {
-
-
-        try {
-            Class.forName("org.postgresql.Driver");
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
         try {
             connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
         } catch (SQLException throwable) {
             throwable.printStackTrace();
         }
         return connection;
-
     }
 
     public Connection makeConnectionWithFalseAutoCommit() {
-
-        try {
-            Class.forName("org.postgresql.Driver");
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
         try {
             connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
             connection.setAutoCommit(false);
@@ -42,5 +28,4 @@ public class ConnectionMaker {
         }
         return connection;
     }
-
 }

@@ -1,15 +1,15 @@
-package ru.laptseu.bankApp.services;
+package ru.laptseu.bankapp.services;
 
 
-import ru.laptseu.bankApp.dao.AccountDaoImpl;
-import ru.laptseu.bankApp.dao.BankDaoImpl;
-import ru.laptseu.bankApp.dao.ClientDaoImpl;
-import ru.laptseu.bankApp.dao.TransferHistoryDAO;
-import ru.laptseu.bankApp.models.Account;
-import ru.laptseu.bankApp.models.Currency;
-import ru.laptseu.bankApp.models.TransferHistory;
-import ru.laptseu.bankApp.utilities.CommissionCalculator;
-import ru.laptseu.bankApp.utilities.CurrencyConverter;
+import ru.laptseu.bankapp.dao.AccountDaoImpl;
+import ru.laptseu.bankapp.dao.BankDaoImpl;
+import ru.laptseu.bankapp.dao.ClientDaoImpl;
+import ru.laptseu.bankapp.dao.TransferHistoryDAO;
+import ru.laptseu.bankapp.models.Account;
+import ru.laptseu.bankapp.models.Currency;
+import ru.laptseu.bankapp.models.TransferHistory;
+import ru.laptseu.bankapp.utilities.CommissionCalculator;
+import ru.laptseu.bankapp.utilities.CurrencyConverter;
 
 import java.util.Calendar;
 import java.util.Scanner;

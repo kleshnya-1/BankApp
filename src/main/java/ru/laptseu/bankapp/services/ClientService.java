@@ -1,36 +1,29 @@
-package ru.laptseu.bankApp.services;
+package ru.laptseu.bankapp.services;
 
-import ru.laptseu.bankApp.dao.ClientDaoImpl;
-import ru.laptseu.bankApp.models.Client;
+import ru.laptseu.bankapp.dao.ClientDaoImpl;
+import ru.laptseu.bankapp.models.Client;
 
 import java.util.Scanner;
 
 public class ClientService implements IMaintainableService {
-    Scanner clientServiceScanner = new Scanner(System.in);
-    ClientDaoImpl clientDaoImpl = new ClientDaoImpl();
+    private Scanner clientServiceScanner = new Scanner(System.in);
+    private ClientDaoImpl clientDaoImpl = new ClientDaoImpl();
 
     @Override
     public boolean create() {
         Client client = new Client();
-
-
         System.out.println("Введите информацию о клиенте в порядке: " +
                 "имя, Физ лицо(true/false)\n" +
                 "Иван Петров, true");
 
         String clientRaw = clientServiceScanner.nextLine();
-        String[] clientsS = clientRaw.split(", ");
-
-        client.setName(clientsS[0]);
-
-        System.out.println(clientsS[1]);
-        client.setNaturalPerson(Boolean.parseBoolean(clientsS[1]));
-
-
+        String[] clients = clientRaw.split(", ");
+        client.setName(clients[0]);
+        System.out.println(clients[1]);
+        client.setNaturalPerson(Boolean.parseBoolean(clients[1]));
         System.out.println(client.isNaturalPerson());
         clientDaoImpl.create(client);
-
-        return false;
+        return true;
     }
 
     @Override

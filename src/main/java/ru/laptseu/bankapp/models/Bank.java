@@ -1,4 +1,4 @@
-package ru.laptseu.bankApp.models;
+package ru.laptseu.bankapp.models;
 
 import java.util.EnumMap;
 import java.util.Map;

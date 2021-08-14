@@ -1,4 +1,4 @@
-package ru.laptseu.bankApp.services;
+package ru.laptseu.bankapp.services;
 
 public interface IMaintainableService {
 

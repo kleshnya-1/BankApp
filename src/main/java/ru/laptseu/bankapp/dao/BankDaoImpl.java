@@ -1,7 +1,7 @@
-package ru.laptseu.bankApp.dao;
+package ru.laptseu.bankapp.dao;
 
-import ru.laptseu.bankApp.models.Bank;
-import ru.laptseu.bankApp.utilities.ConnectionMaker;
+import ru.laptseu.bankapp.models.Bank;
+import ru.laptseu.bankapp.utilities.ConnectionMaker;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -9,7 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class BankDaoImpl implements IMaintainableDAO {
-    Connection connection = new ConnectionMaker().makeConnection();
+    private Connection connection = new ConnectionMaker().makeConnection();
 
     @Override
     public int create(Object obj) {
@@ -22,10 +22,8 @@ public class BankDaoImpl implements IMaintainableDAO {
             preparedStatement.setString(1, bank.getName());
             preparedStatement.setDouble(2, bank.getTransferFeeInPercent());
             preparedStatement.setDouble(3, bank.getTransferFeeInPercentForNotNaturalPersons());
-
             preparedStatement.setDouble(4, bank.getUSDrate());
             preparedStatement.setDouble(5, bank.getEURrate());
-
             preparedStatement.executeUpdate();
             System.out.println("Банк " + bank.getName() + " добавлен");
 
@@ -54,11 +52,6 @@ public class BankDaoImpl implements IMaintainableDAO {
             while (true) {
                 try {
                     if (!resultSet.next()) break;
-                } catch (SQLException throwables) {
-                    throwables.printStackTrace();
-                }
-
-                try {
                     bank.setId(resultSet.getInt("id"));
                     bank.setName(resultSet.getString("name"));
                     bank.setTransferFeeInPercent(resultSet.getDouble("transfer_fee"));
@@ -76,11 +69,13 @@ public class BankDaoImpl implements IMaintainableDAO {
         return bank;
     }
 
+    //must be updated later(?)
     @Override
     public boolean update(Object obj) {
         return false;
     }
 
+    //must be updated later(?)
     @Override
     public boolean delete(int key) {
         return false;
@@ -99,26 +94,15 @@ public class BankDaoImpl implements IMaintainableDAO {
 
     }
 
-    public void showAllNames(
-
-    ) {
+    public void showAllNames() {
         ResultSet resultSet = getAllNames();
-
         while (true) {
             try {
                 if (!resultSet.next()) break;
-            } catch (SQLException throwables) {
-                throwables.printStackTrace();
-            }
-
-            try {
                 System.out.println(resultSet.getString("name"));
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
             }
-
-
         }
-
     }
 }

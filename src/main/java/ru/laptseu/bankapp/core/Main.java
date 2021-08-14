@@ -1,9 +1,7 @@
-package ru.laptseu.bankApp.core;
+package ru.laptseu.bankapp.core;
 
 public class Main {
-
     public static void main(String[] args) {
         Initial.startApp();
-
     }
 }
