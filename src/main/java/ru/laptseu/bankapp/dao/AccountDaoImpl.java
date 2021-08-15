@@ -9,13 +9,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class AccountDaoImpl implements IMaintainableDAO {
+public class AccountDaoImpl implements IMaintainableDAO<Account> {
     Connection connection = new ConnectionMaker().makeConnection();
     Connection connectionManualCommit = new ConnectionMaker().makeConnectionWithFalseAutoCommit();
 
     @Override
-    public int create(Object obj) {
-        Account account = (Account) obj;
+    public int create(Account obj) {
+        Account account = obj;
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(
                     "insert into accounts (client_name, bank_name, currency, amount) " +
@@ -36,10 +36,11 @@ public class AccountDaoImpl implements IMaintainableDAO {
 
     //todo have to be fixed
     @Override
-    public Object read(int key) {
-        return new Object();
+    public Account read(int key) {
+        return new Account();
     }
 
+    //todo refactor with objects but strings
     public Object readByName(String name, String bank) {
 
         Account account = null;
@@ -75,7 +76,7 @@ public class AccountDaoImpl implements IMaintainableDAO {
     }
 
     @Override
-    public boolean update(Object obj) {
+    public boolean update(Account obj) {
         Account account = (Account) obj;
         try {
             PreparedStatement preparedStatement = connectionManualCommit.prepareStatement(
@@ -87,7 +88,6 @@ public class AccountDaoImpl implements IMaintainableDAO {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-
         //todo have to be fixed
         return false;
     }

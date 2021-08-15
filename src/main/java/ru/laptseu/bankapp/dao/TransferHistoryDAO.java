@@ -12,9 +12,7 @@ public class TransferHistoryDAO implements IMaintainableDAO {
 
     @Override
     public int create(Object obj) {
-
         TransferHistory transferHistory = (TransferHistory) obj;
-
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(
                     "insert into transfers (from_c, to_c, from_b, to_b, amount, currency) " +
