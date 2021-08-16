@@ -4,6 +4,8 @@ import ru.laptseu.bankapp.dao.BankDaoImpl;
 import ru.laptseu.bankapp.models.Bank;
 import ru.laptseu.bankapp.models.Currency;
 
+import java.sql.SQLException;
+
 public class CurrencyConverter {
 
     // todo можно реализовать конвертер в БД. но тогда мы более от нее зависимы.
@@ -16,7 +18,12 @@ public class CurrencyConverter {
     private final BankDaoImpl bankDaoImpl = new BankDaoImpl();
 
     public double returnRate(Currency origin, Currency target, String bankName) {
-        Bank bank = (Bank) bankDaoImpl.readByName(bankName);
+        Bank bank = null;
+        try {
+            bank = bankDaoImpl.readByName(bankName);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
         double rate = 0;
         if (origin == Currency.BYN) {
             if (target == Currency.USD)

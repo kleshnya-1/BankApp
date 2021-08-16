@@ -7,13 +7,12 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-public class TransferHistoryDAO implements IMaintainableDAO {
-    private final Connection connection = new ConnectionMaker().makeConnection();
+public class TransferHistoryDAO implements IMaintainableDAO<TransferHistory> {
 
     @Override
-    public int create(Object obj) {
-        TransferHistory transferHistory = (TransferHistory) obj;
-        try {
+    public int create(TransferHistory obj) throws SQLException {
+        TransferHistory transferHistory = obj;
+        try (Connection connection = new ConnectionMaker().makeConnection()) {
             PreparedStatement preparedStatement = connection.prepareStatement(
                     "insert into transfers (from_c, to_c, from_b, to_b, amount, currency) " +
                             "values (?,?,?,?,?,?)");
@@ -26,25 +25,23 @@ public class TransferHistoryDAO implements IMaintainableDAO {
             preparedStatement.executeUpdate();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
+            throw throwables;
         }
         //todo have to be fixed
         return 0;
     }
 
-
     //todo have to be fixed
     @Override
-    public Object read(int key) {
+    public TransferHistory read(int key) {
         return null;
     }
 
-
     //todo have to be fixed
     @Override
-    public boolean update(Object obj) {
+    public boolean update(TransferHistory obj) {
         return false;
     }
-
 
     //todo have to be fixed
     @Override

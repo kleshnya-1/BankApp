@@ -6,8 +6,8 @@ import ru.laptseu.bankapp.models.Client;
 import java.util.Scanner;
 
 public class ClientService implements IMaintainableService {
-    private Scanner clientServiceScanner = new Scanner(System.in);
-    private ClientDaoImpl clientDaoImpl = new ClientDaoImpl();
+    private final Scanner clientServiceScanner = new Scanner(System.in);
+    private final ClientDaoImpl clientDaoImpl = new ClientDaoImpl();
 
     @Override
     public boolean create() {

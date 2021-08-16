@@ -10,29 +10,27 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class AccountDaoImpl implements IMaintainableDAO<Account> {
-    Connection connection = new ConnectionMaker().makeConnection();
     Connection connectionManualCommit = new ConnectionMaker().makeConnectionWithFalseAutoCommit();
 
     @Override
-    public int create(Account obj) {
-        Account account = obj;
-        try {
+    public int create(Account acc) throws SQLException {
+        try (Connection connection = new ConnectionMaker().makeConnection()) {
             PreparedStatement preparedStatement = connection.prepareStatement(
                     "insert into accounts (client_name, bank_name, currency, amount) " +
                             "values (?,?,?,?)");
-            preparedStatement.setString(1, account.getClientName());
-            preparedStatement.setString(2, account.getBankName());
-            preparedStatement.setString(3, account.getCurrency().toString());
-            preparedStatement.setDouble(4, account.getAmount());
+            preparedStatement.setString(1, acc.getClientName());
+            preparedStatement.setString(2, acc.getBankName());
+            preparedStatement.setString(3, acc.getCurrency().toString());
+            preparedStatement.setDouble(4, acc.getAmount());
             preparedStatement.executeUpdate();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
+            throw throwables;
         }
-
-        //todo have to be fixed
+        //todo have to be fixed.
+        // i don't know how to return entity ID
         return 0;
     }
-
 
     //todo have to be fixed
     @Override
@@ -41,10 +39,9 @@ public class AccountDaoImpl implements IMaintainableDAO<Account> {
     }
 
     //todo refactor with objects but strings
-    public Object readByName(String name, String bank) {
-
-        Account account = null;
-        try {
+    public Account readByName(String name, String bank) throws SQLException {
+        Account account = new Account();
+        try (Connection connection = new ConnectionMaker().makeConnection()) {
             PreparedStatement preparedStatement = connection.prepareStatement(
                     "select * from accounts where client_name =? and bank_name=?");
             preparedStatement.setString(1, name);
@@ -71,13 +68,15 @@ public class AccountDaoImpl implements IMaintainableDAO<Account> {
             account.setAmount(resultSet.getDouble("amount"));
         } catch (SQLException throwables) {
             throwables.printStackTrace();
+            throw throwables;
         }
         return account;
     }
 
+    // todo how to close class if it's part of transaction?
     @Override
-    public boolean update(Account obj) {
-        Account account = (Account) obj;
+    public boolean update(Account account) {
+
         try {
             PreparedStatement preparedStatement = connectionManualCommit.prepareStatement(
                     "update  accounts set amount= ? whete id=?");

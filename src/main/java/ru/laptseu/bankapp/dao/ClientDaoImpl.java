@@ -8,13 +8,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class ClientDaoImpl implements IMaintainableDAO {
+public class ClientDaoImpl implements IMaintainableDAO<Client> {
     private final Connection connection = new ConnectionMaker().makeConnection();
 
     @Override
-    public int create(Object obj) {
-        Client client = (Client) obj;
-        try {
+    public int create(Client client) throws SQLException {
+        try (Connection connection = new ConnectionMaker().makeConnection()) {
             PreparedStatement preparedStatement = connection.prepareStatement(
                     "insert into clients (name, is_natural_person) " +
                             "values (?,?)");
@@ -24,21 +23,21 @@ public class ClientDaoImpl implements IMaintainableDAO {
             System.out.println("Клиент " + client.getName() + " добавлен");
         } catch (SQLException throwables) {
             throwables.printStackTrace();
+            throw throwables;
         }
         return 0;
     }
 
-
     //todo have to be fixed
     @Override
-    public Object read(int key) {
+    public Client read(int key) {
         return null;
     }
 
-    public Object readByName(String name) {
-        ResultSet resultSet = null;
-        Client client = null;
-        try {
+    public Client readByName(String name) throws SQLException {
+        ResultSet resultSet;
+        Client client = new Client();
+        try (Connection connection = new ConnectionMaker().makeConnection()) {
             PreparedStatement preparedStatement = connection.prepareStatement(
                     "select * from banks where name =?");
             preparedStatement.setString(1, name);
@@ -48,14 +47,14 @@ public class ClientDaoImpl implements IMaintainableDAO {
             client.setId(resultSet.getInt("id"));
         } catch (SQLException throwables) {
             throwables.printStackTrace();
+            throw throwables;
         }
         return client;
     }
 
-
     //todo have to be fixed
     @Override
-    public boolean update(Object obj) {
+    public boolean update(Client obj) {
         return false;
     }
 

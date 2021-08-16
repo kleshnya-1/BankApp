@@ -6,20 +6,18 @@ import ru.laptseu.bankapp.models.Bank;
 import java.util.Scanner;
 
 public class BankService implements IMaintainableService {
-    private BankDaoImpl bankDaoImpl = new BankDaoImpl();
-    private Scanner bankServiceScanner = new Scanner(System.in);
+    private final BankDaoImpl bankDaoImpl = new BankDaoImpl();
+    private final Scanner bankServiceScanner = new Scanner(System.in);
 
     @Override
     public boolean create() {
-         Bank bank = new Bank();
+        Bank bank = new Bank();
 
         System.out.println("Введите информацию о банке в порядке: " +
                 "имя, % комиссии физ и юр лиц, курс USD, курс EUR\n" +
                 "первый банк, 6, 12, 2.63, 3.06");
-
         String bankRaw = bankServiceScanner.nextLine();
         String[] banks = bankRaw.split(",");
-
         bank.setName(banks[0]);
         bank.setTransferFeeInPercent(Double.parseDouble(banks[1]));
         bank.setTransferFeeInPercentForNotNaturalPersons(Double.parseDouble(banks[2]));

@@ -106,8 +106,8 @@ public class Initial {
                     }
                     break;
                 case "Перевести":
-                    Account fromA = (Account) accountDaoImpl.readByName(commands[1], commands[2]);
-                    Account toA = (Account) accountDaoImpl.readByName(commands[3], commands[4]);
+                    Account fromA = accountDaoImpl.readByName(commands[1], commands[2]);
+                    Account toA = accountDaoImpl.readByName(commands[3], commands[4]);
                     double amount = Double.parseDouble((commands[5]));
                     accountService.transferAmount(fromA, toA, amount);
                     break;

@@ -1,6 +1,5 @@
 package ru.laptseu.bankapp.services;
 
-
 import ru.laptseu.bankapp.dao.AccountDaoImpl;
 import ru.laptseu.bankapp.dao.BankDaoImpl;
 import ru.laptseu.bankapp.dao.ClientDaoImpl;
@@ -49,11 +48,8 @@ public class AccountService implements IMaintainableService {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
         } else {
             account.setBankName(accountS[1]);
-
-
             Currency chosedCurrency = null;
             switch (accountS[2]) {
                 case "BYN":
@@ -69,14 +65,10 @@ public class AccountService implements IMaintainableService {
                     System.out.println("Валюта не существует " + accountS[2]);
                     break;
             }
-
             account.setCurrency(chosedCurrency);
             account.setAmount(Double.parseDouble(accountS[3]));
-
-
             accountDaoImpl.create(account);
             System.out.println("Счет на имя " + account.getClientName() + " добавлен");
-
             return true;
         }
         return false;
@@ -98,14 +90,12 @@ public class AccountService implements IMaintainableService {
         return false;
     }
 
-
     public boolean transferAmount(Account fromA, Account toA, double amount) {
         TransferHistory transferHistory = new TransferHistory();
         TransferHistoryDAO transferHistoryDAO = new TransferHistoryDAO();
         double commission = 0;
         double rate = 1;
         double totalAmount = amount;
-
         if (!fromA.getBankName().equals(toA.getBankName())) {
             commission = commissionCalculator.calculate(toA, amount);
         }
@@ -114,7 +104,6 @@ public class AccountService implements IMaintainableService {
         }
         if (rate != 1)
             totalAmount = amount * rate;
-
 
         fromA.setAmount(fromA.getAmount() - commission - totalAmount);
         toA.setAmount(toA.getAmount() + totalAmount);
@@ -126,18 +115,14 @@ public class AccountService implements IMaintainableService {
         transferHistory.setDate(Calendar.getInstance());
         transferHistory.setFromC(fromA.getClientName());
         transferHistory.setToC(toA.getClientName());
-
         transferHistory.setFromA(fromA);
         transferHistory.setToA(toA);
-
         transferHistory.setFromB(fromA.getBankName());
         transferHistory.setToB(toA.getBankName());
         transferHistory.setAmount(amount);
-
         transferHistoryDAO.create(transferHistory);
 
         return true;
     }
-
 
 }
