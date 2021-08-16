@@ -1,0 +1,9 @@
+# Project exclude paths
+
+.idea
+*.iws
+*.iml
+*.ipr
+/target/
+/.idea/
+infoIgnor.txt
