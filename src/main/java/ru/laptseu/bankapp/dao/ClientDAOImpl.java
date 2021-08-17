@@ -8,7 +8,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class ClientDaoImpl implements IMaintainableDAO<Client> {
+public class ClientDAOImpl implements IMaintainableDAO<Client> {
     private final Connection connection = new ConnectionMaker().makeConnection();
 
     @Override
@@ -62,5 +62,10 @@ public class ClientDaoImpl implements IMaintainableDAO<Client> {
     @Override
     public boolean delete(int key) {
         return false;
+    }
+
+
+    public ClientDAOImpl create() {
+        return new ClientDAOImpl();
     }
 }

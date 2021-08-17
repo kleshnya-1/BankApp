@@ -1,5 +1,7 @@
 package ru.laptseu.bankapp.dao;
 
+
+import lombok.extern.log4j.Log4j2;
 import ru.laptseu.bankapp.models.Account;
 import ru.laptseu.bankapp.models.Currency;
 import ru.laptseu.bankapp.utilities.ConnectionMaker;
@@ -9,7 +11,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class AccountDaoImpl implements IMaintainableDAO<Account> {
+@Log4j2
+public class AccountDAOImpl implements IMaintainableDAO<Account> {
     Connection connectionManualCommit = new ConnectionMaker().makeConnectionWithFalseAutoCommit();
 
     @Override
@@ -24,7 +27,7 @@ public class AccountDaoImpl implements IMaintainableDAO<Account> {
             preparedStatement.setDouble(4, acc.getAmount());
             preparedStatement.executeUpdate();
         } catch (SQLException throwables) {
-            throwables.printStackTrace();
+            log.error(throwables);
             throw throwables;
         }
         //todo have to be fixed.
@@ -97,11 +100,15 @@ public class AccountDaoImpl implements IMaintainableDAO<Account> {
         return false;
     }
 
-    public void commit() {
-        try {
-            connectionManualCommit.commit();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
+    public AccountDAOImpl create() {
+        return new AccountDAOImpl();
     }
+
+//    public void commit() {
+//        try {
+//            connectionManualCommit.commit();
+//        } catch (SQLException throwables) {
+//            throwables.printStackTrace();
+//        }
+//    }
 }

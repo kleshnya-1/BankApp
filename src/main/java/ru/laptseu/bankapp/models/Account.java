@@ -1,20 +1,32 @@
 package ru.laptseu.bankapp.models;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 public class Account {
-
     private int id;
     private int bankId;
-    //хочу сделать имя банка отдельным классом. изначально
-    // там будет только стринг поле, но доступно для расширения.
-    // с клиентом аналогично
     private String bankName;
     private String clientName;
-    //сумма с валютой на счету может быть и отдельным классом. с добавлением
-    // геттеров/сеттеров объекта этого нового отдельного класса (ВАЛЮТЫ и
-    // ОСТАТАТКА на счету) в класс аккаунта.
+    private AccountAmount accountAmount;
     private Currency currency;
     private double amount;
+
+//    public Currency getCurrency() {
+//        return accountAmount.getCurrency();
+//    }
+//
+//    public double getAmount() {
+//        return accountAmount.getAmount();
+//    }
+//
+//    public void setCurrency(Currency currency) {
+//        accountAmount.setCurrency(currency);
+//    }
+//
+//    public void setAmount(double amount) {
+//        accountAmount.setAmount(amount);
+//    }
 }

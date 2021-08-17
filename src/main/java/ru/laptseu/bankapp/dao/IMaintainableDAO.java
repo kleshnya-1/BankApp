@@ -10,4 +10,6 @@ public interface IMaintainableDAO<T> {
     boolean update(T obj) throws SQLException;
 
     boolean delete(int key) throws SQLException;
+
+
 }

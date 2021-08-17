@@ -1,7 +1,7 @@
 package ru.laptseu.bankapp.utilities;
 
-import ru.laptseu.bankapp.dao.BankDaoImpl;
-import ru.laptseu.bankapp.dao.ClientDaoImpl;
+import ru.laptseu.bankapp.dao.BankDAOImpl;
+import ru.laptseu.bankapp.dao.ClientDAOImpl;
 import ru.laptseu.bankapp.models.Account;
 import ru.laptseu.bankapp.models.Bank;
 import ru.laptseu.bankapp.models.Client;
@@ -11,8 +11,8 @@ import java.sql.SQLException;
 public class CommissionCalculator {
 
     public double calculate(Account second, double amount) {
-        BankDaoImpl bankDaoImpl = new BankDaoImpl();
-        ClientDaoImpl clientDaoImpl = new ClientDaoImpl();
+        BankDAOImpl bankDaoImpl = new BankDAOImpl();
+        ClientDAOImpl clientDaoImpl = new ClientDAOImpl();
         double commission = 0;
         Bank secondB = null;
         try {

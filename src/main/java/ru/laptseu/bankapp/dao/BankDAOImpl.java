@@ -1,5 +1,6 @@
 package ru.laptseu.bankapp.dao;
 
+import ru.laptseu.bankapp.models.Account;
 import ru.laptseu.bankapp.models.Bank;
 import ru.laptseu.bankapp.utilities.ConnectionMaker;
 
@@ -8,7 +9,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class BankDaoImpl implements IMaintainableDAO<Bank> {
+public class BankDAOImpl implements IMaintainableDAO<Bank> {
 
     @Override
     public int create(Bank bank) throws SQLException {
@@ -19,8 +20,8 @@ public class BankDaoImpl implements IMaintainableDAO<Bank> {
             preparedStatement.setString(1, bank.getName());
             preparedStatement.setDouble(2, bank.getTransferFeeInPercent());
             preparedStatement.setDouble(3, bank.getTransferFeeInPercentForNotNaturalPersons());
-            preparedStatement.setDouble(4, bank.getUSDrate());
-            preparedStatement.setDouble(5, bank.getEURrate());
+           // preparedStatement.setDouble(4, bank.getUSDrate());
+            //preparedStatement.setDouble(5, bank.getEURrate());
             preparedStatement.executeUpdate();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -50,8 +51,8 @@ public class BankDaoImpl implements IMaintainableDAO<Bank> {
                 bank.setName(resultSet.getString("name"));
                 bank.setTransferFeeInPercent(resultSet.getDouble("transfer_fee"));
                 bank.setTransferFeeInPercentForNotNaturalPersons(resultSet.getDouble("transfer_fee_nnp"));
-                bank.setUSDrate(resultSet.getDouble("usd_rate"));
-                bank.setEURrate(resultSet.getDouble("eur_rate"));
+               // bank.setUSDrate(resultSet.getDouble("usd_rate"));
+               // bank.setEURrate(resultSet.getDouble("eur_rate"));
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -70,6 +71,11 @@ public class BankDaoImpl implements IMaintainableDAO<Bank> {
     @Override
     public boolean delete(int key) {
         return false;
+    }
+
+
+    public BankDAOImpl create() {
+        return new BankDAOImpl();
     }
 
     public ResultSet getAllNames() throws SQLException {
