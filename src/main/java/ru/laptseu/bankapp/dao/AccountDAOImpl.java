@@ -104,12 +104,12 @@ public class AccountDAOImpl implements IMaintainableDAO<Account> {
             log.error(throwables);
             throw throwables;
         } finally {
-            conn.close();
+            //close in service
+            //conn.close();
         }
         return result;
     }
 
-    //todo in progress
     @Override
     public boolean delete(int key) throws SQLException {
         boolean result;
