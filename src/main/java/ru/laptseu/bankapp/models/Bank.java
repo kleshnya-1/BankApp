@@ -1,9 +1,8 @@
 package ru.laptseu.bankapp.models;
-import lombok.Data;
+
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.EnumMap;
 import java.util.List;
 
 @Getter

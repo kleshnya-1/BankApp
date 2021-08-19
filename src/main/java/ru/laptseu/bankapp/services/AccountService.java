@@ -1,123 +1,126 @@
-//package ru.laptseu.bankapp.services;
-//
-//import ru.laptseu.bankapp.dao.AccountDAOImpl;
-//import ru.laptseu.bankapp.dao.BankDAOImpl;
-//import ru.laptseu.bankapp.dao.ClientDAOImpl;
-//import ru.laptseu.bankapp.dao.TransferHistoryDAOImpl;
-//import ru.laptseu.bankapp.models.Account;
-//import ru.laptseu.bankapp.models.Currency;
-//import ru.laptseu.bankapp.models.TransferHistory;
-//import ru.laptseu.bankapp.utilities.CommissionCalculator;
-//
-//import java.util.Calendar;
-//import java.util.Scanner;
-//
-////не комментирую. если принять изменения в классах моделей, сильно изменится логика тут.
-//
-//public class AccountService implements IMaintainableService {
-//    private final AccountDAOImpl accountDaoImpl = new AccountDAOImpl();
-//    private final BankDAOImpl bankDaoImpl = new BankDAOImpl();
-//    private final CommissionCalculator commissionCalculator = new CommissionCalculator();
-//    //private final CurrencyConverter currencyConverter = new CurrencyConverter();
-//    private final ClientDAOImpl clientDaoImpl = new ClientDAOImpl();
-//
-//    @Override
-//    public boolean create() {
-//
-//        Account account = new Account();
-//        Scanner accountServiceScanner = new Scanner(System.in);
-//
-//
-//      //  bankDaoImpl.showAllNames();
-//        System.out.println();
-//
-//        String accountRaw = accountServiceScanner.nextLine();
-//        String[] accountS = accountRaw.split(",");
-//
-//        account.setClientName(accountS[0]);
-//        if (clientDaoImpl.readByName(accountS[0]) == null) {
-//            System.out.println("Такого имени клиента не существует. " +
-//                    "сначала создайте клиента");
-//            try {
-//                throw new Exception("no client exist");
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//        } else {
-//            account.setBankName(accountS[1]);
-//            Currency chosedCurrency = null;
-//            switch (accountS[2]) {
-//                case "BYN":
-//                    chosedCurrency = Currency.BYN;
-//                    break;
-//                case "USD":
-//                    chosedCurrency = Currency.USD;
-//                    break;
-//                case "EUR":
-//                    chosedCurrency = Currency.EUR;
-//                    break;
-//                default:
-//                    System.out.println("Валюта не существует " + accountS[2]);
-//                    break;
-//            }
-//            account.setCurrency(chosedCurrency);
-//            account.setAmount(Double.parseDouble(accountS[3]));
-//            accountDaoImpl.create(account);
-//            System.out.println("Счет на имя " + account.getClientName() + " добавлен");
-//            return true;
-//        }
-//        return false;
-//
-//    }
-//
-//    @Override
-//    public boolean read() {
-//        return false;
-//    }
-//
-//    @Override
-//    public boolean update() {
-//        return false;
-//    }
-//
-//    @Override
-//    public boolean delete() {
-//        return false;
-//    }
-//
-//    public boolean transferAmount(Account fromA, Account toA, double amount) {
-//        TransferHistory transferHistory = new TransferHistory();
-//        TransferHistoryDAOImpl transferHistoryDAOImpl = new TransferHistoryDAOImpl();
-//        double commission = 0;
-//        double rate = 1;
-//        double totalAmount = amount;
-//        if (!fromA.getBankName().equals(toA.getBankName())) {
-//            commission = commissionCalculator.calculate(toA, amount);
-//        }
-//        if (!fromA.getCurrency().equals(toA.getCurrency())) {
-//           // rate = currencyConverter.returnRate(fromA.getCurrency(), toA.getCurrency(), toA.getBankName());
-//        }
-//        if (rate != 1)
-//            totalAmount = amount * rate;
-//
-//        fromA.setAmount(fromA.getAmount() - commission - totalAmount);
-//        toA.setAmount(toA.getAmount() + totalAmount);
-//
-//        accountDaoImpl.update(fromA);
-//        accountDaoImpl.update(toA);
-//       // accountDaoImpl.commit();
-//
-//        transferHistory.setDate(Calendar.getInstance());
-//        transferHistory.setFromC(fromA.getClientName());
-//        transferHistory.setToC(toA.getClientName());
-//        transferHistory.setFromA(fromA);
-//        transferHistory.setToA(toA);
-//        transferHistory.setFromB(fromA.getBankName());
-//        transferHistory.setToB(toA.getBankName());
-//        transferHistory.setAmount(amount);
-//        transferHistoryDAOImpl.create(transferHistory);
-//
-//        return true;
-//    }
-//
-//}
+package ru.laptseu.bankapp.services;
+
+import lombok.extern.log4j.Log4j2;
+import ru.laptseu.bankapp.dao.DaoFactory;
+import ru.laptseu.bankapp.dao.IMaintainableDAO;
+import ru.laptseu.bankapp.dao.TransferHistoryDAOImpl;
+import ru.laptseu.bankapp.models.Account;
+import ru.laptseu.bankapp.models.Currency;
+import ru.laptseu.bankapp.models.TransferHistory;
+import ru.laptseu.bankapp.utilities.CommissionCalculator;
+
+import java.sql.Connection;
+import java.sql.SQLException;
+
+@Log4j2
+//creating models from array of parameters
+public class AccountService implements IMaintainableService<Account> {
+    private final CommissionCalculator commissionCalculator = new CommissionCalculator();
+
+    IMaintainableDAO mainDao = DaoFactory.get(Account.class);
+    TransferHistoryDAOImpl transferHistoryDAOImpl = new TransferHistoryDAOImpl();
+    PgPersister pgPersister = new PgPersister();
+
+    // is it good idea to use the method?
+    public int persist(Account o) throws SQLException {
+        int acId = 0;
+        boolean result = false;
+        try {
+            acId = pgPersister.persist(o);
+            result = true;
+        } catch (SQLException e) {
+            log.error(e);
+            throw e;
+        }
+        return acId;
+    }
+
+    @Override
+    public Account create(String[] paramArr) throws SQLException {
+        Account account = new Account();
+        account.setClientName(paramArr[0]);
+        account.setBankId(Integer.parseInt(paramArr[1]));
+        account.setCurrency(Currency.valueOf(paramArr[2]));
+        account.setAmount(Double.parseDouble(paramArr[3]));
+        return account;
+    }
+
+    @Override
+    public Account read(int key) throws SQLException {
+//generic doesnt work
+        return (Account) mainDao.read(key);
+    }
+
+    @Override
+    public boolean update(String[] paramArr) throws SQLException {
+        int accountId = Integer.parseInt(paramArr[0]);
+        String[] paramArrForCreating = paramArr;
+        paramArrForCreating[0] = null;
+        //null always moves to the end of array. right?
+        Account account;
+        try {
+            account = create(paramArrForCreating);
+            account.setId(accountId);
+            pgPersister.update(account);
+        } catch (SQLException throwables) {
+            log.error(throwables);
+            throw throwables;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean delete(int key) throws SQLException {
+
+        boolean result = false;
+        try {
+            result = mainDao.delete(key);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+            throw throwables;
+        }
+        return result;
+    }
+
+    public boolean transferAmount(Account sourceAcc, Account targetAcc, double amount) throws SQLException {
+        TransferHistory transferHistory = new TransferHistory();
+        double commission = 0;
+        double rate = 1;
+        double totalAmount = amount;
+
+        //todo logic in progress
+      /*  if (sourceAcc.getBankId()!=(targetAcc.getBankId())) {
+            commission = commissionCalculator.calculate(targetAcc, amount);
+        }
+        if (!sourceAcc.getCurrency().equals(targetAcc.getCurrency())) {
+
+        }*/
+
+        sourceAcc.setAmount(sourceAcc.getAmount() - commission - totalAmount);
+        targetAcc.setAmount(targetAcc.getAmount() + totalAmount);
+
+        //transaction logic
+        Connection connection = mainDao.getConnection();
+        try {
+            mainDao.update(sourceAcc, connection);
+            mainDao.update(targetAcc, connection);
+            connection.commit();
+            connection.close();
+        } catch (SQLException throwables) {
+            log.error(throwables);
+            throw throwables;
+        }
+
+        //todo creating and persisting transfer history
+ /*       transferHistory.setDate(Calendar.getInstance());
+        transferHistory.setFromC(sourceAcc.getClientName());
+        transferHistory.setToC(targetAcc.getClientName());
+        transferHistory.setFromA(sourceAcc);
+        transferHistory.setToA(targetAcc);
+        transferHistory.setFromB(sourceAcc.getBankName());
+        transferHistory.setToB(targetAcc.getBankName());
+        transferHistory.setAmount(amount);
+        transferHistoryDAOImpl.create(transferHistory);*/
+        return true;
+    }
+}

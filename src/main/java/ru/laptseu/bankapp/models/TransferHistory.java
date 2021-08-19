@@ -1,6 +1,5 @@
 package ru.laptseu.bankapp.models;
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -21,9 +20,4 @@ public class TransferHistory {
     private Bank bankSource;
     private Bank bankTarget;
     private double amount;
-
-//    public void setDate(Calendar date) {
-//        format.format(date);
-//        this.date = date;
-//    }
 }

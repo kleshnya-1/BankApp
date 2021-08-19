@@ -9,17 +9,19 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class DaoFactory {
+    private static final Map<Class, IMaintainableDAO> factoryMap = new HashMap<>();
 
-    private Map<Class, IMaintainableDAO> factoryMap = new HashMap<>();
-
-    public DaoFactory() {
-        factoryMap.put(new Account().getClass(), new AccountDAOImpl());
-        factoryMap.put(new Bank().getClass(), new BankDAOImpl());
-        factoryMap.put(new Client().getClass(), new ClientDAOImpl());
-        factoryMap.put(new TransferHistory().getClass(), new TransferHistoryDAOImpl());
+    static {
+        factoryMap.put(Account.class, new AccountDAOImpl());
+        factoryMap.put(Bank.class, new BankDAOImpl());
+        factoryMap.put(Client.class, new ClientDAOImpl());
+        factoryMap.put(TransferHistory.class, new TransferHistoryDAOImpl());
     }
 
-    public IMaintainableDAO createDaoFactory(Class daoClass) {
+    public DaoFactory() {
+    }
+
+    public static IMaintainableDAO get(Class daoClass) {
         return factoryMap.get(daoClass);
     }
 }

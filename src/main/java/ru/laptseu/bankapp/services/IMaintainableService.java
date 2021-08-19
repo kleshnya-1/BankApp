@@ -1,11 +1,13 @@
 package ru.laptseu.bankapp.services;
 
-public interface IMaintainableService {
-    boolean create();
+import java.sql.SQLException;
 
-    boolean read();
+public interface IMaintainableService<T> {
+    T create(String[] paramArr) throws SQLException;
 
-    boolean update();
+    T read(int key) throws SQLException;
 
-    boolean delete();
+    boolean update(String[] paramArr) throws SQLException;
+
+    boolean delete(int key) throws SQLException;
 }
