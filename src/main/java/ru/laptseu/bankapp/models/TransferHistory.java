@@ -9,6 +9,7 @@ import java.util.Calendar;
 
 @Getter
 @Setter
+//todo refactor models to Strings
 public class TransferHistory {
     private final DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
     private int id;

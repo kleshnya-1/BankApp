@@ -1,13 +1,14 @@
 package ru.laptseu.bankapp.core;
 
 import lombok.extern.log4j.Log4j2;
+import ru.laptseu.bankapp.ModelNotFoundException;
 import ru.laptseu.bankapp.dao.AccountDAOImpl;
 import ru.laptseu.bankapp.dao.ClientDAOImpl;
 import ru.laptseu.bankapp.models.Account;
 import ru.laptseu.bankapp.services.AccountService;
-import ru.laptseu.bankapp.services.BankService;
-import ru.laptseu.bankapp.services.ClientService;
-import ru.laptseu.bankapp.services.TransactionService;
+import ru.laptseu.bankapp.ignor.BankService;
+import ru.laptseu.bankapp.ignor.ClientService;
+import ru.laptseu.bankapp.ignor.TransactionService;
 import ru.laptseu.bankapp.utilities.Commands;
 
 import java.sql.SQLException;
@@ -25,22 +26,19 @@ public class Initial {
         AccountDAOImpl accountDaoImpl = new AccountDAOImpl();
         ClientDAOImpl clientDaoImpl = new ClientDAOImpl();
         TransactionService transactionService = new TransactionService();
-        boolean isFinished;
+        boolean isFinished = true;
         Commands.demo();
         System.out.println("\nПриложение запущенно. \nДля обзора команд в дальнейшем введите \"Команды\"");
         String input;
         //is it correct to put 100?
         String[] commands = new String[100];
-        while (isFinished = false) {
+        while (isFinished) {
             Scanner sc1 = new Scanner(System.in);
             try {
                 input = sc1.nextLine();
                 commands = input.split("\\s");
-                break;
-            } catch (InputMismatchException fg) {
-                System.out.print("Вы ввели не то. ");
-            }
-            try {
+                isFinished = true;
+
                 switch (commands[0]) {
                     case "Команды":
                         Commands.demo();
@@ -148,12 +146,25 @@ public class Initial {
 
                         break;*/
                 }
-            } catch (ArrayIndexOutOfBoundsException | SQLException e) {
+
+                if (isFinished) {
+                    System.out.println(("Работа програмы окончена"));
+                    break;
+                }
+            } catch (InputMismatchException fg) {
+                log.error(fg);
+                System.out.print("Вы ввели не то. ");
+            } catch (ArrayIndexOutOfBoundsException e ) {
+                log.error(e);
                 System.out.println("Ошибка ввода (не хватает аргументов)");
+            } catch (ModelNotFoundException e ) {
+                log.error(e);
+                System.out.println("Нет такой сущности");
             }
-            if (isFinished = true) {
-                System.out.println(("Работа програмы окончена"));
-                break;
+            catch (SQLException e){
+                log.error(e);
+                //todo text in exc
+                System.out.println("???Ошибка ввода (не хватает аргументов)");
             }
         }
     }

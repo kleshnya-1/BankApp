@@ -7,7 +7,7 @@ import ru.laptseu.bankapp.dao.TransferHistoryDAOImpl;
 import ru.laptseu.bankapp.models.Account;
 import ru.laptseu.bankapp.models.Currency;
 import ru.laptseu.bankapp.models.TransferHistory;
-import ru.laptseu.bankapp.utilities.CommissionCalculator;
+import ru.laptseu.bankapp.ignor.CommissionCalculator;
 
 import java.sql.Connection;
 import java.sql.SQLException;

@@ -1,6 +1,7 @@
 package ru.laptseu.bankapp.dao;
 
 import lombok.extern.log4j.Log4j2;
+import ru.laptseu.bankapp.ModelNotFoundException;
 import ru.laptseu.bankapp.models.Bank;
 import ru.laptseu.bankapp.utilities.ConnectionMaker;
 
@@ -31,11 +32,10 @@ public class BankDAOImpl implements IMaintainableDAO<Bank> {
                 }
             }
         } catch
-        (SQLException throwables) {
-            log.error(throwables);
-            throw throwables;
+        (SQLException e) {
+            log.error(e);
+            throw e;
         }
-
         return bank.getId();
     }
 
@@ -48,18 +48,17 @@ public class BankDAOImpl implements IMaintainableDAO<Bank> {
                     "select * from banks where id=?");
             preparedStatement.setInt(1, key);
             resultSet = preparedStatement.executeQuery();
-
-            while (resultSet.next()) {
+            if (resultSet == null) throw new ModelNotFoundException();
                 bank.setId(resultSet.getInt("id"));
                 bank.setName(resultSet.getString("name"));
                 bank.setTransferFeeInPercent(resultSet.getDouble("transfer_fee"));
                 bank.setTransferFeeInPercentForNotNaturalPersons(resultSet.getDouble("transfer_fee_nnp"));
                 //the method
                 bank.setRateList(currencyRateDAO.readList(bank.getId()));
-            }
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-            throw throwables;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw e;
         }
         return bank;
     }
@@ -69,18 +68,19 @@ public class BankDAOImpl implements IMaintainableDAO<Bank> {
         boolean result;
         try (Connection connection = new ConnectionMaker().makeConnection()) {
             PreparedStatement preparedStatement = connection.prepareStatement(
-                    "update banks (name, transfer_fee, transfer_fee_nnp, currency_rate, id)" +
+                    "update banks (name, transfer_fee, transfer_fee_nnp, currency_rate, id) " +
                             "set (?,?,?,?)");
             preparedStatement.setString(1, bank.getName());
             preparedStatement.setDouble(2, bank.getTransferFeeInPercent());
             preparedStatement.setDouble(3, bank.getTransferFeeInPercentForNotNaturalPersons());
+           //todo. rate DAO
             preparedStatement.setInt(4, bank.getId());
             preparedStatement.executeUpdate();
             result = true;
         } catch
-        (SQLException throwables) {
-            log.error(throwables);
-            throw throwables;
+        (SQLException e) {
+            log.error(e);
+            throw e;
         }
         return result;
     }
@@ -95,13 +95,13 @@ public class BankDAOImpl implements IMaintainableDAO<Bank> {
         boolean result;
         try (Connection connection = new ConnectionMaker().makeConnection()) {
             PreparedStatement preparedStatement = connection.prepareStatement(
-                    "delete  banks where  id=?");
+                    "delete from banks where  id=?");
             preparedStatement.setInt(1, key);
             preparedStatement.executeUpdate();
             result = true;
-        } catch (SQLException throwables) {
-            log.error(throwables);
-            throw throwables;
+        } catch (SQLException e) {
+            log.error(e);
+            throw e;
         }
         return result;
     }

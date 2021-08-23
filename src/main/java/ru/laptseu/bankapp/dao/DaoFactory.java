@@ -21,7 +21,7 @@ public class DaoFactory {
     public DaoFactory() {
     }
 
-    public static IMaintainableDAO get(Class daoClass) {
-        return factoryMap.get(daoClass);
+    public static IMaintainableDAO get(Class clazz) {
+        return factoryMap.get(clazz);
     }
 }

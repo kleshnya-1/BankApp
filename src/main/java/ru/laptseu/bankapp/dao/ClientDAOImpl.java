@@ -8,6 +8,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+//
+//
+//not for checking now. in progress
+//
+//
+//
+//
 public class ClientDAOImpl implements IMaintainableDAO<Client> {
     private final Connection connection = new ConnectionMaker().makeConnection();
 
@@ -63,7 +70,6 @@ public class ClientDAOImpl implements IMaintainableDAO<Client> {
     public boolean delete(int key) {
         return false;
     }
-
 
     public ClientDAOImpl create() {
         return new ClientDAOImpl();

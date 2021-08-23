@@ -10,13 +10,4 @@ public enum Currency {
     Currency(String label) {
         this.label = label;
     }
-
-//    public static Currency valueOfLabel(String label) {
-//        for (Currency e : values()) {
-//            if (e.label.equals(label)) {
-//                return e;
-//            }
-//        }
-//        return null;
-//    }
 }

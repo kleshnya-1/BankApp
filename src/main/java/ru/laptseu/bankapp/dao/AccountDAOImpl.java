@@ -1,7 +1,7 @@
 package ru.laptseu.bankapp.dao;
 
 import lombok.extern.log4j.Log4j2;
-import ru.laptseu.bankapp.ModelNotFountException;
+import ru.laptseu.bankapp.ModelNotFoundException;
 import ru.laptseu.bankapp.models.Account;
 import ru.laptseu.bankapp.models.Currency;
 import ru.laptseu.bankapp.utilities.ConnectionMaker;
@@ -23,13 +23,14 @@ public class AccountDAOImpl implements IMaintainableDAO<Account> {
             preparedStatement.setDouble(4, acc.getAmount());
             int affectedRows = preparedStatement.executeUpdate();
             if (affectedRows == 0) throw new SQLException("Creating failed, no rows affected.");
-            try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
+            ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
                 if (generatedKeys.next()) {
                     acc.setId(generatedKeys.getInt(1));
                 } else {
                     throw new SQLException("Creating user failed, no ID obtained.");
                 }
-            }
+                //вместо try-with-resources. место удачное?
+                generatedKeys.close();
         } catch
         (SQLException throwables) {
             log.error(throwables);
@@ -47,10 +48,10 @@ public class AccountDAOImpl implements IMaintainableDAO<Account> {
                     "select * from accounts where id=?");
             preparedStatement.setInt(1, key);
             ResultSet resultSet = preparedStatement.executeQuery();
-            if (resultSet == null) throw new ModelNotFountException();
+            //todo. close resultset
+            if (resultSet == null) throw new ModelNotFoundException();
             account.setId(resultSet.getInt("id"));
             account.setBankId(resultSet.getInt("bank_id"));
-
             account.setClientName(resultSet.getString("client_name"));
             //todo. check in test currency
             account.setCurrency(Currency.valueOf(resultSet.getString("currency")));
@@ -58,7 +59,7 @@ public class AccountDAOImpl implements IMaintainableDAO<Account> {
         } catch (SQLException throwables) {
             log.error(throwables);
             throw throwables;
-        } catch (RuntimeException e) {
+        } catch (ModelNotFoundException e) {
             log.error(e);
             throw e;
         }
@@ -68,20 +69,9 @@ public class AccountDAOImpl implements IMaintainableDAO<Account> {
     @Override
     public boolean update(Account account) throws SQLException {
         boolean result;
-        try (Connection connection = new ConnectionMaker().makeConnection()) {
-            PreparedStatement preparedStatement = connection.prepareStatement(
-                    "update  accounts set amount= ?, name =?, bank_id=?, currency = ? where id=?");
-            preparedStatement.setDouble(1, account.getAmount());
-            preparedStatement.setString(2, account.getClientName());
-            preparedStatement.setInt(3, account.getBankId());
-            preparedStatement.setString(4, account.getCurrency().toString());
-            preparedStatement.setInt(5, account.getId());
-            preparedStatement.executeUpdate();
-            result = true;
-        } catch (SQLException throwables) {
-            log.error(throwables);
-            throw throwables;
-        }
+        Connection connection = new ConnectionMaker().makeConnection();
+        result = update(account, connection);
+        connection.close();
         //todo is it good to return result as here?
         return result;
     }
@@ -103,9 +93,6 @@ public class AccountDAOImpl implements IMaintainableDAO<Account> {
         } catch (SQLException throwables) {
             log.error(throwables);
             throw throwables;
-        } finally {
-            //close in service
-            //conn.close();
         }
         return result;
     }
