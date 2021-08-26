@@ -8,11 +8,11 @@ public interface IMaintainableDAO<T> {
 
     T read(int key) throws SQLException;
 
-    boolean update(T obj) throws SQLException;
+    void update(T obj) throws SQLException;
 
-    boolean update(T obj, Connection conn) throws SQLException;
+    void update(T obj, Connection conn) throws SQLException;
 
-    boolean delete(int key) throws SQLException;
+    void delete(int key) throws SQLException;
 
     Connection getConnection();
 

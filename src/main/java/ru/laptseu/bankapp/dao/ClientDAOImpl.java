@@ -1,5 +1,6 @@
 package ru.laptseu.bankapp.dao;
 
+import lombok.extern.log4j.Log4j2;
 import ru.laptseu.bankapp.models.Client;
 import ru.laptseu.bankapp.utilities.ConnectionMaker;
 
@@ -15,6 +16,7 @@ import java.sql.SQLException;
 //
 //
 //
+@Log4j2
 public class ClientDAOImpl implements IMaintainableDAO<Client> {
     private final Connection connection = new ConnectionMaker().makeConnection();
 
@@ -26,13 +28,21 @@ public class ClientDAOImpl implements IMaintainableDAO<Client> {
                             "values (?,?)");
             preparedStatement.setString(1, client.getName());
             preparedStatement.setBoolean(2, client.isNaturalPerson());
-            preparedStatement.executeUpdate();
-            System.out.println("Клиент " + client.getName() + " добавлен");
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-            throw throwables;
+            int affectedRows = preparedStatement.executeUpdate();
+            if (affectedRows == 0) throw new SQLException("Creating failed, no rows affected.");
+            ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
+            if (generatedKeys.next()) {
+                client.setId(generatedKeys.getInt(1));
+            } else {
+                throw new SQLException("Creating user failed, no ID obtained.");
+            }
+            generatedKeys.close();
+        } catch
+        (SQLException e) {
+            log.error(e);
+            throw e;
         }
-        return 0;
+        return client.getId();
     }
 
     //todo have to be fixed
@@ -41,37 +51,24 @@ public class ClientDAOImpl implements IMaintainableDAO<Client> {
         return null;
     }
 
-    public Client readByName(String name) throws SQLException {
-        ResultSet resultSet;
-        Client client = new Client();
-        try (Connection connection = new ConnectionMaker().makeConnection()) {
-            PreparedStatement preparedStatement = connection.prepareStatement(
-                    "select * from banks where name =?");
-            preparedStatement.setString(1, name);
-            resultSet = preparedStatement.executeQuery();
-            client.setName(resultSet.getString("name"));
-            client.setNaturalPerson(resultSet.getBoolean("is_natural_person"));
-            client.setId(resultSet.getInt("id"));
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-            throw throwables;
-        }
-        return client;
+    //todo have to be fixed
+    @Override
+    public void update(Client obj) {
+    }
+
+    @Override
+    public void update(Client obj, Connection conn) throws SQLException {
+
     }
 
     //todo have to be fixed
     @Override
-    public boolean update(Client obj) {
-        return false;
+    public void delete(int key) {
     }
 
-    //todo have to be fixed
     @Override
-    public boolean delete(int key) {
-        return false;
+    public Connection getConnection() {
+        return new ConnectionMaker().makeConnectionWithFalseAutoCommit();
     }
 
-    public ClientDAOImpl create() {
-        return new ClientDAOImpl();
-    }
 }

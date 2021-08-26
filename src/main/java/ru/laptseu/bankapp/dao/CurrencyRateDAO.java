@@ -1,7 +1,7 @@
 package ru.laptseu.bankapp.dao;
 
 import lombok.extern.log4j.Log4j2;
-import ru.laptseu.bankapp.ModelNotFoundException;
+import ru.laptseu.bankapp.EntityNotFoundException;
 import ru.laptseu.bankapp.models.Currency;
 import ru.laptseu.bankapp.models.CurrencyRate;
 import ru.laptseu.bankapp.utilities.ConnectionMaker;
@@ -31,9 +31,9 @@ public class CurrencyRateDAO {
                     throw new SQLException("Creating currency_rate failed, no ID obtained.");
                 }
             }
-        } catch (SQLException throwables) {
-            log.error(throwables);
-            throw throwables;
+        } catch (SQLException e) {
+            log.error(e);
+            throw e;
         }
         return currencyRate.getId();
     }
@@ -47,16 +47,16 @@ public class CurrencyRateDAO {
                     "select * from currency_rate where bank_id=?");
             preparedStatement.setInt(1, key);
             ResultSet resultSet = preparedStatement.executeQuery();
-            if (resultSet == null) throw new ModelNotFoundException();
+            if (resultSet == null) throw new EntityNotFoundException();
             while (resultSet.next()) {
                 currencyRate.setBankId(resultSet.getInt("bank_id"));
                 currencyRate.setCurrency(Currency.valueOf(resultSet.getString("currency")));
                 currencyRate.setRateToByn(resultSet.getDouble("rate_to_byn"));
                 currencyList.add(currencyRate);
             }
-        } catch (SQLException throwables) {
-            log.error(throwables);
-            throw throwables;
+        } catch (SQLException e) {
+            log.error(e);
+            throw e;
         } catch (RuntimeException e) {
             log.error(e);
             throw e;
@@ -74,9 +74,9 @@ public class CurrencyRateDAO {
             //todo check exception while no entity found and add to catch
             preparedStatement.executeUpdate();
             result = true;
-        } catch (SQLException throwables) {
-            log.error(throwables);
-            throw throwables;
+        } catch (SQLException e) {
+            log.error(e);
+            throw e;
         }
         return result;
     }
@@ -91,9 +91,9 @@ public class CurrencyRateDAO {
             //todo check exception while no entity found
             preparedStatement.executeUpdate();
             result = true;
-        } catch (SQLException throwables) {
-            log.error(throwables);
-            throw throwables;
+        } catch (SQLException e) {
+            log.error(e);
+            throw e;
         }
         return result;
     }

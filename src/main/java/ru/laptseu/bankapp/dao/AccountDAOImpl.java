@@ -1,7 +1,7 @@
 package ru.laptseu.bankapp.dao;
 
 import lombok.extern.log4j.Log4j2;
-import ru.laptseu.bankapp.ModelNotFoundException;
+import ru.laptseu.bankapp.EntityNotFoundException;
 import ru.laptseu.bankapp.models.Account;
 import ru.laptseu.bankapp.models.Currency;
 import ru.laptseu.bankapp.utilities.ConnectionMaker;
@@ -17,7 +17,7 @@ public class AccountDAOImpl implements IMaintainableDAO<Account> {
             PreparedStatement preparedStatement = connection.prepareStatement(
                     "insert into accounts (client_name, bank_id, currency, amount) " +
                             "values (?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
-            preparedStatement.setString(1, acc.getClientName());
+            preparedStatement.setInt(1, acc.getClientId());
             preparedStatement.setInt(2, acc.getBankId());
             preparedStatement.setString(3, acc.getCurrency().toString());
             preparedStatement.setDouble(4, acc.getAmount());
@@ -29,12 +29,11 @@ public class AccountDAOImpl implements IMaintainableDAO<Account> {
                 } else {
                     throw new SQLException("Creating user failed, no ID obtained.");
                 }
-                //вместо try-with-resources. место удачное?
                 generatedKeys.close();
         } catch
-        (SQLException throwables) {
-            log.error(throwables);
-            throw throwables;
+        (SQLException e) {
+            log.error(e);
+            throw e;
         }
 
         return acc.getId();
@@ -49,17 +48,17 @@ public class AccountDAOImpl implements IMaintainableDAO<Account> {
             preparedStatement.setInt(1, key);
             ResultSet resultSet = preparedStatement.executeQuery();
             //todo. close resultset
-            if (resultSet == null) throw new ModelNotFoundException();
+            if (resultSet == null) throw new EntityNotFoundException();
             account.setId(resultSet.getInt("id"));
             account.setBankId(resultSet.getInt("bank_id"));
-            account.setClientName(resultSet.getString("client_name"));
+            account.setClientId(resultSet.getInt("client_name"));
             //todo. check in test currency
             account.setCurrency(Currency.valueOf(resultSet.getString("currency")));
             account.setAmount(resultSet.getDouble("amount"));
-        } catch (SQLException throwables) {
-            log.error(throwables);
-            throw throwables;
-        } catch (ModelNotFoundException e) {
+        } catch (SQLException e) {
+            log.error(e);
+            throw e;
+        } catch (EntityNotFoundException e) {
             log.error(e);
             throw e;
         }
@@ -67,50 +66,52 @@ public class AccountDAOImpl implements IMaintainableDAO<Account> {
     }
 
     @Override
-    public boolean update(Account account) throws SQLException {
-        boolean result;
-        Connection connection = new ConnectionMaker().makeConnection();
-        result = update(account, connection);
-        connection.close();
-        //todo is it good to return result as here?
-        return result;
+    public void update(Account account) throws SQLException {
+
+         update(account, null);
+
     }
 
     //method for transaction
+    //must be closed after usage
     @Override
-    public boolean update(Account account, Connection conn) throws SQLException {
-        boolean result;
+    public void update(Account account, Connection conn) throws SQLException {
+        Connection connection;
+        if (conn != null) {
+            connection = conn;
+        } else {
+            connection =  new ConnectionMaker().makeConnection();
+        }
         try {
-            PreparedStatement preparedStatement = conn.prepareStatement(
+            PreparedStatement preparedStatement = connection.prepareStatement(
                     "update  accounts set amount= ?, name =?, bank_id=?, currency = ? where id=?");
             preparedStatement.setDouble(1, account.getAmount());
-            preparedStatement.setString(2, account.getClientName());
+            preparedStatement.setInt(2, account.getClientId());
             preparedStatement.setInt(3, account.getBankId());
             preparedStatement.setString(4, account.getCurrency().toString());
             preparedStatement.setInt(5, account.getId());
             preparedStatement.executeUpdate();
-            result = true;
-        } catch (SQLException throwables) {
-            log.error(throwables);
-            throw throwables;
+
+        } catch (SQLException e) {
+            log.error(e);
+            throw e;
         }
-        return result;
+        if (conn==null) connection.close();
+
     }
 
     @Override
-    public boolean delete(int key) throws SQLException {
-        boolean result;
+    public void delete(int key) throws SQLException {
         try (Connection connection = new ConnectionMaker().makeConnection()) {
             PreparedStatement preparedStatement = connection.prepareStatement(
                     "delete  accounts where  id=?");
             preparedStatement.setInt(1, key);
             preparedStatement.executeUpdate();
-            result = true;
-        } catch (SQLException throwables) {
-            log.error(throwables);
-            throw throwables;
+            //todo close???
+        } catch (SQLException e) {
+            log.error(e);
+            throw e;
         }
-        return result;
     }
 
     @Override

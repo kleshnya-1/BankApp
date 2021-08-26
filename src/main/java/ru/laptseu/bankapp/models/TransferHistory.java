@@ -9,16 +9,16 @@ import java.util.Calendar;
 
 @Getter
 @Setter
-//todo refactor models to Strings
 public class TransferHistory {
     private final DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
     private int id;
-    private Calendar date;
-    private Client clientSource;
-    private Client clientTarget;
-    private Account accountSource;
-    private Account accountTarget;
-    private Bank bankSource;
-    private Bank bankTarget;
+    private String date;
+    private String clientSourceName;
+    private String clientTargetName;
+    private String accountSourceName;
+    private String accountTargetName;
+    private String bankSourceName;
+    private String bankTargetName;
+    private String currency;
     private double amount;
 }

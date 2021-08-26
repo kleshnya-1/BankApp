@@ -1,7 +1,7 @@
 package ru.laptseu.bankapp.dao;
 
 import lombok.extern.log4j.Log4j2;
-import ru.laptseu.bankapp.ModelNotFoundException;
+import ru.laptseu.bankapp.EntityNotFoundException;
 import ru.laptseu.bankapp.models.Bank;
 import ru.laptseu.bankapp.utilities.ConnectionMaker;
 
@@ -48,7 +48,7 @@ public class BankDAOImpl implements IMaintainableDAO<Bank> {
                     "select * from banks where id=?");
             preparedStatement.setInt(1, key);
             resultSet = preparedStatement.executeQuery();
-            if (resultSet == null) throw new ModelNotFoundException();
+            if (resultSet == null) throw new EntityNotFoundException();
                 bank.setId(resultSet.getInt("id"));
                 bank.setName(resultSet.getString("name"));
                 bank.setTransferFeeInPercent(resultSet.getDouble("transfer_fee"));
@@ -64,46 +64,43 @@ public class BankDAOImpl implements IMaintainableDAO<Bank> {
     }
 
     @Override
-    public boolean update(Bank bank) throws SQLException {
-        boolean result;
+    public void update(Bank bank) throws SQLException {
         try (Connection connection = new ConnectionMaker().makeConnection()) {
             PreparedStatement preparedStatement = connection.prepareStatement(
-                    "update banks (name, transfer_fee, transfer_fee_nnp, currency_rate, id) " +
+                    "update banks (name, transfer_fee, transfer_fee_nnp, id) " +
                             "set (?,?,?,?)");
             preparedStatement.setString(1, bank.getName());
             preparedStatement.setDouble(2, bank.getTransferFeeInPercent());
             preparedStatement.setDouble(3, bank.getTransferFeeInPercentForNotNaturalPersons());
-           //todo. rate DAO
             preparedStatement.setInt(4, bank.getId());
             preparedStatement.executeUpdate();
-            result = true;
         } catch
         (SQLException e) {
             log.error(e);
             throw e;
         }
-        return result;
+
     }
 
     @Override
-    public boolean update(Bank obj, Connection conn) throws SQLException {
+    public void update(Bank obj, Connection conn) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public boolean delete(int key) throws SQLException {
-        boolean result;
+    public void delete(int key) throws SQLException {
+
         try (Connection connection = new ConnectionMaker().makeConnection()) {
             PreparedStatement preparedStatement = connection.prepareStatement(
                     "delete from banks where  id=?");
             preparedStatement.setInt(1, key);
             preparedStatement.executeUpdate();
-            result = true;
+
         } catch (SQLException e) {
             log.error(e);
             throw e;
         }
-        return result;
+
     }
 
     @Override

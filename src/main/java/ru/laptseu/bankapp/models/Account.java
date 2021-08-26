@@ -8,7 +8,7 @@ import lombok.Setter;
 public class Account {
     private int id;
     private int bankId;
-    private String clientName;
+    private int clientId;
     private Currency currency;
     private double amount;
 }

@@ -19,11 +19,11 @@ public class TransferHistoryDAOImpl implements IMaintainableDAO<TransferHistory>
             PreparedStatement preparedStatement = connection.prepareStatement(
                     "insert into transfers (source_client, target_client, source_bank, target_bank, amount, currency, date ) " +
                             "values (?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
-            preparedStatement.setInt(1, transferHistory.getAccountSource().getId());
-            preparedStatement.setInt(2, transferHistory.getAccountTarget().getId());
-            preparedStatement.setInt(3, transferHistory.getBankSource().getId());
-            preparedStatement.setInt(4, transferHistory.getBankTarget().getId());
-            preparedStatement.setString(5, transferHistory.getAccountSource().getCurrency().toString());
+//            preparedStatement.setInt(1, transferHistory.getAccountSource().getId());
+//            preparedStatement.setInt(2, transferHistory.getAccountTarget().getId());
+//            preparedStatement.setInt(3, transferHistory.getBankSource().getId());
+//            preparedStatement.setInt(4, transferHistory.getBankTarget().getId());
+//            preparedStatement.setString(5, transferHistory.getAccountSource().getCurrency().toString());
             preparedStatement.setDouble(6, transferHistory.getAmount());
             //todo check working in DB
             preparedStatement.setString(7, transferHistory.getDate().toString());
@@ -37,9 +37,9 @@ public class TransferHistoryDAOImpl implements IMaintainableDAO<TransferHistory>
                 }
             }
         } catch
-        (SQLException throwables) {
-            log.error(throwables);
-            throw throwables;
+        (SQLException e) {
+            log.error(e);
+            throw e;
         }
         return transferHistory.getId();
     }
@@ -68,9 +68,9 @@ public class TransferHistoryDAOImpl implements IMaintainableDAO<TransferHistory>
 //            //todo. check in test currency
 //            transferHistory.setCurrency(Currency.valueOf(resultSet.getString("currency")));
 //            transferHistory.setAmount(resultSet.getDouble("amount"));
-//        } catch (SQLException throwables) {
-//            log.error(throwables);
-//            throw throwables;
+//        } catch (SQLException e) {
+//            log.error(e);
+//            throw e;
 //        } catch (RuntimeException e) {
 //            log.error(e);
 //            throw e;
@@ -80,19 +80,18 @@ public class TransferHistoryDAOImpl implements IMaintainableDAO<TransferHistory>
 
     //no reason to realise
     @Override
-    public boolean update(TransferHistory obj) {
+    public void update(TransferHistory obj) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public boolean update(TransferHistory obj, Connection conn) throws SQLException {
+    public void update(TransferHistory obj, Connection conn) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
     //todo in progress
     @Override
-    public boolean delete(int key) {
-        return false;
+    public void delete(int key) {
     }
 
     @Override
