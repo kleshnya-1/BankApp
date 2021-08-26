@@ -1,20 +1,87 @@
 package ru.laptseu.bankapp.dao;
 
 import lombok.extern.log4j.Log4j2;
-import ru.laptseu.bankapp.EntityNotFoundException;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+import ru.laptseu.bankapp.core.HibernateSessionFactoryUtil;
 import ru.laptseu.bankapp.models.Currency;
 import ru.laptseu.bankapp.models.CurrencyRate;
-import ru.laptseu.bankapp.utilities.ConnectionMaker;
 
-import java.sql.*;
-import java.util.ArrayList;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import java.sql.SQLException;
 import java.util.List;
 
-//not implements interface
+//have one un-implemented methods readList(int bank id) and read (int bankId, Currency currency)
 @Log4j2
-public class CurrencyRateDAO {
+public class CurrencyRateDAO implements IMaintainableDAO<CurrencyRate> {
 
-    public int create(CurrencyRate currencyRate) throws SQLException {
+    @Override
+    public int create(CurrencyRate obj) throws SQLException {
+        Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
+        Transaction tx1 = session.beginTransaction();
+        session.save(obj);
+        tx1.commit();
+        session.close();
+        //todo check is works
+        return obj.getId();
+    }
+
+    @Override
+    public CurrencyRate read(int key) throws SQLException {
+        return HibernateSessionFactoryUtil.getSessionFactory().openSession().get(CurrencyRate.class, key);
+    }
+
+    //un-implemented method
+    public List<CurrencyRate> readList(int bankKey) throws SQLException {
+        String hql = "from currency_rate c where c.bankId =:bankId";
+        List<CurrencyRate> result = HibernateSessionFactoryUtil.getSessionFactory().openSession().
+                createQuery(hql).setParameter("bankId", bankKey).list();
+        return result;
+    }
+//todo check HQL
+    public CurrencyRate read(int bankKey, Currency currency) throws SQLException {
+        String hql = "from currency_rate c where c.bankId =:bankId and c.currency =:currency";
+        CurrencyRate currencyRateForReturning =  (CurrencyRate) HibernateSessionFactoryUtil.getSessionFactory().openSession().createQuery(hql)
+                .setParameter("bankId", bankKey)
+                .setParameter("currency", currency).stream().findAny().orElse(null);
+        return currencyRateForReturning;
+
+    }
+
+    @Override
+    public void update(CurrencyRate obj) throws SQLException {
+        Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
+        update(obj, session);
+        //todo ask. thread-safe?
+        session.getTransaction().commit();
+        session.close();
+    }
+
+    @Override
+    public void update(CurrencyRate obj, Session s) throws SQLException {
+        Session session = s;
+        Transaction tx1 = session.beginTransaction();
+        session.update(obj);
+    }
+
+    @Override
+    public void delete(int key) throws SQLException {
+        Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
+        Transaction tx1 = session.beginTransaction();
+        session.delete(key);
+        tx1.commit();
+        session.close();
+    }
+
+    @Override
+    public Session getSession() {
+        return HibernateSessionFactoryUtil.getSessionFactory().openSession();
+    }
+
+
+
+   /* public int create(CurrencyRate currencyRate) throws SQLException {
         try (Connection connection = new ConnectionMaker().makeConnection()) {
             PreparedStatement preparedStatement = connection.prepareStatement(
                     "insert into currency_rate values ", Statement.RETURN_GENERATED_KEYS);
@@ -96,6 +163,6 @@ public class CurrencyRateDAO {
             throw e;
         }
         return result;
-    }
+    }*/
 
 }

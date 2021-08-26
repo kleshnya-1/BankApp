@@ -1,20 +1,62 @@
 package ru.laptseu.bankapp.dao;
 
 import lombok.extern.log4j.Log4j2;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+import ru.laptseu.bankapp.core.HibernateSessionFactoryUtil;
 import ru.laptseu.bankapp.models.TransferHistory;
-import ru.laptseu.bankapp.utilities.ConnectionMaker;
 
-import java.sql.*;
+import javax.persistence.Entity;
+import java.sql.SQLException;
 
 @Log4j2
 //DB saves ID's of models in create().
-//todo  in read() should i use DAO classes to extract all models and add
-// to returning transferHistory object?
+
 public class TransferHistoryDAOImpl implements IMaintainableDAO<TransferHistory> {
 
     @Override
     public int create(TransferHistory obj) throws SQLException {
-        TransferHistory transferHistory = obj;
+        Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
+        Transaction tx1 = session.beginTransaction();
+        session.save(obj);
+        tx1.commit();
+        session.close();
+        //todo check is works
+        return obj.getId();
+    }
+
+    @Override
+    public TransferHistory read(int key) throws SQLException {
+        return HibernateSessionFactoryUtil.getSessionFactory().openSession().get(TransferHistory.class, key);
+    }
+
+    @Override
+    public void update(TransferHistory obj) throws SQLException {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void update(TransferHistory obj, Session s) throws SQLException {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void delete(int key) throws SQLException {
+        Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
+        Transaction tx1 = session.beginTransaction();
+        session.delete(key);
+        tx1.commit();
+        session.close();
+    }
+
+    @Override
+    public Session getSession() {
+        return HibernateSessionFactoryUtil.getSessionFactory().openSession();
+    }
+    
+   
+
+/*        TransferHistory transferHistory = obj;
         try (Connection connection = new ConnectionMaker().makeConnection()) {
             PreparedStatement preparedStatement = connection.prepareStatement(
                     "insert into transfers (source_client, target_client, source_bank, target_bank, amount, currency, date ) " +
@@ -76,26 +118,9 @@ public class TransferHistoryDAOImpl implements IMaintainableDAO<TransferHistory>
 //            throw e;
 //        }
         return transferHistory;
-    }
-
-    //no reason to realise
-    @Override
-    public void update(TransferHistory obj) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void update(TransferHistory obj, Connection conn) throws SQLException {
-        throw new UnsupportedOperationException();
-    }
-
-    //todo in progress
-    @Override
-    public void delete(int key) {
-    }
-
-    @Override
-    public Connection getConnection() {
-        throw new UnsupportedOperationException();
-    }
+    }*/
+//    @Override
+//    public Connection getSession() {
+//        throw new UnsupportedOperationException();
+//    }
 }

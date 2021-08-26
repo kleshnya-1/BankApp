@@ -57,25 +57,25 @@ public class AccountService implements IMaintainableService<Account> {
 
     //todo
     public boolean transferAmount(Account sourceAcc, Account targetAcc, double amount) throws SQLException {
-        TransferHistory transferHistory = new TransferHistory();
-        double commission = 0;
-        double rate = 1;
-        double totalAmount = amount;
-
-        //todo logic in progress
-        if (sourceAcc.getBankId() != (targetAcc.getBankId())) {
-            commission = commissionCalculator.calculate(targetAcc, amount);
-        }
-        if (!sourceAcc.getCurrency().equals(targetAcc.getCurrency())) {
-            totalAmount = currencyConverter.returnConvertedAmount(sourceAcc, targetAcc, amount);
-        }
-        sourceAcc.setAmount(sourceAcc.getAmount() - commission - totalAmount);
-        targetAcc.setAmount(targetAcc.getAmount() + totalAmount);
-        Connection connection = accountDao.getConnection();
-                    accountDao.update(sourceAcc, connection);
-            accountDao.update(targetAcc, connection);
-            connection.commit();
-            connection.close();
+//        TransferHistory transferHistory = new TransferHistory();
+//        double commission = 0;
+//        double rate = 1;
+//        double totalAmount = amount;
+//
+//        //todo logic in progress
+//        if (sourceAcc.getBankId() != (targetAcc.getBankId())) {
+//            commission = commissionCalculator.calculate(targetAcc, amount);
+//        }
+//        if (!sourceAcc.getCurrency().equals(targetAcc.getCurrency())) {
+//            totalAmount = currencyConverter.returnConvertedAmount(sourceAcc, targetAcc, amount);
+//        }
+//        sourceAcc.setAmount(sourceAcc.getAmount() - commission - totalAmount);
+//        targetAcc.setAmount(targetAcc.getAmount() + totalAmount);
+//        Connection connection = accountDao.getSession();
+//                    accountDao.update(sourceAcc, connection);
+//            accountDao.update(targetAcc, connection);
+//            connection.commit();
+//            connection.close();
 
 
         //todo creating and persisting transfer history

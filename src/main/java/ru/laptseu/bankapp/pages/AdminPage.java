@@ -1,5 +1,6 @@
 package ru.laptseu.bankapp.pages;
 
+import lombok.extern.log4j.Log4j2;
 import ru.laptseu.bankapp.models.Account;
 import ru.laptseu.bankapp.models.Bank;
 import ru.laptseu.bankapp.models.Client;
@@ -11,11 +12,13 @@ import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.Scanner;
 
-public class AdminPage {
+@Log4j2
+public class AdminPage implements IPages{
 
     Scanner scanner = new Scanner(System.in);
 
     public void enter() throws SQLException {
+        try {
         System.out.println("Вошли как Админ");
         System.out.println("Что необходимо сделать");
         System.out.println("1. Добавить");
@@ -73,7 +76,13 @@ public class AdminPage {
                 break;
         }
 
-        String rawArgumentsForCreating = scanner.nextLine();
+//        int rawAr2gumentsForCreating = scanner.nextInt();
+        Scanner scanner2 = new Scanner(System.in);
+//        String rawAr2gumentsForCreating2 = scanner.nextLine();
+//        String rawAr2gumentsForCreating22 = scanner2.nextLine();
+       // scanner.close();
+      //  scanner.reset();
+        String rawArgumentsForCreating = scanner2.nextLine();
         String[] argumentsForCreating = rawArgumentsForCreating.split(",");
         Arrays.stream(argumentsForCreating).forEach(s -> s.trim());
 //todo check for object.class
@@ -99,5 +108,17 @@ public class AdminPage {
                 //todo exit
         }
 
+
+
+        }
+        catch (NumberFormatException nfe){
+            log.error(nfe);
+            System.out.println("Ошибка ввода. значение не может быть "+nfe.getMessage());
+        }
+    }
+
+    @Override
+    public void enter(int id) throws SQLException {
+        enter();
     }
 }
