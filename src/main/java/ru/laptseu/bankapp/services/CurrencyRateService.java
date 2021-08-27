@@ -1,9 +1,7 @@
 package ru.laptseu.bankapp.services;
 
-import ru.laptseu.bankapp.core.HibernateSessionFactoryUtil;
 import ru.laptseu.bankapp.dao.DaoFactory;
 import ru.laptseu.bankapp.dao.IMaintainableDAO;
-import ru.laptseu.bankapp.models.Account;
 import ru.laptseu.bankapp.models.Currency;
 import ru.laptseu.bankapp.models.CurrencyRate;
 

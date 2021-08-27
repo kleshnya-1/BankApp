@@ -9,22 +9,23 @@ import java.sql.SQLException;
 
 @Log4j2
 public class BankPage implements IPages {
-    public void enter(int id){
+    public void enter(int id) {
         IMaintainableService<Bank> bankService = ServiceFactory.get(Bank.class);
         Bank bank = null;
         try {
             bank = bankService.read(id);
         } catch (SQLException e) {
-           log.error(e);
+            log.error(e);
         }
-        if (bank==null){
-            System.out.println("Ид такого банка "+id+" не существует. Повторите попытку ");
+        if (bank == null) {
+            System.out.println("Ид такого банка " + id + " не существует. Повторите попытку ");
         } else {
-            System.out.println("Вы вошли как банк с ID " +id);
+            System.out.println("Вы вошли как банк с ID " + id);
             startPage();
         }
     }
-    private  void startPage(){
+
+    private void startPage() {
         System.out.println();
         System.out.println("***Функции в разработке***");
         System.out.println("1. Сменить название");

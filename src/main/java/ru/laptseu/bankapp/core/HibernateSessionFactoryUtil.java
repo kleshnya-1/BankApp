@@ -1,7 +1,5 @@
 package ru.laptseu.bankapp.core;
 
-
-
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
@@ -21,7 +19,7 @@ public class HibernateSessionFactoryUtil {
                 configuration.addAnnotatedClass(Bank.class);
                 configuration.addAnnotatedClass(Client.class);
                 configuration.addAnnotatedClass(CurrencyRate.class);
-               //todo configuration.addAnnotatedClass(Currency.class);
+                //todo configuration.addAnnotatedClass(Currency.class);
                 configuration.addAnnotatedClass(TransferHistory.class);
                 StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties());
                 sessionFactory = configuration.buildSessionFactory(builder.build());

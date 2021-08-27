@@ -1,6 +1,7 @@
 package ru.laptseu.bankapp.services;
 
 import lombok.extern.log4j.Log4j2;
+import org.hibernate.Session;
 import ru.laptseu.bankapp.dao.DaoFactory;
 import ru.laptseu.bankapp.dao.IMaintainableDAO;
 import ru.laptseu.bankapp.dao.TransferHistoryDAOImpl;
@@ -10,7 +11,6 @@ import ru.laptseu.bankapp.models.TransferHistory;
 import ru.laptseu.bankapp.utilities.CommissionCalculator;
 import ru.laptseu.bankapp.utilities.CurrencyConverter;
 
-import java.sql.Connection;
 import java.sql.SQLException;
 
 @Log4j2
@@ -57,26 +57,24 @@ public class AccountService implements IMaintainableService<Account> {
 
     //todo
     public boolean transferAmount(Account sourceAcc, Account targetAcc, double amount) throws SQLException {
-//        TransferHistory transferHistory = new TransferHistory();
-//        double commission = 0;
-//        double rate = 1;
-//        double totalAmount = amount;
-//
-//        //todo logic in progress
-//        if (sourceAcc.getBankId() != (targetAcc.getBankId())) {
-//            commission = commissionCalculator.calculate(targetAcc, amount);
-//        }
-//        if (!sourceAcc.getCurrency().equals(targetAcc.getCurrency())) {
-//            totalAmount = currencyConverter.returnConvertedAmount(sourceAcc, targetAcc, amount);
-//        }
-//        sourceAcc.setAmount(sourceAcc.getAmount() - commission - totalAmount);
-//        targetAcc.setAmount(targetAcc.getAmount() + totalAmount);
-//        Connection connection = accountDao.getSession();
-//                    accountDao.update(sourceAcc, connection);
-//            accountDao.update(targetAcc, connection);
-//            connection.commit();
-//            connection.close();
+        TransferHistory transferHistory = new TransferHistory();
+        double commission = 0;
+        double rate = 1;
+        double totalAmount = amount;
 
+        if (sourceAcc.getBankId() != (targetAcc.getBankId())) {
+            commission = commissionCalculator.calculate(targetAcc, amount);
+        }
+        if (!sourceAcc.getCurrency().equals(targetAcc.getCurrency())) {
+            totalAmount = currencyConverter.returnConvertedAmount(sourceAcc, targetAcc, amount);
+        }
+        sourceAcc.setAmount(sourceAcc.getAmount() - commission - totalAmount);
+        targetAcc.setAmount(targetAcc.getAmount() + totalAmount);
+        Session session = accountDao.getSession();
+        accountDao.update(sourceAcc, session);
+        accountDao.update(targetAcc, session);
+        session.getTransaction().commit();
+        session.close();
 
         //todo creating and persisting transfer history
  /*       transferHistory.setDate(Calendar.getInstance());

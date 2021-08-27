@@ -33,7 +33,7 @@ public class CurrencyConverter {
             targetAmount = sourceAmountByn / currencyTarget.getRateToByn();
         } else targetAmount = sourceAmountByn;
 
-        log.info(amount +" "+sourceAcc.getCurrency()+" converted to "+ targetAmount+" "+ targetAcc.getCurrency());
+        log.info(amount + " " + sourceAcc.getCurrency() + " converted to " + targetAmount + " " + targetAcc.getCurrency());
         return targetAmount;
     }
 

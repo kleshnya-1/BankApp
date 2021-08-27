@@ -32,7 +32,7 @@ public class Initial {
                 }
                 if (isRunning == false) {
                     System.out.println("Закончить выполнение програмы? Y/N");
-                    isRunning = (scanner.nextLine().equalsIgnoreCase("Y") ? true : false);
+                    isRunning = (scanner.nextLine().equalsIgnoreCase("Y"));
                 }
 
             } catch (InputMismatchException fg) {

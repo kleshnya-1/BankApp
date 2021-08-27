@@ -23,5 +23,4 @@ public class PageFactory {
         return factoryMap.get(clazz);
     }
 
-
 }

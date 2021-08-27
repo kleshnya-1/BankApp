@@ -9,15 +9,14 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Entity
-@Table(name ="Currency_Rates" )
+@Table(name = "Currency_Rates")
 public class CurrencyRate {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id", insertable = false, updatable = false)
     Bank bank;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
     private int bankId;
     private Currency currency;
     private double rateToByn;

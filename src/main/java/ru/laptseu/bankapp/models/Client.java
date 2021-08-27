@@ -1,6 +1,5 @@
 package ru.laptseu.bankapp.models;
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Type;
@@ -9,7 +8,6 @@ import javax.persistence.*;
 
 @Getter
 @Setter
-
 
 @Entity
 

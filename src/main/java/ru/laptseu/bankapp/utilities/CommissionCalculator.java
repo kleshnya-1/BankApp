@@ -20,9 +20,9 @@ public class CommissionCalculator {
         Bank targetBank = bankDaoImpl.read(targetAcc.getBankId());
         Client targetClient = clientDaoImpl.read(targetAcc.getClientId());
         if (targetClient.isNaturalPerson()) commissionPercent = targetBank.getTransferFeeInPercent();
-        else  commissionPercent = targetBank.getTransferFeeInPercentForNotNaturalPersons();
-        commission = commissionPercent*amount/100;
-        log.info("Commission calculated " + commission + "with percent "+commissionPercent+"% and amount + "+amount);
+        else commissionPercent = targetBank.getTransferFeeInPercentForNotNaturalPersons();
+        commission = commissionPercent * amount / 100;
+        log.info("Commission calculated " + commission + "with percent " + commissionPercent + "% and amount + " + amount);
         return commission;
     }
 }

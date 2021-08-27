@@ -6,7 +6,6 @@ import org.hibernate.Transaction;
 import ru.laptseu.bankapp.core.HibernateSessionFactoryUtil;
 import ru.laptseu.bankapp.models.TransferHistory;
 
-import javax.persistence.Entity;
 import java.sql.SQLException;
 
 @Log4j2

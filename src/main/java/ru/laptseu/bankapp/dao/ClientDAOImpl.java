@@ -4,10 +4,10 @@ import lombok.extern.log4j.Log4j2;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import ru.laptseu.bankapp.core.HibernateSessionFactoryUtil;
-import ru.laptseu.bankapp.dao.IMaintainableDAO;
 import ru.laptseu.bankapp.models.Client;
 
 import java.sql.SQLException;
+
 @Log4j2
 public class ClientDAOImpl implements IMaintainableDAO<Client> {
 

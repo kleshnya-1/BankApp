@@ -7,8 +7,6 @@ import ru.laptseu.bankapp.core.HibernateSessionFactoryUtil;
 import ru.laptseu.bankapp.models.Currency;
 import ru.laptseu.bankapp.models.CurrencyRate;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -33,16 +31,18 @@ public class CurrencyRateDAO implements IMaintainableDAO<CurrencyRate> {
     }
 
     //un-implemented method
+    //todo it doesnt work
     public List<CurrencyRate> readList(int bankKey) throws SQLException {
-        String hql = "from currency_rate c where c.bankId =:bankId";
+        String hql = "from currency_rates c where c.bankId =:bankId";
         List<CurrencyRate> result = HibernateSessionFactoryUtil.getSessionFactory().openSession().
                 createQuery(hql).setParameter("bankId", bankKey).list();
         return result;
     }
-//todo check HQL
+
+    //todo check HQL
     public CurrencyRate read(int bankKey, Currency currency) throws SQLException {
-        String hql = "from currency_rate c where c.bankId =:bankId and c.currency =:currency";
-        CurrencyRate currencyRateForReturning =  (CurrencyRate) HibernateSessionFactoryUtil.getSessionFactory().openSession().createQuery(hql)
+        String hql = "from currency_rates c where c.bankId =:bankId and c.currency =:currency";
+        CurrencyRate currencyRateForReturning = (CurrencyRate) HibernateSessionFactoryUtil.getSessionFactory().openSession().createQuery(hql)
                 .setParameter("bankId", bankKey)
                 .setParameter("currency", currency).stream().findAny().orElse(null);
         return currencyRateForReturning;
