@@ -21,4 +21,10 @@ public class Bank {
 
     @OneToMany(mappedBy = "bank", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CurrencyRate> rateList;
+
+    public void setRateList(List<CurrencyRate> rateList) {
+        rateList.stream().forEach(r -> r.setBank(this));
+        rateList.stream().forEach(r -> r.setBankId(this.id));
+        this.rateList = rateList;
+    }
 }

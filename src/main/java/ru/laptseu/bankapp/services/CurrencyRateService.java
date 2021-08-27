@@ -1,7 +1,9 @@
 package ru.laptseu.bankapp.services;
 
+import ru.laptseu.bankapp.core.HibernateSessionFactoryUtil;
 import ru.laptseu.bankapp.dao.DaoFactory;
 import ru.laptseu.bankapp.dao.IMaintainableDAO;
+import ru.laptseu.bankapp.models.Account;
 import ru.laptseu.bankapp.models.Currency;
 import ru.laptseu.bankapp.models.CurrencyRate;
 
@@ -27,12 +29,15 @@ public class CurrencyRateService implements IMaintainableService<CurrencyRate> {
 
     @Override
     public CurrencyRate read(int key) throws SQLException {
-        return null;
+        return currencyRateDao.read(key);
     }
 
     @Override
     public void update(String[] paramArr) throws SQLException {
-
+        CurrencyRate cr;
+        cr = create(paramArr);
+        cr.setId(Integer.parseInt(paramArr[paramArr.length]));
+        currencyRateDao.update(cr);
     }
 
     @Override
