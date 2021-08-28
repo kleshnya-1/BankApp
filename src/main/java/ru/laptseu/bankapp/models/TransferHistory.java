@@ -7,18 +7,23 @@ import javax.persistence.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 @Getter
 @Setter
 @Entity
 @Table(name = "Transfer_History")
 public class TransferHistory {
-    private final DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+    //todo make custom hibernate converter
+    //private final DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+
+    public TransferHistory() {
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private String date;
+    private Calendar date;
     private String clientSourceName;
     private String clientTargetName;
     private String accountSourceId;
@@ -31,7 +36,7 @@ public class TransferHistory {
     public TransferHistory(String clientSourceName, String clientTargetName,
                            String accountSourceId, String accountTargetId, String bankSourceName,
                            String bankTargetName, String currency, double amount) {
-        this.date = Calendar;
+        this.date = new GregorianCalendar();
         this.clientSourceName = clientSourceName;
         this.clientTargetName = clientTargetName;
         this.accountSourceId = accountSourceId;

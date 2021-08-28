@@ -36,7 +36,9 @@ public class TransferHistoryDAOImpl implements IMaintainableDAO<TransferHistory>
 
     @Override
     public void update(TransferHistory obj, Session s) throws SQLException {
-        throw new UnsupportedOperationException();
+        Session session = s;
+        Transaction tx1 = session.beginTransaction();
+        session.update(obj);
     }
 
     @Override

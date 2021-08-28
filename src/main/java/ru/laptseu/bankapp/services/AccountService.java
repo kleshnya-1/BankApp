@@ -11,15 +11,16 @@ import ru.laptseu.bankapp.utilities.CommissionCalculator;
 import ru.laptseu.bankapp.utilities.CurrencyConverter;
 
 import java.sql.SQLException;
-import java.util.Calendar;
 
 @Log4j2
 //creating models from array of parameters
 public class AccountService implements IMaintainableService<Account> {
     CommissionCalculator commissionCalculator = new CommissionCalculator();
-    // CurrencyConverter currencyConverter = new CurrencyConverter();
+
     IMaintainableDAO<Account> accountDao = DaoFactory.get(Account.class);
-    TransferHistoryService transferHistoryService = new TransferHistoryService();
+    IMaintainableService transferHistoryService = ServiceFactory.get(TransferHistory.class);
+    IMaintainableDAO transferHistoryDao = DaoFactory.get(TransferHistory.class);
+    CurrencyConverter currencyConverter = new CurrencyConverter();
 
     @Override
     public int persist(Account o) throws SQLException {
@@ -30,7 +31,7 @@ public class AccountService implements IMaintainableService<Account> {
     @Override
     public Account create(String[] paramArr) throws SQLException {
         Account account = new Account();
-        //todo ok? getBank.setId
+        //todo.ask ok? getBank.setId
         account.getBank().setId(Integer.parseInt(paramArr[1]));
         account.setCurrency(Currency.valueOf(paramArr[2]));
         account.setAmount(Double.parseDouble(paramArr[3]));
@@ -62,11 +63,8 @@ public class AccountService implements IMaintainableService<Account> {
 
     //todo.ask это же действия внутри аккаунтов. значит, и место им тут. хотя можно и вынести отдельным классом
     public void transferAmount(Account sourceAcc, Account targetAcc, double amount) throws SQLException {
-        TransferHistory transferHistory = new TransferHistory();
-        CurrencyConverter currencyConverter = new CurrencyConverter();
         double commission = 0;
-        double rate = 1;
-        double totalAmount = amount;
+             double totalAmount = amount;
 
         if (!sourceAcc.getBank().equals(targetAcc.getBank())) {
             commission = commissionCalculator.calculate(targetAcc, amount);
@@ -76,6 +74,10 @@ public class AccountService implements IMaintainableService<Account> {
         }
         sourceAcc.setAmount(sourceAcc.getAmount() - commission - totalAmount);
         targetAcc.setAmount(targetAcc.getAmount() + totalAmount);
+
+        //creating and persisting an empty transfer history
+        TransferHistory history = new TransferHistory();
+        transferHistoryService.persist(history);
         Session session = accountDao.getSession();
         accountDao.update(sourceAcc, session);
         accountDao.update(targetAcc, session);
@@ -84,22 +86,15 @@ public class AccountService implements IMaintainableService<Account> {
                 targetAcc.getId() + "(" + targetAcc.getClient().getName() + ") transfered " + amount + sourceAcc.getCurrency()
                 + " (as " + totalAmount + "" + targetAcc.getCurrency() + ") with  commission " + commission + "" + sourceAcc.getCurrency());
 
-        //creating and persisting transfer history
-        {
-            transferHistory.setDate(Calendar.getInstance().toString());
-            transferHistory.setClientSourceName(sourceAcc.getClient().getName());
-            transferHistory.setClientTargetName(targetAcc.getClient().getName());
-            transferHistory.setAccountSourceId(String.valueOf(sourceAcc.getId()));
-            transferHistory.setAccountTargetId(String.valueOf(targetAcc.getId()));
-            transferHistory.setBankSourceName(sourceAcc.getBank().getName());
-            transferHistory.setBankTargetName(targetAcc.getBank().getName());
-            transferHistory.setAmount(sourceAcc.getAmount());
-            transferHistory.setAmount(amount);
-            transferHistoryService.persist(transferHistory);
-        }
+        //creating full transfer history
+        history = new TransferHistory(sourceAcc.getClient().getName(), targetAcc.getClient().getName(),
+                String.valueOf(sourceAcc.getId()), String.valueOf(targetAcc.getId()), sourceAcc.getBank().getName(),
+                targetAcc.getBank().getName(), sourceAcc.getCurrency().toString(), amount);
+        //todo ask. here we will use directly DAO
+        //updating history
+        transferHistoryDao.update(history, session);
 
         session.getTransaction().commit();
         session.close();
-
     }
 }
