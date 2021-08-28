@@ -38,7 +38,7 @@ public class AccountDAOImpl implements IMaintainableDAO<Account> {
     @Override
     public void update(Account obj, Session s) throws SQLException {
         Session session = s;
-        Transaction tx1 = session.beginTransaction();
+        if (!session.getTransaction().isActive()) session.beginTransaction();
         session.update(obj);
     }
 

@@ -16,25 +16,24 @@ public class CurrencyConverter {
     private final CurrencyRateDAO currencyRateDAO = new CurrencyRateDAO();
 
     public double returnConvertedAmount(Account sourceAcc, Account targetAcc, double amount) throws SQLException {
-        Bank sourceBank = bankDaoImpl.read(sourceAcc.getBankId());
-        Bank targetBank = bankDaoImpl.read(targetAcc.getBankId());
+        Bank sourceBank = sourceAcc.getBank();//bankDaoImpl.read(sourceAcc.getBankId());
+        Bank targetBank = targetAcc.getBank();//bankDaoImpl.read(targetAcc.getBankId());
         CurrencyRate currencySource;
         CurrencyRate currencyTarget;
         double sourceAmountByn;
         double targetAmount;
 
         if (!sourceAcc.getCurrency().equals(Currency.BYN)) {
-            currencySource = currencyRateDAO.readList(sourceBank.getId()).stream().filter(c -> c.getCurrency().equals(sourceAcc.getCurrency())).findAny().orElse(null);
+            currencySource = sourceBank.getLastCurrency(sourceAcc.getCurrency());
             sourceAmountByn = amount * currencySource.getRateToByn();
         } else sourceAmountByn = amount;
 
         if (!targetAcc.getCurrency().equals(Currency.BYN)) {
-            currencyTarget = currencyRateDAO.readList(targetBank.getId()).stream().filter(c -> c.getCurrency().equals(targetAcc.getCurrency())).findAny().orElse(null);
+            currencyTarget = targetBank.getLastCurrency(targetAcc.getCurrency());
             targetAmount = sourceAmountByn / currencyTarget.getRateToByn();
         } else targetAmount = sourceAmountByn;
 
         log.info(amount + " " + sourceAcc.getCurrency() + " converted to " + targetAmount + " " + targetAcc.getCurrency());
         return targetAmount;
     }
-
 }

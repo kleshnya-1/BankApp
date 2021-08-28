@@ -2,6 +2,7 @@ package ru.laptseu.bankapp.services;
 
 import ru.laptseu.bankapp.dao.DaoFactory;
 import ru.laptseu.bankapp.dao.IMaintainableDAO;
+import ru.laptseu.bankapp.models.Bank;
 import ru.laptseu.bankapp.models.Client;
 
 import java.sql.SQLException;
@@ -35,6 +36,10 @@ public class ClientService implements IMaintainableService<Client> {
         Client client;
         client = create(paramArr);
         client.setId(Integer.parseInt(paramArr[paramArr.length]));
+        clientDao.update(client);
+    }
+    @Override
+    public void update(Client client) throws SQLException {
         clientDao.update(client);
     }
 

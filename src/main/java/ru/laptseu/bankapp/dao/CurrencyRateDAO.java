@@ -31,17 +31,20 @@ public class CurrencyRateDAO implements IMaintainableDAO<CurrencyRate> {
     }
 
     //un-implemented method
+
+
+    //doesnt work in jdbc
     //todo it doesnt work
-    public List<CurrencyRate> readList(int bankKey) throws SQLException {
-        String hql = "from currency_rates c where c.bankId =:bankId";
+    public List<CurrencyRate> readListByBankId(int bankKey) throws SQLException {
+        String hql = "from CurrencyRate where bankid =:bankid2";
         List<CurrencyRate> result = HibernateSessionFactoryUtil.getSessionFactory().openSession().
-                createQuery(hql).setParameter("bankId", bankKey).list();
+                createQuery(hql).setParameter("bankid2", bankKey).list();
         return result;
     }
 
     //todo check HQL
     public CurrencyRate read(int bankKey, Currency currency) throws SQLException {
-        String hql = "from currency_rates c where c.bankId =:bankId and c.currency =:currency";
+        String hql = "from CurrencyRate  c where c.bankId =:bankId and c.currency =:currency";
         CurrencyRate currencyRateForReturning = (CurrencyRate) HibernateSessionFactoryUtil.getSessionFactory().openSession().createQuery(hql)
                 .setParameter("bankId", bankKey)
                 .setParameter("currency", currency).stream().findAny().orElse(null);

@@ -1,9 +1,6 @@
 package ru.laptseu.bankapp.services;
 
-import ru.laptseu.bankapp.models.Account;
-import ru.laptseu.bankapp.models.Bank;
-import ru.laptseu.bankapp.models.Client;
-import ru.laptseu.bankapp.models.CurrencyRate;
+import ru.laptseu.bankapp.models.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -16,6 +13,7 @@ public class ServiceFactory {
         factoryMap.put(Bank.class, new BankService());
         factoryMap.put(Client.class, new ClientService());
         factoryMap.put(CurrencyRate.class, new CurrencyRateService());
+        factoryMap.put(TransferHistory.class, new TransferHistoryService());
     }
 
     public ServiceFactory() {

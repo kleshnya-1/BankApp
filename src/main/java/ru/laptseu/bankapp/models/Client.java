@@ -5,6 +5,8 @@ import lombok.Setter;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -19,4 +21,12 @@ public class Client {
     private String name;
     @Type(type = "yes_no")
     private boolean isNaturalPerson;
+
+    @OneToMany(mappedBy = "client",cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Account> accounts = new HashSet<>();
+
+    public void addAccount(Account account) {
+        account.setClient(this);
+        accounts.add(account);
+    }
 }

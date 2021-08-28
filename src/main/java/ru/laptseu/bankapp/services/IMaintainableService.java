@@ -11,5 +11,7 @@ public interface IMaintainableService<T> {
 
     void update(String[] paramArr) throws SQLException;
 
+    void update(T obj) throws SQLException;
+
     void delete(int key) throws SQLException;
 }

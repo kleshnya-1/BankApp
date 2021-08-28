@@ -9,15 +9,18 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Entity
-@Table(name = "Currency_Rates")
+@Table(name = "currency_rates")
 public class CurrencyRate {
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id", insertable = false, updatable = false)
-    Bank bank;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private int bankId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "bank_id")
+    Bank bank;
+    //private int bankId;
+    @Enumerated(EnumType.STRING)
     private Currency currency;
     private double rateToByn;
+
 }

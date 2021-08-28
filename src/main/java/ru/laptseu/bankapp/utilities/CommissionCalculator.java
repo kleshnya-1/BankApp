@@ -13,16 +13,14 @@ import java.sql.SQLException;
 public class CommissionCalculator {
 
     public double calculate(Account targetAcc, double amount) throws SQLException {
-        BankDAOImpl bankDaoImpl = new BankDAOImpl();
-        ClientDAOImpl clientDaoImpl = new ClientDAOImpl();
         double commission = 0;
         double commissionPercent = 0;
-        Bank targetBank = bankDaoImpl.read(targetAcc.getBankId());
-        Client targetClient = clientDaoImpl.read(targetAcc.getClientId());
+        Bank targetBank = targetAcc.getBank();//bankDaoImpl.read(targetAcc.getBankId());
+        Client targetClient = targetAcc.getClient();
         if (targetClient.isNaturalPerson()) commissionPercent = targetBank.getTransferFeeInPercent();
         else commissionPercent = targetBank.getTransferFeeInPercentForNotNaturalPersons();
         commission = commissionPercent * amount / 100;
-        log.info("Commission calculated " + commission + "with percent " + commissionPercent + "% and amount + " + amount);
+        log.info("Commission calculated " + commission + targetAcc.getCurrency()+" with percent " + commissionPercent + "% and amount + " + amount);
         return commission;
     }
 }

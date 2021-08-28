@@ -39,6 +39,11 @@ public class BankService implements IMaintainableService<Bank> {
     }
 
     @Override
+    public void update(Bank bank) throws SQLException {
+        bankDao.update(bank);
+    }
+
+    @Override
     public void delete(int key) throws SQLException {
         bankDao.delete(key);
     }
