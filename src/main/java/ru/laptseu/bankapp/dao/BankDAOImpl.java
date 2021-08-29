@@ -3,13 +3,18 @@ package ru.laptseu.bankapp.dao;
 import lombok.extern.log4j.Log4j2;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import ru.laptseu.bankapp.core.HibernateSessionFactoryUtil;
+import ru.laptseu.bankapp.models.CurrencyRate;
+import ru.laptseu.bankapp.utilities.HibernateSessionFactoryUtil;
 import ru.laptseu.bankapp.models.Bank;
 
 import java.sql.SQLException;
 
 @Log4j2
 public class BankDAOImpl implements IMaintainableDAO<Bank> {
+    //todo ask. я заменил работу ДАО курса на чтение из монго. но он читает как-то в обход.
+    // потому что он к ДАО курса не обращается, а сохраняет/обновляет
+    // себя вместе с набором входящих в него сущностей отдельно от их ДАО.
+    // по крайней мере, это вяглядит так.
 
     @Override
     public int create(Bank obj) throws SQLException {
@@ -39,7 +44,7 @@ public class BankDAOImpl implements IMaintainableDAO<Bank> {
     @Override
     public void update(Bank obj, Session s) throws SQLException {
         Session session = s;
-        Transaction tx1 = session.beginTransaction();
+        if (!session.getTransaction().isActive())  session.beginTransaction();
         session.update(obj);
     }
 

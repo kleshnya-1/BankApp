@@ -1,9 +1,7 @@
 package ru.laptseu.bankapp.services;
 
-import ru.laptseu.bankapp.dao.CurrencyRateDAO;
 import ru.laptseu.bankapp.dao.DaoFactory;
 import ru.laptseu.bankapp.dao.IMaintainableDAO;
-import ru.laptseu.bankapp.models.Bank;
 import ru.laptseu.bankapp.models.Currency;
 import ru.laptseu.bankapp.models.CurrencyRate;
 

@@ -17,9 +17,4 @@ public interface IMaintainableDAO<T> {
 
     Session getSession();
 
-//jdbc
-    /*void update(T obj, Connection conn) throws SQLException;
-
-    Connection getConnection();
-*/
 }

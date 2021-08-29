@@ -2,6 +2,7 @@ package ru.laptseu.bankapp.models;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.text.DateFormat;
@@ -32,6 +33,8 @@ public class TransferHistory {
     private String bankTargetName;
     private String currency;
     private double amount;
+    @Type(type = "yes_no")
+    private boolean success;
 
     public TransferHistory(String clientSourceName, String clientTargetName,
                            String accountSourceId, String accountTargetId, String bankSourceName,

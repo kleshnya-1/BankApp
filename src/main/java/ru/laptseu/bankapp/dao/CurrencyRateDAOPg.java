@@ -3,7 +3,7 @@ package ru.laptseu.bankapp.dao;
 import lombok.extern.log4j.Log4j2;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import ru.laptseu.bankapp.core.HibernateSessionFactoryUtil;
+import ru.laptseu.bankapp.utilities.HibernateSessionFactoryUtil;
 import ru.laptseu.bankapp.models.Currency;
 import ru.laptseu.bankapp.models.CurrencyRate;
 
@@ -12,7 +12,8 @@ import java.util.List;
 
 //have one un-implemented methods readList(int bank id) and read (int bankId, Currency currency)
 @Log4j2
-public class CurrencyRateDAO implements IMaintainableDAO<CurrencyRate> {
+public class CurrencyRateDAOPg implements IMaintainableDAO<CurrencyRate> {
+    //todo note чистый HQL у меня не заработал. но HIB справился со всем и по стандартным CRUD
 
     @Override
     public int create(CurrencyRate obj) throws SQLException {
@@ -31,8 +32,6 @@ public class CurrencyRateDAO implements IMaintainableDAO<CurrencyRate> {
     }
 
     //un-implemented method
-
-
     //doesnt work in jdbc
     //todo it doesnt work
     public List<CurrencyRate> readListByBankId(int bankKey) throws SQLException {

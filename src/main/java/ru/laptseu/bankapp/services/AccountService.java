@@ -75,21 +75,19 @@ public class AccountService implements IMaintainableService<Account> {
         sourceAcc.setAmount(sourceAcc.getAmount() - commission - totalAmount);
         targetAcc.setAmount(targetAcc.getAmount() + totalAmount);
 
-        //creating and persisting an empty transfer history
-        TransferHistory history = new TransferHistory();
+        //creating and persisting unsuccessful transfer history
+        TransferHistory history = new TransferHistory(sourceAcc.getClient().getName(), targetAcc.getClient().getName(),
+                String.valueOf(sourceAcc.getId()), String.valueOf(targetAcc.getId()), sourceAcc.getBank().getName(),
+                targetAcc.getBank().getName(), sourceAcc.getCurrency().toString(), amount);
         transferHistoryService.persist(history);
-        Session session = accountDao.getSession();
-        accountDao.update(sourceAcc, session);
-        accountDao.update(targetAcc, session);
-
         log.info("\nfrom acc ID " + sourceAcc.getId() + "(" + sourceAcc.getClient().getName() + ")" + " to acc ID" +
                 targetAcc.getId() + "(" + targetAcc.getClient().getName() + ") transfered " + amount + sourceAcc.getCurrency()
                 + " (as " + totalAmount + "" + targetAcc.getCurrency() + ") with  commission " + commission + "" + sourceAcc.getCurrency());
+        Session session = accountDao.getSession();
+        history.setSuccess(true);
+        accountDao.update(sourceAcc, session);
+        accountDao.update(targetAcc, session);
 
-        //creating full transfer history
-        history = new TransferHistory(sourceAcc.getClient().getName(), targetAcc.getClient().getName(),
-                String.valueOf(sourceAcc.getId()), String.valueOf(targetAcc.getId()), sourceAcc.getBank().getName(),
-                targetAcc.getBank().getName(), sourceAcc.getCurrency().toString(), amount);
         //todo ask. here we will use directly DAO
         //updating history
         transferHistoryDao.update(history, session);

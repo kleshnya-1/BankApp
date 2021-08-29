@@ -11,6 +11,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "currency_rates")
 public class CurrencyRate {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -18,9 +19,17 @@ public class CurrencyRate {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "bank_id")
     Bank bank;
-    //private int bankId;
     @Enumerated(EnumType.STRING)
     private Currency currency;
     private double rateToByn;
+
+    public CurrencyRate() {
+    }
+
+    public CurrencyRate(Bank bank, Currency currency, double rateToByn) {
+        this.bank = bank;
+        this.currency = currency;
+        this.rateToByn = rateToByn;
+    }
 
 }

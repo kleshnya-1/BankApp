@@ -15,7 +15,7 @@
 
         <property name="dialect">org.hibernate.dialect.PostgreSQL9Dialect</property>
 
-        <property  name="javax.persistence.schema-generation.database.action">create</property>
+<!--        <property  name="javax.persistence.schema-generation.database.action">create</property>-->
 
 
     </session-factory>

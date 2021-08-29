@@ -1,4 +1,4 @@
-package ru.laptseu.bankapp.core;
+package ru.laptseu.bankapp.utilities;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
