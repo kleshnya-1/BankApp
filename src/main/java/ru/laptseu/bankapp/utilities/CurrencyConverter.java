@@ -2,31 +2,29 @@ package ru.laptseu.bankapp.utilities;
 
 import lombok.extern.log4j.Log4j2;
 import ru.laptseu.bankapp.models.Account;
-import ru.laptseu.bankapp.models.Bank;
 import ru.laptseu.bankapp.models.Currency;
 import ru.laptseu.bankapp.models.CurrencyRate;
+import ru.laptseu.bankapp.services.CurrencyRateService;
 
 import java.sql.SQLException;
 
 @Log4j2
 public class CurrencyConverter {
+    CurrencyRateService currencyRateService = new CurrencyRateService();
+
     public double returnConvertedAmount(Account sourceAcc, Account targetAcc, double amount) throws SQLException {
-        Bank sourceBank;
-        Bank targetBank;
         CurrencyRate currencySource;
         CurrencyRate currencyTarget;
         double sourceAmountByn;
         double targetAmount;
 
         if (!sourceAcc.getCurrency().equals(Currency.BYN)) {
-            sourceBank = sourceAcc.getBank();
-            currencySource = sourceBank.getLastCurrency(sourceAcc.getCurrency());
+            currencySource = currencyRateService.getLastCurrency(sourceAcc.getCurrency(), sourceAcc.getBank().getId());
             sourceAmountByn = amount * currencySource.getRateToByn();
         } else sourceAmountByn = amount;
 
         if (!targetAcc.getCurrency().equals(Currency.BYN)) {
-            targetBank = targetAcc.getBank();
-            currencyTarget = targetBank.getLastCurrency(targetAcc.getCurrency());
+            currencyTarget = currencyRateService.getLastCurrency(targetAcc.getCurrency(), targetAcc.getBank().getId());
             targetAmount = sourceAmountByn / currencyTarget.getRateToByn();
         } else targetAmount = sourceAmountByn;
 

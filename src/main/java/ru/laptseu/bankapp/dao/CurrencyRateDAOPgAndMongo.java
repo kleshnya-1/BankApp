@@ -3,14 +3,12 @@ package ru.laptseu.bankapp.dao;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
-import ru.laptseu.bankapp.utilities.HibernateSessionFactoryUtil;
-import ru.laptseu.bankapp.utilities.MongoClientSetUp;
 import ru.laptseu.bankapp.models.CurrencyRate;
+import ru.laptseu.bankapp.utilities.MongoClientSetUp;
 
 import java.sql.SQLException;
 
-public class CurrencyRateDAOPgAndMongo  implements IMaintainableDAO<CurrencyRate> {
+public class CurrencyRateDAOPgAndMongo implements IMaintainableDAO<CurrencyRate> {
     //todo. ask. без такой конфигурации hibernate не хочет дружить с объектами курса валюты.
     // он их не может принимать за сущности, так как не видит в своей базе данных. если он не видит их как сущности, он их не
     // тому сделано следующим обраpом: сохраняется в 2 БД, как монго, так и ПГ, а читает
@@ -19,13 +17,13 @@ public class CurrencyRateDAOPgAndMongo  implements IMaintainableDAO<CurrencyRate
 
     @Override
     public int create(CurrencyRate obj) throws SQLException {
-        Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
-        Transaction tx1 = session.beginTransaction();
-        session.save(obj);
-        tx1.commit();
-        session.close();
+//        Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
+//        Transaction tx1 = session.beginTransaction();
+//        session.save(obj);
+//        tx1.commit();
+//        session.close();
         currencyRatesMongo.insertOne(obj);
-  return obj.getId();
+        return obj.getId();
     }
 
     @Override

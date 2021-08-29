@@ -3,9 +3,9 @@ package ru.laptseu.bankapp.dao;
 import lombok.extern.log4j.Log4j2;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import ru.laptseu.bankapp.utilities.HibernateSessionFactoryUtil;
 import ru.laptseu.bankapp.models.Currency;
 import ru.laptseu.bankapp.models.CurrencyRate;
+import ru.laptseu.bankapp.utilities.HibernateSessionFactoryUtil;
 
 import java.sql.SQLException;
 import java.util.List;

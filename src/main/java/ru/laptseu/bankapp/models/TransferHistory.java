@@ -5,8 +5,6 @@ import lombok.Setter;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
@@ -17,9 +15,6 @@ import java.util.GregorianCalendar;
 public class TransferHistory {
     //todo make custom hibernate converter
     //private final DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-
-    public TransferHistory() {
-    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,6 +30,8 @@ public class TransferHistory {
     private double amount;
     @Type(type = "yes_no")
     private boolean success;
+    public TransferHistory() {
+    }
 
     public TransferHistory(String clientSourceName, String clientTargetName,
                            String accountSourceId, String accountTargetId, String bankSourceName,

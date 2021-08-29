@@ -3,8 +3,8 @@ package ru.laptseu.bankapp.dao;
 import lombok.extern.log4j.Log4j2;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import ru.laptseu.bankapp.utilities.HibernateSessionFactoryUtil;
 import ru.laptseu.bankapp.models.Client;
+import ru.laptseu.bankapp.utilities.HibernateSessionFactoryUtil;
 
 import java.sql.SQLException;
 

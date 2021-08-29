@@ -3,25 +3,28 @@ package ru.laptseu.bankapp.dao;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
 import org.hibernate.Session;
-import ru.laptseu.bankapp.utilities.MongoClientSetUp;
+import ru.laptseu.bankapp.models.Currency;
 import ru.laptseu.bankapp.models.CurrencyRate;
+import ru.laptseu.bankapp.utilities.MongoClientSetUp;
 
 import java.sql.SQLException;
 
-public class CurrencyRateDAOMongoDb implements IMaintainableDAO<CurrencyRate>{
+import static com.mongodb.client.model.Filters.eq;
+
+public class CurrencyRateDAOMongoDb implements IMaintainableDAO<CurrencyRate> {
     //todo.  в БД можно настроить создание ИД нормально(последовательно), а не так.
     // при перезагрузке класса он обнулится, я знаю, это все просто для демонстрации. если заменить
     // ИД на Integer, можно сделать налл в объекте и, теоритически, монго сгененирует ИД сам но тогда
     // у нас нет никакой гарантии в порядке чтения записаей и нужно менять либо ид, либо добавить
     // дату в класс, что значительно лучше.
-    private static int ID_COUNTER =6;
+    private static int ID_COUNTER = 12790;
     MongoCollection currencyRatesMongo = MongoClientSetUp.getMongoCollection(CurrencyRate.class);
 
     @Override
     public int create(CurrencyRate obj) throws SQLException {
         CurrencyRate o = obj;
         o.setId(ID_COUNTER);
-         currencyRatesMongo.insertOne(o);
+        currencyRatesMongo.insertOne(o);
         ID_COUNTER++;
 
         return obj.getId();
@@ -29,7 +32,7 @@ public class CurrencyRateDAOMongoDb implements IMaintainableDAO<CurrencyRate>{
 
     @Override
     public CurrencyRate read(int key) throws SQLException {
-        return (CurrencyRate) currencyRatesMongo.find(Filters.eq("_id", key)).first();
+        return (CurrencyRate) currencyRatesMongo.find(eq("_id", key)).first();
     }
 
     @Override
@@ -50,6 +53,11 @@ public class CurrencyRateDAOMongoDb implements IMaintainableDAO<CurrencyRate>{
     @Override
     public Session getSession() {
         throw new UnsupportedOperationException();
+    }
+
+    public CurrencyRate getLastCurrency(Currency curr, int bankId) {
+        return (CurrencyRate) currencyRatesMongo.find
+                (Filters.and(eq("currency", curr.toString()), eq("bankId", bankId))).first();
     }
 
 //    @Override

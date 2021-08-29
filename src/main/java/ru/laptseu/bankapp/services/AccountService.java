@@ -64,7 +64,7 @@ public class AccountService implements IMaintainableService<Account> {
     //todo.ask это же действия внутри аккаунтов. значит, и место им тут. хотя можно и вынести отдельным классом
     public void transferAmount(Account sourceAcc, Account targetAcc, double amount) throws SQLException {
         double commission = 0;
-             double totalAmount = amount;
+        double totalAmount = amount;
 
         if (!sourceAcc.getBank().equals(targetAcc.getBank())) {
             commission = commissionCalculator.calculate(targetAcc, amount);

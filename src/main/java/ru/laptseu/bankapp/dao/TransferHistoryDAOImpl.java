@@ -3,8 +3,8 @@ package ru.laptseu.bankapp.dao;
 import lombok.extern.log4j.Log4j2;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import ru.laptseu.bankapp.utilities.HibernateSessionFactoryUtil;
 import ru.laptseu.bankapp.models.TransferHistory;
+import ru.laptseu.bankapp.utilities.HibernateSessionFactoryUtil;
 
 import java.sql.SQLException;
 
@@ -30,7 +30,8 @@ public class TransferHistoryDAOImpl implements IMaintainableDAO<TransferHistory>
     public void update(TransferHistory obj) throws SQLException {
         throw new UnsupportedOperationException();
     }
-//объект создается в 2 этапа, чтоб, в случае неудачной транзакции, это было зафиксированно в истории
+
+    //объект создается в 2 этапа, чтоб, в случае неудачной транзакции, это было зафиксированно в истории
     @Override
     public void update(TransferHistory obj, Session s) throws SQLException {
         Session session = s;

@@ -32,5 +32,4 @@ public class BankPage implements IPages {
         System.out.println("2. Найти клиента по ИД");
     }
 
-
 }

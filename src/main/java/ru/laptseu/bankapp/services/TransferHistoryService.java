@@ -6,8 +6,9 @@ import ru.laptseu.bankapp.models.TransferHistory;
 
 import java.sql.SQLException;
 
-public class TransferHistoryService implements IMaintainableService<TransferHistory>{
+public class TransferHistoryService implements IMaintainableService<TransferHistory> {
     IMaintainableDAO<TransferHistory> transactionDao = DaoFactory.get(TransferHistory.class);
+
     @Override
     public TransferHistory create(String[] paramArr) throws SQLException {
         throw new UnsupportedOperationException();

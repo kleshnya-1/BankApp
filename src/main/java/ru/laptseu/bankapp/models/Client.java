@@ -22,7 +22,7 @@ public class Client {
     @Type(type = "yes_no")
     private boolean isNaturalPerson;
 
-    @OneToMany(mappedBy = "client",cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Account> accounts = new HashSet<>();
 
     public void addAccount(Account account) {
