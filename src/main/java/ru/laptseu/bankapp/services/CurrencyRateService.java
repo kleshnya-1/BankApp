@@ -36,7 +36,7 @@ public class CurrencyRateService implements IMaintainableService<CurrencyRate> {
     public void update(String[] paramArr) throws SQLException {
         CurrencyRate cr;
         cr = create(paramArr);
-        cr.setId(Integer.parseInt(paramArr[paramArr.length]));
+        //cr.setId(Integer.parseInt(paramArr[paramArr.length]));
         currencyRateDao.update(cr);
     }
 

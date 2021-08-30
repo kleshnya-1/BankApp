@@ -45,8 +45,8 @@ public class AdminPage implements IPages {
             switch (entity) {
                 case 1:
                     entityObject = new Account();
-                    System.out.println("Создать аккауент(счет): ИД банка, ИД клиента, валюта, остаток");
-                    System.out.println("Например: 0, 2, USD, 100");
+                    System.out.println("Создать аккауент(счет): Название банка, ИД клиента, валюта, остаток");
+                    System.out.println("Например: Новый, 2, USD, 100");
                     System.out.println("Удалить и прочесть: просто введите ИД");
                     System.out.println("Обновить: Аналогично созданию, но после последнего аргумента добавьте ИД");
                     break;
@@ -66,8 +66,8 @@ public class AdminPage implements IPages {
                     break;
                 case 4:
                     entityObject = new CurrencyRate();
-                    System.out.println("Создать(добавить) курс валют: ИД банка, валюта, курс к BYN");
-                    System.out.println("Например: 0, USD, 2.65");
+                    System.out.println("Создать(добавить) курс валют: Название банка, валюта, курс к BYN");
+                    System.out.println("Например: Новый, USD, 2.65");
                     System.out.println("Удалить и прочесть: просто введите ИД");
                     System.out.println("Обновить: Аналогично созданию, но после последнего аргумента добавьте ИД");
                     break;

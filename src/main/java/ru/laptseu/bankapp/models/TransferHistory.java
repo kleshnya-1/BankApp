@@ -22,8 +22,8 @@ public class TransferHistory {
     private Calendar date;
     private String clientSourceName;
     private String clientTargetName;
-    private String accountSourceId;
-    private String accountTargetId;
+    private String accSourceNum;
+    private String accTargetNum;
     private String bankSourceName;
     private String bankTargetName;
     private String currency;
@@ -34,13 +34,13 @@ public class TransferHistory {
     }
 
     public TransferHistory(String clientSourceName, String clientTargetName,
-                           String accountSourceId, String accountTargetId, String bankSourceName,
+                           String accSourceNum, String accTargetNum, String bankSourceName,
                            String bankTargetName, String currency, double amount) {
         this.date = new GregorianCalendar();
         this.clientSourceName = clientSourceName;
         this.clientTargetName = clientTargetName;
-        this.accountSourceId = accountSourceId;
-        this.accountTargetId = accountTargetId;
+        this.accSourceNum = accSourceNum;
+        this.accTargetNum = accTargetNum;
         this.bankSourceName = bankSourceName;
         this.bankTargetName = bankTargetName;
         this.currency = currency;
@@ -49,8 +49,8 @@ public class TransferHistory {
 
     @Override
     public String toString() {
-        return "from acc " + clientSourceName + " with ID " + accountSourceId + " in bank " + bankSourceName + "\n" +
-                "to acc " + clientTargetName + " with ID " + accountTargetId + " in bank " + bankTargetName + "\n" +
+        return "from acc " + clientSourceName + " with № " + accSourceNum + " in bank " + bankSourceName + "\n" +
+                "to acc " + clientTargetName + " with № " + accTargetNum + " in bank " + bankTargetName + "\n" +
                 date + " transfered " + amount + currency;
     }
 }

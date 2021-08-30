@@ -6,6 +6,7 @@ import ru.laptseu.bankapp.dao.DaoFactory;
 import ru.laptseu.bankapp.dao.IMaintainableDAO;
 import ru.laptseu.bankapp.models.Account;
 import ru.laptseu.bankapp.models.Currency;
+import ru.laptseu.bankapp.utilities.NumberGeneratorForAccounts;
 import ru.laptseu.bankapp.models.TransferHistory;
 import ru.laptseu.bankapp.utilities.CommissionCalculator;
 import ru.laptseu.bankapp.utilities.CurrencyConverter;
@@ -24,15 +25,17 @@ public class AccountService implements IMaintainableService<Account> {
 
     @Override
     public int persist(Account o) throws SQLException {
-        int id = accountDao.create(o);
-        return id;
+        int number = NumberGeneratorForAccounts.generate(o.getBank(), o.getClient());
+        o.setNumber(number);
+        accountDao.create(o);
+        return number;
     }
 
     @Override
     public Account create(String[] paramArr) throws SQLException {
         Account account = new Account();
         //todo.ask ok? getBank.setId
-        account.getBank().setId(Integer.parseInt(paramArr[1]));
+        account.getBank().setName(paramArr[1]);
         account.setCurrency(Currency.valueOf(paramArr[2]));
         account.setAmount(Double.parseDouble(paramArr[3]));
         return account;
@@ -40,6 +43,7 @@ public class AccountService implements IMaintainableService<Account> {
 
     @Override
     public Account read(int key) throws SQLException {
+        //todo ask. тут запрашиваем по номеру аккаунта, а не ИД?
         return accountDao.read(key);
     }
 
@@ -76,9 +80,11 @@ public class AccountService implements IMaintainableService<Account> {
         targetAcc.setAmount(targetAcc.getAmount() + totalAmount);
 
         //creating and persisting unsuccessful transfer history
-        TransferHistory history = new TransferHistory(sourceAcc.getClient().getName(), targetAcc.getClient().getName(),
-                String.valueOf(sourceAcc.getId()), String.valueOf(targetAcc.getId()), sourceAcc.getBank().getName(),
-                targetAcc.getBank().getName(), sourceAcc.getCurrency().toString(), amount);
+        TransferHistory history = new TransferHistory(
+                sourceAcc.getClient().getName(), targetAcc.getClient().getName(),
+                String.valueOf(sourceAcc.getNumber()), String.valueOf(targetAcc.getNumber()), sourceAcc.getBank().getName(),
+                targetAcc.getBank().getName(), sourceAcc.getCurrency().toString(), amount
+        );
         transferHistoryService.persist(history);
         log.info("\nfrom acc ID " + sourceAcc.getId() + "(" + sourceAcc.getClient().getName() + ")" + " to acc ID" +
                 targetAcc.getId() + "(" + targetAcc.getClient().getName() + ") transfered " + amount + sourceAcc.getCurrency()
@@ -87,11 +93,9 @@ public class AccountService implements IMaintainableService<Account> {
         history.setSuccess(true);
         accountDao.update(sourceAcc, session);
         accountDao.update(targetAcc, session);
-
-        //todo ask. here we will use directly DAO
+        //todo ask. here we will use directly transfer DAO
         //updating history
         transferHistoryDao.update(history, session);
-
         session.getTransaction().commit();
         session.close();
     }

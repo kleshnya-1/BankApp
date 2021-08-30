@@ -5,7 +5,7 @@ import com.mongodb.client.model.Filters;
 import org.hibernate.Session;
 import ru.laptseu.bankapp.models.Currency;
 import ru.laptseu.bankapp.models.CurrencyRate;
-import ru.laptseu.bankapp.utilities.MongoClientSetUp;
+import ru.laptseu.bankapp.utilities.MongoClientFactoryAndSetUp;
 
 import java.sql.SQLException;
 
@@ -17,17 +17,16 @@ public class CurrencyRateDAOMongoDb implements IMaintainableDAO<CurrencyRate> {
     // ИД на Integer, можно сделать налл в объекте и, теоритически, монго сгененирует ИД сам но тогда
     // у нас нет никакой гарантии в порядке чтения записаей и нужно менять либо ид, либо добавить
     // дату в класс, что значительно лучше.
-    private static int ID_COUNTER = 12790;
-    MongoCollection currencyRatesMongo = MongoClientSetUp.getMongoCollection(CurrencyRate.class);
+
+    MongoCollection currencyRatesMongo ;
 
     @Override
     public int create(CurrencyRate obj) throws SQLException {
-        CurrencyRate o = obj;
-        o.setId(ID_COUNTER);
-        currencyRatesMongo.insertOne(o);
-        ID_COUNTER++;
-
-        return obj.getId();
+        currencyRatesMongo = MongoClientFactoryAndSetUp.getMongoCollection(obj.getBankId(), CurrencyRate.class);
+        currencyRatesMongo.insertOne(obj);
+        //todo ask есть проблема: монго созает ИД как строку с буквами. у нас инт. все дао менять придется.
+        // в этом случае сейчас это ДОЭ имеет void метод
+        return -1;//obj.getId();
     }
 
     @Override
@@ -56,76 +55,9 @@ public class CurrencyRateDAOMongoDb implements IMaintainableDAO<CurrencyRate> {
     }
 
     public CurrencyRate getLastCurrency(Currency curr, int bankId) {
-        return (CurrencyRate) currencyRatesMongo.find
-                (Filters.and(eq("currency", curr.toString()), eq("bankId", bankId))).first();
+        currencyRatesMongo = MongoClientFactoryAndSetUp.getMongoCollection(bankId, CurrencyRate.class);
+return (CurrencyRate) currencyRatesMongo.find(Filters.eq("currency", curr.toString())).first();
+//        return (CurrencyRate) currencyRatesMongo.find
+//                (Filters.eq("currency", curr.toString())).first();
     }
-
-//    @Override
-//    public int create(CurrencyRate obj) throws SQLException {
-//        Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
-//        Transaction tx1 = session.beginTransaction();
-//        session.save(obj);
-//        tx1.commit();
-//        session.close();
-//        //todo check is works
-//        return obj.getId();
-//    }
-//
-//    @Override
-//    public CurrencyRate read(int key) throws SQLException {
-//        return HibernateSessionFactoryUtil.getSessionFactory().openSession().get(CurrencyRate.class, key);
-//    }
-//
-//    //un-implemented method
-//
-//
-//    //doesnt work in jdbc
-//    //todo it doesnt work
-//    public List<CurrencyRate> readListByBankId(int bankKey) throws SQLException {
-//        String hql = "from CurrencyRate where bankid =:bankid2";
-//        List<CurrencyRate> result = HibernateSessionFactoryUtil.getSessionFactory().openSession().
-//                createQuery(hql).setParameter("bankid2", bankKey).list();
-//        return result;
-//    }
-//
-//    //todo check HQL
-//    public CurrencyRate read(int bankKey, Currency currency) throws SQLException {
-//        String hql = "from CurrencyRate  c where c.bankId =:bankId and c.currency =:currency";
-//        CurrencyRate currencyRateForReturning = (CurrencyRate) HibernateSessionFactoryUtil.getSessionFactory().openSession().createQuery(hql)
-//                .setParameter("bankId", bankKey)
-//                .setParameter("currency", currency).stream().findAny().orElse(null);
-//        return currencyRateForReturning;
-//
-//    }
-//
-//    @Override
-//    public void update(CurrencyRate obj) throws SQLException {
-//        Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
-//        update(obj, session);
-//        //todo ask. thread-safe?
-//        session.getTransaction().commit();
-//        session.close();
-//    }
-//
-//    @Override
-//    public void update(CurrencyRate obj, Session s) throws SQLException {
-//        Session session = s;
-//        Transaction tx1 = session.beginTransaction();
-//        session.update(obj);
-//    }
-//
-//    @Override
-//    public void delete(int key) throws SQLException {
-//        Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
-//        Transaction tx1 = session.beginTransaction();
-//        session.delete(key);
-//        tx1.commit();
-//        session.close();
-//    }
-//
-//    @Override
-//    public Session getSession() {
-//        return HibernateSessionFactoryUtil.getSessionFactory().openSession();
-//    }
-
 }

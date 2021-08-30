@@ -9,7 +9,7 @@ import java.sql.SQLException;
 
 @Log4j2
 public class ClientPage implements IPages {
-
+    //todo replace ID to NAMEs
     public void enter(int id) {
         IMaintainableService<Client> clientService = ServiceFactory.get(Client.class);
         Client c = null;

@@ -9,6 +9,7 @@ import java.sql.SQLException;
 
 @Log4j2
 public class BankPage implements IPages {
+    //todo replace ID to NAMEs
     public void enter(int id) {
         IMaintainableService<Bank> bankService = ServiceFactory.get(Bank.class);
         Bank bank = null;

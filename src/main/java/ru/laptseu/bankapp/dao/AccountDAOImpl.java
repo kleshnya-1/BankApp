@@ -30,7 +30,6 @@ public class AccountDAOImpl implements IMaintainableDAO<Account> {
     public void update(Account obj) throws SQLException {
         Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
         update(obj, session);
-        //todo ask. thread-safe?
         session.getTransaction().commit();
         session.close();
     }
