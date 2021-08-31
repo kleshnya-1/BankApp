@@ -2,6 +2,7 @@ package ru.laptseu.bankapp.services;
 
 import lombok.extern.log4j.Log4j2;
 import org.hibernate.Session;
+import ru.laptseu.bankapp.EntityNotFoundException;
 import ru.laptseu.bankapp.dao.DaoFactory;
 import ru.laptseu.bankapp.dao.IMaintainableDAO;
 import ru.laptseu.bankapp.models.Account;
@@ -19,16 +20,23 @@ public class AccountService implements IMaintainableService<Account> {
     CommissionCalculator commissionCalculator = new CommissionCalculator();
 
     IMaintainableDAO<Account> accountDao = DaoFactory.get(Account.class);
+    IMaintainableDAO<TransferHistory> transferHistoryDao = DaoFactory.get(TransferHistory.class);
     IMaintainableService transferHistoryService = ServiceFactory.get(TransferHistory.class);
-    IMaintainableDAO transferHistoryDao = DaoFactory.get(TransferHistory.class);
     CurrencyConverter currencyConverter = new CurrencyConverter();
 
     @Override
     public int persist(Account o) throws SQLException {
-        int number = NumberGeneratorForAccounts.generate(o.getBank(), o.getClient());
-        o.setNumber(number);
+       while (o.getAccNumber()==null){
+           int number = NumberGeneratorForAccounts.generate(o.getBank(), o.getClient());
+           try{
+               read(number);
+           }
+           catch (EntityNotFoundException e){
+               o.setAccNumber(number);
+           }
+       }
         accountDao.create(o);
-        return number;
+        return o.getAccNumber();
     }
 
     @Override
@@ -82,7 +90,7 @@ public class AccountService implements IMaintainableService<Account> {
         //creating and persisting unsuccessful transfer history
         TransferHistory history = new TransferHistory(
                 sourceAcc.getClient().getName(), targetAcc.getClient().getName(),
-                String.valueOf(sourceAcc.getNumber()), String.valueOf(targetAcc.getNumber()), sourceAcc.getBank().getName(),
+                String.valueOf(sourceAcc.getAccNumber()), String.valueOf(targetAcc.getAccNumber()), sourceAcc.getBank().getName(),
                 targetAcc.getBank().getName(), sourceAcc.getCurrency().toString(), amount
         );
         transferHistoryService.persist(history);

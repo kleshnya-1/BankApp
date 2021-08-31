@@ -47,10 +47,11 @@ public class MongoClientFactoryAndSetUp {
 
         String collectionName = classMap.get(clazz);
         if (id != null) collectionName = id.toString() + collectionName;
-
-        MongoCollection<CurrencyRate> collection = new MongoClient(new MongoClientURI(MONGO_URL))
+        MongoClient mongoClient = new MongoClient(new MongoClientURI(MONGO_URL));
+        MongoCollection<CurrencyRate> collection = mongoClient
                 .getDatabase("123")
                 .withCodecRegistry(codecRegistry).getCollection(collectionName, clazz);
+        mongoClient.close();
         return collection;
     }
 

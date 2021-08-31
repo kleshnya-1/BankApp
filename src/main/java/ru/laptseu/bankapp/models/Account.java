@@ -22,5 +22,5 @@ public class Account {
     @Enumerated(EnumType.STRING)
     private Currency currency;
     private double amount;
-    private int accNumber;
+    private Integer accNumber;
 }
