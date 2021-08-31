@@ -7,10 +7,10 @@ import ru.laptseu.bankapp.dao.DaoFactory;
 import ru.laptseu.bankapp.dao.IMaintainableDAO;
 import ru.laptseu.bankapp.models.Account;
 import ru.laptseu.bankapp.models.Currency;
-import ru.laptseu.bankapp.utilities.NumberGeneratorForAccounts;
 import ru.laptseu.bankapp.models.TransferHistory;
 import ru.laptseu.bankapp.utilities.CommissionCalculator;
 import ru.laptseu.bankapp.utilities.CurrencyConverter;
+import ru.laptseu.bankapp.utilities.NumberGeneratorForAccounts;
 
 import java.sql.SQLException;
 
@@ -26,15 +26,14 @@ public class AccountService implements IMaintainableService<Account> {
 
     @Override
     public int persist(Account o) throws SQLException {
-       while (o.getAccNumber()==null){
-           int number = NumberGeneratorForAccounts.generate(o.getBank(), o.getClient());
-           try{
-               read(number);
-           }
-           catch (EntityNotFoundException e){
-               o.setAccNumber(number);
-           }
-       }
+        while (o.getAccNumber() == null) {
+            int number = NumberGeneratorForAccounts.generate(o.getBank(), o.getClient());
+            try {
+                read(number);
+            } catch (EntityNotFoundException e) {
+                o.setAccNumber(number);
+            }
+        }
         accountDao.create(o);
         return o.getAccNumber();
     }

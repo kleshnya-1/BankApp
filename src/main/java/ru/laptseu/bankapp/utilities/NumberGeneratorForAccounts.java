@@ -2,7 +2,6 @@ package ru.laptseu.bankapp.utilities;
 
 import ru.laptseu.bankapp.models.Bank;
 import ru.laptseu.bankapp.models.Client;
-import ru.laptseu.bankapp.services.AccountService;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -12,20 +11,20 @@ public class NumberGeneratorForAccounts {
     public static int generate(Bank b, Client c) {
         Calendar calendar = new GregorianCalendar();
         String number = "";
-        if (b!=null) number=number+b.hashCode();
-        if (c!=null) number=number+c.hashCode();
-        number=number+calendar.get(Calendar.MILLISECOND);
-       while (number.startsWith("0")){
-           number.substring(1,number.length());
-       }
-       int returning;
-       try {
-           returning= Integer.valueOf(number);
-       } catch (java.lang.NumberFormatException e){
-           //over int.size
-           number=number.substring(number.length()-9,number.length());
-           returning= Integer.valueOf(number);
-       }
+        if (b != null) number = number + b.hashCode();
+        if (c != null) number = number + c.hashCode();
+        number = number + calendar.get(Calendar.MILLISECOND);
+        while (number.startsWith("0")) {
+            number.substring(1);
+        }
+        int returning;
+        try {
+            returning = Integer.valueOf(number);
+        } catch (java.lang.NumberFormatException e) {
+            //over int.size
+            number = number.substring(number.length() - 9);
+            returning = Integer.valueOf(number);
+        }
         return returning;
     }
 }

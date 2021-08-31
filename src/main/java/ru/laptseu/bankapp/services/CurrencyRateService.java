@@ -11,7 +11,6 @@ public class CurrencyRateService implements IMaintainableService<CurrencyRate> {
     // getLastCurrency() is specific method.
     CurrencyRateDAOMongoDb currencyRateDao = new CurrencyRateDAOMongoDb();
 
-
     @Override
     public CurrencyRate create(String[] paramArr) throws SQLException {
         CurrencyRate currencyRate = new CurrencyRate();

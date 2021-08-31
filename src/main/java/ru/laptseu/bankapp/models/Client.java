@@ -3,7 +3,6 @@ package ru.laptseu.bankapp.models;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Type;
-import ru.laptseu.bankapp.services.AccountService;
 
 import javax.persistence.*;
 import java.util.HashSet;

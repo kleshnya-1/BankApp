@@ -18,7 +18,7 @@ public class CurrencyRateDAOMongoDb implements IMaintainableDAO<CurrencyRate> {
     // у нас нет никакой гарантии в порядке чтения записаей и нужно менять либо ид, либо добавить
     // дату в класс, что значительно лучше.
 
-    MongoCollection currencyRatesMongo ;
+    MongoCollection currencyRatesMongo;
 
     @Override
     public int create(CurrencyRate obj) throws SQLException {
@@ -56,8 +56,6 @@ public class CurrencyRateDAOMongoDb implements IMaintainableDAO<CurrencyRate> {
 
     public CurrencyRate getLastCurrency(Currency curr, int bankId) {
         currencyRatesMongo = MongoClientFactoryAndSetUp.getMongoCollection(bankId, CurrencyRate.class);
-return (CurrencyRate) currencyRatesMongo.find(Filters.eq("currency", curr.toString())).first();
-//        return (CurrencyRate) currencyRatesMongo.find
-//                (Filters.eq("currency", curr.toString())).first();
+        return (CurrencyRate) currencyRatesMongo.find(Filters.eq("currency", curr.toString())).first();
     }
 }

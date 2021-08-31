@@ -2,12 +2,9 @@ package ru.laptseu.bankapp.models;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.bson.codecs.pojo.annotations.BsonDiscriminator;
 import org.bson.codecs.pojo.annotations.BsonId;
 import org.bson.codecs.pojo.annotations.BsonProperty;
 import org.bson.types.ObjectId;
-
-import javax.persistence.*;
 
 @Getter
 @Setter

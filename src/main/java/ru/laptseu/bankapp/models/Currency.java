@@ -5,11 +5,10 @@ public enum Currency {
     USD("usd"),
     EUR("eur");
 
-    public final String label ;
+    public final String label;
 
     Currency(String label) {
         this.label = label;
     }
-
 
 }

@@ -3,7 +3,6 @@ package ru.laptseu.bankapp.utilities;
 import lombok.extern.log4j.Log4j2;
 import ru.laptseu.bankapp.ConvertingValueException;
 import ru.laptseu.bankapp.models.Account;
-import ru.laptseu.bankapp.models.Bank;
 import ru.laptseu.bankapp.models.Currency;
 import ru.laptseu.bankapp.models.CurrencyRate;
 import ru.laptseu.bankapp.services.CurrencyRateService;
@@ -30,7 +29,7 @@ public class CurrencyConverter {
             targetAmount = sourceAmountByn / currencyTarget.getRateToByn();
         } else targetAmount = sourceAmountByn;
 
-        if (targetAmount==null||sourceAmountByn==null) throw new ConvertingValueException();
+        if (targetAmount == null || sourceAmountByn == null) throw new ConvertingValueException();
         log.info(amount + " " + sourceAcc.getCurrency() + " converted to " + targetAmount + " " + targetAcc.getCurrency());
         return targetAmount;
     }

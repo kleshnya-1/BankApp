@@ -30,6 +30,7 @@ public class TransferHistory {
     private double amount;
     @Type(type = "yes_no")
     private boolean success;
+
     public TransferHistory() {
     }
 

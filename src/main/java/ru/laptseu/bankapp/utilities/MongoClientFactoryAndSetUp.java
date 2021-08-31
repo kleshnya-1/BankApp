@@ -23,7 +23,7 @@ public class MongoClientFactoryAndSetUp {
     // потому перешел на облачное в основной системе.
 
     private static final String MONGO_URL = "mongodb+srv://1:1@cluster0.vlexj.mongodb.net/test";
-    private static Map<Class, String> classMap = new HashMap<>();
+    private static final Map<Class, String> classMap = new HashMap<>();
 
     static {
         classMap.put(CurrencyRate.class, "-'st bank rates");
