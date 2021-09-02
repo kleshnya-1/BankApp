@@ -1,30 +1,33 @@
 package ru.laptseu.bankapp.utilities;
 
+import lombok.extern.log4j.Log4j2;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-
-public class ConnectionMaker {
+@Log4j2
+public class ConnectionCreator {
     private static final String URL = "jdbc:postgresql://localhost:5432/BankAppDB";
     private static final String USERNAME = "postgres";
     private static final String PASSWORD = "1";
     private static Connection connection;
 
-    public Connection makeConnection() {
+    public Connection createConnection() {
         try {
             connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
-        } catch (SQLException throwable) {
-            throwable.printStackTrace();
+        } catch (SQLException e) {
+            log.error(e);
         }
         return connection;
     }
 
-    public Connection makeConnectionWithFalseAutoCommit() {
+    //todo свести к одному методу. как-то
+    public Connection createConnectionWithFalseAutoCommit() {
         try {
-            connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+            connection = createConnection();
             connection.setAutoCommit(false);
-        } catch (SQLException throwable) {
-            throwable.printStackTrace();
+        } catch (SQLException e) {
+            log.error(e);
         }
         return connection;
     }

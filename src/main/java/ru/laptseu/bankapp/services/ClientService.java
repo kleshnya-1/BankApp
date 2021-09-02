@@ -13,7 +13,7 @@ public class ClientService implements IMaintainableService<Client> {
 
     @Override
     public int persist(Client o) throws SQLException {
-        int id = clientDao.create(o);
+        int id = clientDao.save(o);
         return id;
     }
 

@@ -14,9 +14,19 @@ public class TransferHistoryService implements IMaintainableService<TransferHist
         throw new UnsupportedOperationException();
     }
 
+    public TransferHistory create(String clientSourceName, String clientTargetName,
+                                  int accSourceNum, int accTargetNum, String bankSourceName,
+                                  String bankTargetName, String currency, double amount) throws SQLException {
+
+        return new TransferHistory(clientSourceName, clientTargetName,
+                accSourceNum, accTargetNum, bankSourceName,
+                bankTargetName, currency, amount);
+
+    }
+
     @Override
     public int persist(TransferHistory obj) throws SQLException {
-        int id = transactionDao.create(obj);
+        int id = transactionDao.save(obj);
         return id;
     }
 

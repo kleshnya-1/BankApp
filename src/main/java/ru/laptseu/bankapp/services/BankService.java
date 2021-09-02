@@ -21,7 +21,7 @@ public class BankService implements IMaintainableService<Bank> {
 
     @Override
     public int persist(Bank obj) throws SQLException {
-        int id = bankDao.create(obj);
+        int id = bankDao.save(obj);
         return id;
     }
 

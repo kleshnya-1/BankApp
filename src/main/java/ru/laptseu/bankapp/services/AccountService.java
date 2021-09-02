@@ -15,13 +15,14 @@ import ru.laptseu.bankapp.utilities.NumberGeneratorForAccounts;
 import java.sql.SQLException;
 
 @Log4j2
-//creating models from array of parameters
 public class AccountService implements IMaintainableService<Account> {
+    //todo ask. я правильно пишу аннотации или они должны быть над классом?
+    // дефолтные методы тут появятся со spring boot. до этого нет возможности вызвать ДАО, пока у них разные имена
     CommissionCalculator commissionCalculator = new CommissionCalculator();
 
     IMaintainableDAO<Account> accountDao = DaoFactory.get(Account.class);
     IMaintainableDAO<TransferHistory> transferHistoryDao = DaoFactory.get(TransferHistory.class);
-    IMaintainableService transferHistoryService = ServiceFactory.get(TransferHistory.class);
+    TransferHistoryService transferHistoryService = new TransferHistoryService();
     CurrencyConverter currencyConverter = new CurrencyConverter();
 
     @Override
@@ -34,11 +35,12 @@ public class AccountService implements IMaintainableService<Account> {
                 o.setAccNumber(number);
             }
         }
-        accountDao.create(o);
+        accountDao.save(o);
         return o.getAccNumber();
     }
 
     @Override
+    //creating models from array of parameters
     public Account create(String[] paramArr) throws SQLException {
         Account account = new Account();
         //todo.ask ok? getBank.setId
@@ -72,7 +74,7 @@ public class AccountService implements IMaintainableService<Account> {
         accountDao.delete(key);
     }
 
-    //todo.ask это же действия внутри аккаунтов. значит, и место им тут. хотя можно и вынести отдельным классом
+    //todo. refactor
     public void transferAmount(Account sourceAcc, Account targetAcc, double amount) throws SQLException {
         double commission = 0;
         double totalAmount = amount;
@@ -80,30 +82,25 @@ public class AccountService implements IMaintainableService<Account> {
         if (!sourceAcc.getBank().equals(targetAcc.getBank())) {
             commission = commissionCalculator.calculate(targetAcc, amount);
         }
-        if (!sourceAcc.getCurrency().equals(targetAcc.getCurrency())) {
-            totalAmount = currencyConverter.returnConvertedAmount(sourceAcc, targetAcc, amount);
-        }
+
+//todo bank.getСurrency()
+        // totalAmount = currencyConverter.returnConvertedAmount(sourceAcc.getBank()., targetAcc, amount);
         sourceAcc.setAmount(sourceAcc.getAmount() - commission - totalAmount);
         targetAcc.setAmount(targetAcc.getAmount() + totalAmount);
 
-        //creating and persisting unsuccessful transfer history
-        TransferHistory history = new TransferHistory(
-                sourceAcc.getClient().getName(), targetAcc.getClient().getName(),
-                String.valueOf(sourceAcc.getAccNumber()), String.valueOf(targetAcc.getAccNumber()), sourceAcc.getBank().getName(),
-                targetAcc.getBank().getName(), sourceAcc.getCurrency().toString(), amount
-        );
-        transferHistoryService.persist(history);
-        log.info("\nfrom acc ID " + sourceAcc.getId() + "(" + sourceAcc.getClient().getName() + ")" + " to acc ID" +
-                targetAcc.getId() + "(" + targetAcc.getClient().getName() + ") transfered " + amount + sourceAcc.getCurrency()
-                + " (as " + totalAmount + "" + targetAcc.getCurrency() + ") with  commission " + commission + "" + sourceAcc.getCurrency());
-        Session session = accountDao.getSession();
-        history.setSuccess(true);
-        accountDao.update(sourceAcc, session);
-        accountDao.update(targetAcc, session);
-        //todo ask. here we will use directly transfer DAO
-        //updating history
-        transferHistoryDao.update(history, session);
-        session.getTransaction().commit();
-        session.close();
+        try (Session session = accountDao.getSession()) {
+            accountDao.update(sourceAcc, session);
+            accountDao.update(targetAcc, session);
+            session.getTransaction().commit();
+            session.close();
+            log.info("\nfrom acc ID " + sourceAcc.getId() + "(" + sourceAcc.getClient().getName() + ")" + " to acc ID" +
+                    targetAcc.getId() + "(" + targetAcc.getClient().getName() + ") transfered " + amount + sourceAcc.getCurrency()
+                    + " (as " + totalAmount + "" + targetAcc.getCurrency() + ") with  commission " + commission + "" + sourceAcc.getCurrency());
+            transferHistoryDao.save(transferHistoryService.create(sourceAcc.getClient().getName(), targetAcc.getClient().getName(),
+                    sourceAcc.getAccNumber(), targetAcc.getAccNumber(), sourceAcc.getBank().getName(),
+                    targetAcc.getBank().getName(), sourceAcc.getCurrency().toString(), amount));
+        }
     }
 }
+
+

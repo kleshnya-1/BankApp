@@ -2,9 +2,9 @@ package ru.laptseu.bankapp.models;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.Type;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
@@ -12,30 +12,25 @@ import java.util.GregorianCalendar;
 @Setter
 @Entity
 @Table(name = "Transfer_History")
-public class TransferHistory {
+public class TransferHistory extends EntityModel {
     //todo make custom hibernate converter
     //private final DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
     private Calendar date;
     private String clientSourceName;
     private String clientTargetName;
-    private String accSourceNum;
-    private String accTargetNum;
+    private int accSourceNum;
+    private int accTargetNum;
     private String bankSourceName;
     private String bankTargetName;
     private String currency;
     private double amount;
-    @Type(type = "yes_no")
-    private boolean success;
 
     public TransferHistory() {
     }
 
     public TransferHistory(String clientSourceName, String clientTargetName,
-                           String accSourceNum, String accTargetNum, String bankSourceName,
+                           int accSourceNum, int accTargetNum, String bankSourceName,
                            String bankTargetName, String currency, double amount) {
         this.date = new GregorianCalendar();
         this.clientSourceName = clientSourceName;

@@ -9,16 +9,13 @@ import javax.persistence.*;
 @Setter
 @Entity
 @Table(name = "Accounts")
-public class Account {
+public class Account extends EntityModel {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "bank_id")
     Bank bank;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "client_id")
     Client client;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
     @Enumerated(EnumType.STRING)
     private Currency currency;
     private double amount;
