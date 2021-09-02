@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<persistence xmlns="http://java.sun.com/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
+             version="2.0">
+    <persistence-unit name="ogm-jpa-tutorial" transaction-type="JTA">
+        <!-- Use the Hibernate OGM provider: configuration will be transparent -->
+        <provider>org.hibernate.ogm.jpa.HibernateOgmPersistence</provider>
+        <properties>
+            <property name="hibernate.ogm.datastore.provider" value="MONGODB" />
+            <property name="hibernate.ogm.datastore.database" value="TestDB" />
+            <property name="hibernate.ogm.datastore.create_database" value="true" />
+        </properties>
+    </persistence-unit>
+</persistence>
+
+<!--<?xml version="1.0" encoding="utf-8"?>-->
+<!--<!DOCTYPE hibernate-configuration PUBLIC-->
+<!--        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"-->
+<!--        "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">-->
+<!--<hibernate-configuration>-->
+<!--    <session-factory>-->
+<!--        <property name="hibernate.bytecode.use_reflection_optimizer">false</property>-->
+<!--        <property name="hibernate.connection.driver_class">oracle.jdbc.driver.OracleDriver</property>-->
+<!--        <property name="hibernate.connection.password">PASSWORD</property>-->
+<!--        <property name="hibernate.connection.url">jdbc:oracle:thin:UR DB NAME</property>-->
+<!--        <property name="hibernate.connection.username">USERNAME</property>-->
+<!--        <property name="hibernate.dialect">org.hibernate.dialect.Oracle10gDialect</property>-->
+<!--        <property name="show_sql">true</property>-->
+<!--        <mapping class="domain.EmployeeOracleSql"></mapping>-->
+<!--    </session-factory>-->
+<!--</hibernate-configuration>-->

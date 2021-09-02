@@ -1,0 +1,15 @@
+package ru.laptseu.bankapp.dao;
+
+import lombok.extern.log4j.Log4j2;
+import ru.laptseu.bankapp.models.Account;
+import ru.laptseu.bankapp.utilities.HibernateSessionFactoryUtil;
+
+@Log4j2
+public class AccountDAOImpl implements IMaintainableDAO<Account> {
+
+    @Override
+    public Account read(int key) {
+        //todo close session
+        return HibernateSessionFactoryUtil.getSessionFactory().openSession().get(Account.class, key);
+    }
+}
