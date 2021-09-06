@@ -8,11 +8,15 @@ import org.bson.codecs.configuration.CodecRegistries;
 import org.bson.codecs.configuration.CodecRegistry;
 import org.bson.codecs.pojo.ClassModel;
 import org.bson.codecs.pojo.PojoCodecProvider;
+import org.springframework.stereotype.Component;
 import ru.laptseu.bankapp.models.CurrencyRate;
+import ru.laptseu.bankapp.models.CustomDocument;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
+@Component
 public class MongoClientFactoryAndSetUp {
 
     //todo ask. стоит ли разделять монго СЕТАП и фабрику?
@@ -30,7 +34,9 @@ public class MongoClientFactoryAndSetUp {
                 MongoClientSettings.getDefaultCodecRegistry(),
                 CodecRegistries.fromProviders(PojoCodecProvider.builder()
                         .register(
-                                ClassModel.builder(CurrencyRate.class).enableDiscriminator(true).build()
+                                ClassModel.builder(CurrencyRate.class).enableDiscriminator(true).build(),
+                                ClassModel.builder(Set.class).enableDiscriminator(true).build(),
+                                ClassModel.builder(CustomDocument.class).enableDiscriminator(true).build()
                         ).automatic(true)
                         .build()
                 )
@@ -41,18 +47,28 @@ public class MongoClientFactoryAndSetUp {
     public static MongoCollection getMongoCollection(Integer id, Class clazz) {
         CodecRegistry codecRegistry = getCodeсRegistry();
 
-        String collectionName = classMap.get(clazz);
-        if (id != null) collectionName = id.toString() + collectionName;
+        // String collectionName = classMap.get(clazz);
+        //if (id != null) collectionName = id.toString() + collectionName;
         MongoClient mongoClient = new MongoClient(new MongoClientURI(MONGO_URL));
-        MongoCollection<CurrencyRate> collection = mongoClient
+        MongoCollection collection = mongoClient
                 .getDatabase("123")
-                .withCodecRegistry(codecRegistry).getCollection(collectionName, clazz);
-        mongoClient.close();
+                .withCodecRegistry(codecRegistry).getCollection(clazz.getSimpleName() + "s", clazz);
+        // mongoClient.close();
         return collection;
     }
 
-    public static MongoCollection getMongoCollection(Class clazz) {
-        return getMongoCollection(null, clazz);
+    public static MongoCollection getMongoCollection(String collectionName, Class clazz) {
+        CodecRegistry codecRegistry = getCodeсRegistry();
+        MongoClient mongoClient = new MongoClient(new MongoClientURI(MONGO_URL));
+        MongoCollection collection = mongoClient
+                .getDatabase("123")
+                .withCodecRegistry(codecRegistry).getCollection(collectionName, clazz);
+        // mongoClient.close();
+        return collection;
     }
+
+//    public static MongoCollection getMongoCollection(Class clazz) {
+//        return getMongoCollection(null, clazz);
+//    }
 
 }

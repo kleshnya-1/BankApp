@@ -2,28 +2,49 @@ package ru.laptseu.bankapp.models;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.bson.codecs.pojo.annotations.BsonId;
-import org.bson.codecs.pojo.annotations.BsonProperty;
-import org.bson.types.ObjectId;
+import lombok.extern.log4j.Log4j2;
+import org.springframework.stereotype.Component;
 
-import javax.persistence.ManyToOne;
-
+@Log4j2
+@Component
 @Getter
 @Setter
 //@Entity
-//todo in progress. road to NoSQL
+//todo in progress.
+//todo ask should it have any ID?
 public class CurrencyRate extends EntityModel {
 
-    @ManyToOne
     Bank bank;
-    @BsonProperty("_id")
-    @BsonId
-
-    private ObjectId id;
+    int bankId;
     private Currency currency;
     private double rateToByn;
 
-    public int getId() {
-        return -500;
+    public CurrencyRate(Currency currency, double rateToByn) {
+        this.currency = currency;
+        this.rateToByn = rateToByn;
     }
+
+    public CurrencyRate() {
+
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == this) {
+            return true;
+        }
+        if (!(o instanceof CurrencyRate)) {
+            return false;
+        }
+        CurrencyRate c = (CurrencyRate) o;
+        if (bank != null || c.getBank() != null) {
+            return currency.equals(c.getCurrency()) &&
+                    bank.equals(c.getBank()) &&
+                    rateToByn == c.getRateToByn();
+        }
+        return currency.equals(c.getCurrency()) &&
+                rateToByn == c.getRateToByn();
+
+    }
+
 }

@@ -12,19 +12,26 @@
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
     </properties>
-
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.1.1.RELEASE</version>
+    </parent>
 
     <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+
+        <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-web -->
 <!--        <dependency>-->
-<!--            <groupId>org.hibernate.ogm</groupId>-->
-<!--            <artifactId>hibernate-ogm-mongodb</artifactId>-->
-<!--            <version>5.4.0.Final</version>-->
+<!--            <groupId>org.springframework.boot</groupId>-->
+<!--            <artifactId>spring-boot-starter-web</artifactId>-->
+<!--            <version>2.5.4</version>-->
 <!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>org.jboss.narayana.jta</groupId>-->
-<!--            <artifactId>narayana-jta</artifactId>-->
-<!--            <version>5.9.2.Final</version>-->
-<!--        </dependency>-->
+
         <dependency>
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
@@ -71,6 +78,18 @@
             <version>RELEASE</version>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-jdbc</artifactId>
+            <version>4.2.6.RELEASE</version>
+        </dependency>
     </dependencies>
-
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
 </project>

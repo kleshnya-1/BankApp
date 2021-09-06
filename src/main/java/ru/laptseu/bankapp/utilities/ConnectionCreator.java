@@ -5,6 +5,7 @@ import lombok.extern.log4j.Log4j2;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+
 @Log4j2
 public class ConnectionCreator {
     private static final String URL = "jdbc:postgresql://localhost:5432/BankAppDB";

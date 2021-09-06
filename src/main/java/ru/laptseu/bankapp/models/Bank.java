@@ -2,14 +2,17 @@ package ru.laptseu.bankapp.models;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.log4j.Log4j2;
+import org.springframework.stereotype.Component;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
+@Log4j2
+@Component
 @Getter
 @Setter
 @Entity
@@ -21,9 +24,11 @@ public class Bank extends EntityModel {
     @OneToMany(mappedBy = "bank", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Account> accounts = new HashSet<>();
 
-    //todo mongo
-    //@OneToMany(mappedBy = "bank", cascade = CascadeType.ALL, orphanRemoval = true)
-//    private Set<CurrencyRate> currencyRates = new HashSet<>();
+    // todo mongo
+    @OneToMany(mappedBy = "bank", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Transient
+    private List<CurrencyRate> currencyRates = new ArrayList<>();
+
     @Override
     public boolean equals(Object o) {
         if (o == this) {

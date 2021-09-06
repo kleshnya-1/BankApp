@@ -1,35 +1,80 @@
-import com.mongodb.MongoClient;
-import com.mongodb.MongoClientSettings;
-import com.mongodb.MongoClientURI;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
-import com.mongodb.client.model.CreateCollectionOptions;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
-import org.bson.Document;
-import org.bson.codecs.configuration.CodecRegistries;
-import org.bson.codecs.configuration.CodecRegistry;
-import org.bson.codecs.pojo.ClassModel;
-import org.bson.codecs.pojo.PojoCodecProvider;
 import org.junit.jupiter.api.Test;
-import ru.laptseu.bankapp.dao.*;
-import ru.laptseu.bankapp.models.*;
-import ru.laptseu.bankapp.services.AccountService;
-import ru.laptseu.bankapp.services.BankService;
-import ru.laptseu.bankapp.services.ClientService;
-import ru.laptseu.bankapp.services.CurrencyRateService;
-import ru.laptseu.bankapp.utilities.MongoClientFactoryAndSetUp;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import ru.laptseu.bankapp.core.SpringConfig;
+import ru.laptseu.bankapp.dao.BankDAOImpl;
+import ru.laptseu.bankapp.dao.CurrencyRateDAOImpl;
+import ru.laptseu.bankapp.models.Bank;
+import ru.laptseu.bankapp.models.Currency;
+import ru.laptseu.bankapp.models.CurrencyRate;
+import ru.laptseu.bankapp.utilities.CurrencyConverter;
 
-import java.sql.SQLException;
 import java.util.Calendar;
-import java.util.Locale;
 
-import static com.mongodb.client.model.Filters.eq;
 import static org.junit.jupiter.api.Assertions.*;
 
 @Log4j2
 public class workingTest {
 
+    @SneakyThrows
+    @Test
+    public void testAppCont() {
+
+//        ApplicationContext context = new AnnotationConfigApplicationContext(SpringConfig.class);
+//
+//        CurrencyConverter currencyConverter = context.getBean(CurrencyConverter.class);
+//        CurrencyRateDAOImpl currencyRateDAO = context.getBean(CurrencyRateDAOImpl.class);
+//        BankDAOImpl bankDAO = context.getBean(BankDAOImpl.class);
+//
+//        System.out.println(currencyConverter);
+//        System.out.println(currencyRateDAO);
+//        System.out.println(bankDAO);
+//        Bank b = bankDAO.read(288);
+//        System.out.println(b);
+
+    }
+
+    @SneakyThrows
+    @Test
+    public void testCurrencyRateCRUD() {
+        Bank b1 = new Bank();
+        Bank b2 = new Bank();
+        b1.setName("TestBank1" + Calendar.getInstance().getTime());
+        b2.setName("TestBank2" + Calendar.getInstance().getTime());
+
+        CurrencyRate cr1 = new CurrencyRate();
+        cr1.setCurrency(Currency.EUR);
+        cr1.setRateToByn(260);
+        cr1.setBank(b1);
+        CurrencyRate cr2 = new CurrencyRate();
+        cr2.setCurrency(Currency.USD);
+        cr2.setRateToByn(360);
+        cr2.setBank(b2);
+        CurrencyRate cr3 = new CurrencyRate();
+        cr3.setCurrency(Currency.USD);
+        cr3.setRateToByn(361);
+        cr3.setBank(b2);
+        CurrencyRate cr4 = new CurrencyRate();
+        cr4.setCurrency(Currency.USD);
+        cr4.setRateToByn(362);
+        cr4.setBank(b2);
+        CurrencyRateDAOImpl currencyRateDAO = new CurrencyRateDAOImpl();
+
+        b1.getCurrencyRates().add(cr1);
+        b2.getCurrencyRates().add(cr2);
+        b2.getCurrencyRates().add(cr3);
+        b2.getCurrencyRates().add(cr4);
+        currencyRateDAO.save(cr1);
+        currencyRateDAO.save(cr2);
+        currencyRateDAO.save(cr3);
+        currencyRateDAO.save(cr4);
+
+        assertEquals(cr1, currencyRateDAO.read(cr1.getBankId(), cr1.getCurrency()));
+        assertEquals(cr4, currencyRateDAO.read(cr4.getBankId(), cr4.getCurrency()));
+
+    }
 
     @SneakyThrows
     @Test
@@ -37,8 +82,8 @@ public class workingTest {
         BankDAOImpl bankDAO = new BankDAOImpl();
         Bank b1 = new Bank();
         Bank b2 = new Bank();
-        b1.setName("TestBank1" + Calendar.getInstance().getTime());
-        b2.setName("TestBank2");
+        b1.setName("testBankCRUD" + Calendar.getInstance().getTime());
+        b2.setName("testBankCRUD2 " + Calendar.getInstance().getTime());
         b1.setTransferFeeInPercentForNotNaturalPersons(70);
         b2.setTransferFeeInPercentForNotNaturalPersons(70);
         int n1 = bankDAO.save(b1);
@@ -62,6 +107,74 @@ public class workingTest {
 
         bankDAO.delete(b1);
         bankDAO.delete(b2);
+        b1Fdb = bankDAO.read(n1);
+        b2Fdb = bankDAO.read(n2);
+        assertNull(b1Fdb);
+        assertNull(b2Fdb);
+    }
+
+    @SneakyThrows
+    @Test
+    public void testBankAndCurrRatesCRUD() {
+        BankDAOImpl bankDAO = new BankDAOImpl();
+        CurrencyRateDAOImpl currencyRateDAO = new CurrencyRateDAOImpl();
+        Bank b1 = new Bank();
+        Bank b2 = new Bank();
+        b1.setName("testBankAndCurrRatesCRUD " + Calendar.getInstance().getTime());
+        b2.setName("testBankAndCurrRatesCRUD1 " + Calendar.getInstance().getTime());
+        b1.setTransferFeeInPercentForNotNaturalPersons(70);
+        b2.setTransferFeeInPercentForNotNaturalPersons(70);
+        int n1 = bankDAO.save(b1);
+        int n2 = bankDAO.save(b2);
+
+        Bank b1Fdb = bankDAO.read(n1);
+        Bank b2Fdb = bankDAO.read(n2);
+        assertEquals(b1, b1Fdb);
+        assertEquals(b2, b2Fdb);
+
+        CurrencyRate currencyRateUsd = new CurrencyRate(Currency.USD, 1000);
+        CurrencyRate currencyRateEur = new CurrencyRate(Currency.EUR, 1200);
+        CurrencyRate currencyRateUsd1 = new CurrencyRate(Currency.USD, 1010);
+        CurrencyRate currencyRateEur1 = new CurrencyRate(Currency.EUR, 1210);
+        CurrencyRate currencyRateUsd2 = new CurrencyRate(Currency.USD, 1020);
+        CurrencyRate currencyRateEur2 = new CurrencyRate(Currency.EUR, 1220);
+        currencyRateUsd.setBank(b1);
+        currencyRateEur.setBank(b1);
+        currencyRateUsd1.setBank(b1);
+        currencyRateEur1.setBank(b1);
+        currencyRateUsd2.setBank(b2);
+        currencyRateEur2.setBank(b2);
+        currencyRateUsd.setBankId(b1.getId());
+        currencyRateEur.setBankId(b1.getId());
+        currencyRateUsd1.setBankId(b1.getId());
+        currencyRateEur1.setBankId(b1.getId());
+        currencyRateUsd2.setBankId(b2.getId());
+        currencyRateEur2.setBankId(b2.getId());
+
+        b1.getCurrencyRates().add(currencyRateUsd);
+        b1.getCurrencyRates().add(currencyRateEur);
+        b1.getCurrencyRates().add(currencyRateUsd1);
+        b1.getCurrencyRates().add(currencyRateEur1);
+        b2.getCurrencyRates().add(currencyRateUsd2);
+        b2.getCurrencyRates().add(currencyRateEur2);
+        b1.setTransferFeeInPercent(50);
+        b2.setTransferFeeInPercent(50);
+
+        bankDAO.update(b1);
+        bankDAO.update(b2);
+        assertNotEquals(b1, b1Fdb);
+        assertNotEquals(b2, b2Fdb);
+
+        b1Fdb = bankDAO.read(n1);
+        b2Fdb = bankDAO.read(n2);
+        assertEquals(b1, b1Fdb);
+        assertEquals(b2, b2Fdb);
+
+        CurrencyRate lastCurr = currencyRateDAO.read(b1.getId(), currencyRateEur1.getCurrency());
+        assertEquals(lastCurr, currencyRateEur1);
+        bankDAO.delete(b1);
+        bankDAO.delete(b2);
+
         b1Fdb = bankDAO.read(n1);
         b2Fdb = bankDAO.read(n2);
         assertNull(b1Fdb);

@@ -54,7 +54,7 @@ public interface IMaintainableDAO<T extends EntityModel> {
         Transaction tx1 = session.beginTransaction();
         try {
             session.delete(key);
-            tx1.commit();;
+            tx1.commit();
         } finally {
             session.close();
         }
@@ -66,7 +66,7 @@ public interface IMaintainableDAO<T extends EntityModel> {
 
     //todo fix if its possible for read()
     default T read(int key) {
-       Class c = this.getClass();
+        Class c = this.getClass();
         return (T) HibernateSessionFactoryUtil.getSessionFactory().openSession().get(this.getClass(), key);
     }
 }

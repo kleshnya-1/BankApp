@@ -1,8 +1,14 @@
 package ru.laptseu.bankapp.core;
 
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.ComponentScan;
+
+@SpringBootApplication
+@ComponentScan("ru.laptseu.bankapp")
+//@RestController
 public class Main {
     public static void main(String[] args) {
-        Initial initial = new Initial();
-        initial.startApp();
+        SpringApplication.run(Main.class, args);
     }
 }

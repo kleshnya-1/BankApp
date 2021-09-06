@@ -27,10 +27,11 @@ public class CurrencyRateService implements IMaintainableService<CurrencyRate> {
         return id;
     }
 
+    //todo fix
     @Override
     //key - bankId
     public CurrencyRate read(int key) throws SQLException {
-        return currencyRateDao.read(key);
+        return null;//currencyRateDao.read(key);
     }
 
     @Override
