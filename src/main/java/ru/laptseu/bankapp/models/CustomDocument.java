@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Log4j2
-@Component
+//@Component
 @Getter
 @Setter
 //todo rename it

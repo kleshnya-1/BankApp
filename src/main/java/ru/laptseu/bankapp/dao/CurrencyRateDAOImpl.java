@@ -1,29 +1,30 @@
 package ru.laptseu.bankapp.dao;
 
+
 import com.mongodb.client.MongoCollection;
-import com.mongodb.client.model.Filters;
 import lombok.extern.log4j.Log4j2;
 import org.hibernate.Session;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import ru.laptseu.bankapp.core.MyBean;
 import ru.laptseu.bankapp.models.Currency;
 import ru.laptseu.bankapp.models.CurrencyRate;
 import ru.laptseu.bankapp.models.CustomDocument;
-import ru.laptseu.bankapp.utilities.MongoClientFactoryAndSetUp;
-
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 import static com.mongodb.client.model.Filters.eq;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Log4j2
 @Component
 public class CurrencyRateDAOImpl //implements  IMaintainableDAO<CurrencyRate>
 {
+@Autowired
+    MyBean myBean;
+    // MongoCollection currencyRatesMongoCollection = null;// = MongoClientFactoryAndSetUp.getMongoCollection("CurrencyRates", CustomDocument.class);
 
-    MongoCollection currencyRatesMongoCollection = MongoClientFactoryAndSetUp.getMongoCollection("CurrencyRates", CustomDocument.class);
-
+    MongoCollection currencyRatesMongoCollection= myBean.getMongoCollection("CurrencyRates", CustomDocument.class);
     public CurrencyRateDAOImpl() {
     }
 
@@ -62,20 +63,21 @@ public class CurrencyRateDAOImpl //implements  IMaintainableDAO<CurrencyRate>
 
     public List<CurrencyRate> read(int key) {
         //todo null exc
-        CustomDocument o3 = (CustomDocument) currencyRatesMongoCollection.find(eq("bankId", key)).first();
-        if (o3 == null) {
-            List<CurrencyRate> empty = new ArrayList<>();
-            return empty;
-        } else {
-            return o3.getCurrencies();
-        }
-
+//        CustomDocument o3 = (CustomDocument) currencyRatesMongoCollection.find(eq("bankId", key)).first();
+//        if (o3 == null) {
+//            List<CurrencyRate> empty = new ArrayList<>();
+//            return empty;
+//        } else {
+//            return o3.getCurrencies();
+//        }
+        return null;
     }
 
     public CurrencyRate read(int key, Currency c) {
-        List<CurrencyRate> reversed = read(key);
-        Collections.reverse(reversed);
-        return reversed.stream().filter(cr -> cr.getCurrency().equals(c)).findFirst().orElse(null);
+//        List<CurrencyRate> reversed = read(key);
+//        Collections.reverse(reversed);
+//        return reversed.stream().filter(cr -> cr.getCurrency().equals(c)).findFirst().orElse(null);
+        return null;
     }
 
     public void update(CurrencyRate obj) throws SQLException {
@@ -95,7 +97,8 @@ public class CurrencyRateDAOImpl //implements  IMaintainableDAO<CurrencyRate>
     }
 
     public CurrencyRate getLastCurrency(Currency curr, int bankId) {
-        currencyRatesMongoCollection = MongoClientFactoryAndSetUp.getMongoCollection(bankId, CurrencyRate.class);
-        return (CurrencyRate) currencyRatesMongoCollection.find(Filters.eq("currency", curr.toString())).first();
+//        //currencyRatesMongoCollection = MongoClientFactoryAndSetUp.getMongoCollection(bankId, CurrencyRate.class);
+//        return (CurrencyRate) currencyRatesMongoCollection.find(Filters.eq("currency", curr.toString())).first();
+        return null;
     }
 }

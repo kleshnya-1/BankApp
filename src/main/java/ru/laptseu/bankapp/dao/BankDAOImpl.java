@@ -16,7 +16,7 @@ import java.sql.SQLException;
 public class BankDAOImpl implements IMaintainableDAO<Bank> {
 //todo ask i use DAO, not SERVICE?
 
-    @Autowired
+   // @Autowired
     private CurrencyRateDAOImpl currencyRateDAO= new CurrencyRateDAOImpl();
 
     public BankDAOImpl() {

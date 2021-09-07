@@ -1,15 +1,11 @@
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import ru.laptseu.bankapp.core.SpringConfig;
 import ru.laptseu.bankapp.dao.BankDAOImpl;
 import ru.laptseu.bankapp.dao.CurrencyRateDAOImpl;
 import ru.laptseu.bankapp.models.Bank;
 import ru.laptseu.bankapp.models.Currency;
 import ru.laptseu.bankapp.models.CurrencyRate;
-import ru.laptseu.bankapp.utilities.CurrencyConverter;
 
 import java.util.Calendar;
 
