@@ -3,14 +3,17 @@ package ru.laptseu.bankapp.utilities;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
+import org.springframework.stereotype.Component;
 import ru.laptseu.bankapp.models.Account;
 import ru.laptseu.bankapp.models.Bank;
 import ru.laptseu.bankapp.models.Client;
 import ru.laptseu.bankapp.models.TransferHistory;
 
-public class HibernateSessionFactoryUtil {
+
+@Component
+public class HibernateSessionFactoryUnstatic {
     private static SessionFactory sessionFactory;
-    private HibernateSessionFactoryUtil() {    }
+    private HibernateSessionFactoryUnstatic() {    }
     public static SessionFactory getSessionFactory() {
         if (sessionFactory == null) {
             try {

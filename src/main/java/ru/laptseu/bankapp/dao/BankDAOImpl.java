@@ -17,9 +17,13 @@ public class BankDAOImpl implements IMaintainableDAO<Bank> {
 //todo ask i use DAO, not SERVICE?
 
 
-    private CurrencyRateDAOImpl currencyRateDAO= new CurrencyRateDAOImpl();
+    private CurrencyRateDAOImpl currencyRateDAO;
 
     public BankDAOImpl() {
+    }
+@Autowired
+    public BankDAOImpl(CurrencyRateDAOImpl currencyRateDAO) {
+        this.currencyRateDAO = currencyRateDAO;
     }
 
     @Override

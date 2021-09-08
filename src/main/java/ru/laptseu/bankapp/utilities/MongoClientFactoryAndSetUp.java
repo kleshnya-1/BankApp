@@ -16,7 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-@Component
+
 public class MongoClientFactoryAndSetUp {
 
     //todo ask. стоит ли разделять монго СЕТАП и фабрику?
