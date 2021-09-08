@@ -9,6 +9,7 @@ import ru.laptseu.bankapp.models.Client;
 import ru.laptseu.bankapp.models.TransferHistory;
 
 public class HibernateSessionFactoryUtil {
+
     private static SessionFactory sessionFactory;
 
     private HibernateSessionFactoryUtil() {

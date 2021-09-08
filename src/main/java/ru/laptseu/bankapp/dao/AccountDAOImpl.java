@@ -6,7 +6,6 @@ import ru.laptseu.bankapp.models.Account;
 import ru.laptseu.bankapp.utilities.HibernateSessionFactoryUtil;
 
 @Log4j2
-@Component
 public class AccountDAOImpl implements IMaintainableDAO<Account> {
 
     @Override

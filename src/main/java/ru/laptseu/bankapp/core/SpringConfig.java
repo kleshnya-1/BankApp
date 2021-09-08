@@ -1,16 +1,50 @@
 package ru.laptseu.bankapp.core;
 
 import lombok.Data;
+import org.hibernate.SessionFactory;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import ru.laptseu.bankapp.dao.BankDAOImpl;
+import ru.laptseu.bankapp.models.Account;
+import ru.laptseu.bankapp.models.Bank;
+import ru.laptseu.bankapp.models.Client;
+import ru.laptseu.bankapp.models.TransferHistory;
 
-//@Configuration
+@Configuration
 //@ComponentScan("ru.laptseu.bankapp")
-@Data
+
 public class SpringConfig {
 
-    @Autowired
-    ApplicationContext context;
+    @Bean
+    public BankDAOImpl bankDAO(){
+        return new BankDAOImpl();
+    }
+
+//    @Bean
+//    public SessionFactory getSessionFactory() {
+//          SessionFactory sessionFactory =null;
+//        try {
+//                org.hibernate.cfg.Configuration configuration = new org.hibernate.cfg.Configuration().configure();
+//                configuration.addAnnotatedClass(Account.class);
+//                configuration.addAnnotatedClass(Bank.class);
+//                configuration.addAnnotatedClass(Client.class);
+//                //todo configuration.addAnnotatedClass(Currency.class);
+//                configuration.addAnnotatedClass(TransferHistory.class);
+//                StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties());
+//                sessionFactory = configuration.buildSessionFactory(builder.build());
+//            } catch (Exception e) {
+//                System.out.println("Исключение!" + e);
+//            }
+//
+//        return sessionFactory;
+//    }
+
+
+
+  //  ApplicationContext context;
     // ApplicationContext context ;//= new AnnotationConfigApplicationContext(SpringConfig.class);
 
 //    @Bean
