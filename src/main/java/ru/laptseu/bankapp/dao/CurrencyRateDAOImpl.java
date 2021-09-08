@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 import ru.laptseu.bankapp.models.Currency;
 import ru.laptseu.bankapp.models.CurrencyRate;
 import ru.laptseu.bankapp.models.CustomDocument;
-import ru.laptseu.bankapp.utilities.MongoClientFactoryAndSetUp;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -22,7 +21,7 @@ import static com.mongodb.client.model.Filters.eq;
 public class CurrencyRateDAOImpl //implements  IMaintainableDAO<CurrencyRate>
 {
 
-    MongoCollection currencyRatesMongoCollection = MongoClientFactoryAndSetUp.getMongoCollection("CurrencyRates", CustomDocument.class);
+    MongoCollection currencyRatesMongoCollection;// = MongoClientFactoryAndSetUp.getMongoCollection("CurrencyRates", CustomDocument.class);
 
     public CurrencyRateDAOImpl() {
     }
@@ -95,7 +94,7 @@ public class CurrencyRateDAOImpl //implements  IMaintainableDAO<CurrencyRate>
     }
 
     public CurrencyRate getLastCurrency(Currency curr, int bankId) {
-        currencyRatesMongoCollection = MongoClientFactoryAndSetUp.getMongoCollection(bankId, CurrencyRate.class);
+        //currencyRatesMongoCollection;// = MongoClientFactoryAndSetUp.getMongoCollection(bankId, CurrencyRate.class);
         return (CurrencyRate) currencyRatesMongoCollection.find(Filters.eq("currency", curr.toString())).first();
     }
 }
