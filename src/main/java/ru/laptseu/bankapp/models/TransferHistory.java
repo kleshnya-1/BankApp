@@ -11,7 +11,6 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 @Log4j2
-@Component
 @Getter
 @Setter
 @Entity

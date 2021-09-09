@@ -14,5 +14,4 @@ public class TransferHistoryDAOImpl implements IMaintainableDAO<TransferHistory>
     public TransferHistory read(int key) {
         return HibernateSessionFactoryUtil.getSessionFactory().openSession().get(TransferHistory.class, key);
     }
-
 }

@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Set;
 
 @Log4j2
-@Component
 @Getter
 @Setter
 @Entity

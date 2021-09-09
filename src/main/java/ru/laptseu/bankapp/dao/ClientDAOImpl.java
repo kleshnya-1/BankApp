@@ -13,5 +13,4 @@ public class ClientDAOImpl implements IMaintainableDAO<Client> {
     public Client read(int key) {
         return HibernateSessionFactoryUtil.getSessionFactory().openSession().get(Client.class, key);
     }
-
 }

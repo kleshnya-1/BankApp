@@ -14,7 +14,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Log4j2
-@Component
 @Getter
 @Setter
 @Entity
@@ -23,12 +22,6 @@ public class Client extends EntityModel {
     private String name;
     @Type(type = "yes_no")
     private boolean isNaturalPerson;
-
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Account> accounts = new HashSet<>();
-
-    public void addAccount(Account account) {
-        account.setClient(this);
-        accounts.add(account);
-    }
 }

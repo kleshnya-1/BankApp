@@ -1,11 +1,12 @@
 package ru.laptseu.bankapp.services;
 
+import org.springframework.stereotype.Service;
 import ru.laptseu.bankapp.dao.CurrencyRateDAOImpl;
 import ru.laptseu.bankapp.models.Currency;
 import ru.laptseu.bankapp.models.CurrencyRate;
 
 import java.sql.SQLException;
-
+@Service
 //todo in progress. road to NoSQL
 public class CurrencyRateService implements IMaintainableService<CurrencyRate> {
 

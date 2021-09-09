@@ -2,41 +2,43 @@ package ru.laptseu.bankapp.services;
 
 import lombok.extern.log4j.Log4j2;
 import org.hibernate.Session;
-import ru.laptseu.bankapp.EntityNotFoundException;
-import ru.laptseu.bankapp.dao.DaoFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import ru.laptseu.bankapp.dao.IMaintainableDAO;
 import ru.laptseu.bankapp.models.Account;
 import ru.laptseu.bankapp.models.Currency;
+import ru.laptseu.bankapp.models.CurrencyRate;
 import ru.laptseu.bankapp.models.TransferHistory;
 import ru.laptseu.bankapp.utilities.CommissionCalculator;
 import ru.laptseu.bankapp.utilities.CurrencyConverter;
-import ru.laptseu.bankapp.utilities.NumberGeneratorForAccounts;
 
 import java.sql.SQLException;
 
 @Log4j2
+@Service
 public class AccountService implements IMaintainableService<Account> {
     //todo ask. я правильно пишу аннотации или они должны быть над классом?
     // дефолтные методы тут появятся со spring boot. до этого нет возможности вызвать ДАО, пока у них разные имена
-    CommissionCalculator commissionCalculator = new CommissionCalculator();
 
-    IMaintainableDAO<Account> accountDao = DaoFactory.get(Account.class);
-    IMaintainableDAO<TransferHistory> transferHistoryDao = DaoFactory.get(TransferHistory.class);
-    TransferHistoryService transferHistoryService = new TransferHistoryService();
-    CurrencyConverter currencyConverter = new CurrencyConverter();
+    // TODO: 09.09.2021 replace as constructor
+    @Autowired
+    CommissionCalculator commissionCalculator;// = new CommissionCalculator();
+    @Autowired
+    IMaintainableDAO<Account> accountDao;// = DaoFactory.get(Account.class);
+    @Autowired
+    IMaintainableDAO<TransferHistory> transferHistoryDao;// = DaoFactory.get(TransferHistory.class);
+    @Autowired
+    TransferHistoryService transferHistoryService;// = new TransferHistoryService();
+    @Autowired
+    CurrencyConverter currencyConverter;// = new CurrencyConverter();
+    @Autowired
+    CurrencyRateService currencyRateService;
 
     @Override
     public int persist(Account o) throws SQLException {
-        while (o.getAccNumber() == null) {
-            int number = NumberGeneratorForAccounts.generate(o.getBank(), o.getClient());
-            try {
-                read(number);
-            } catch (EntityNotFoundException e) {
-                o.setAccNumber(number);
-            }
-        }
-        accountDao.save(o);
-        return o.getAccNumber();
+        int num = accountDao.save(o);
+        // TODO: 09.09.2021 check how it works
+        return num;
     }
 
     @Override
@@ -52,7 +54,8 @@ public class AccountService implements IMaintainableService<Account> {
 
     @Override
     public Account read(int key) throws SQLException {
-        //todo ask. тут запрашиваем по номеру аккаунта, а не ИД?
+        //todo ask. тут запрашиваем пока по Ид. а надо по номеру аккаунта, а не ИД? мы же из сервисов
+        // понятия не имеем, как там у ид дела
         return accountDao.read(key);
     }
 
@@ -78,13 +81,16 @@ public class AccountService implements IMaintainableService<Account> {
     public void transferAmount(Account sourceAcc, Account targetAcc, double amount) throws SQLException {
         double commission = 0;
         double totalAmount = amount;
+        // TODO: 09.09.2021 ask это для понимания. или сразу стоит такое вклчать в конструктор?
+        CurrencyRate source = currencyRateService.read(sourceAcc.getBank().getId());
+        CurrencyRate target = currencyRateService.read(targetAcc.getBank().getId());
 
         if (!sourceAcc.getBank().equals(targetAcc.getBank())) {
             commission = commissionCalculator.calculate(targetAcc, amount);
         }
-
-//todo bank.getСurrency()
-        // totalAmount = currencyConverter.returnConvertedAmount(sourceAcc.getBank()., targetAcc, amount);
+        if (!sourceAcc.getCurrency().equals(targetAcc.getCurrency())) {
+            totalAmount = currencyConverter.convert(source.getRateToByn(), target.getRateToByn(), amount);
+        }
         sourceAcc.setAmount(sourceAcc.getAmount() - commission - totalAmount);
         targetAcc.setAmount(targetAcc.getAmount() + totalAmount);
 

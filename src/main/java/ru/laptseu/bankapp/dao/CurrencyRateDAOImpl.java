@@ -5,11 +5,10 @@ import com.mongodb.client.model.Filters;
 import lombok.extern.log4j.Log4j2;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 import ru.laptseu.bankapp.models.Currency;
 import ru.laptseu.bankapp.models.CurrencyRate;
-import ru.laptseu.bankapp.models.CustomDocument;
+import ru.laptseu.bankapp.models.MongoDocumentForEachBankRates;
 import ru.laptseu.bankapp.utilities.MongoClientFactoryAndSetUp;
 
 import java.sql.SQLException;
@@ -19,16 +18,21 @@ import java.util.List;
 
 import static com.mongodb.client.model.Filters.eq;
 
-//todo круцти спринг дату
+//todo проблема с имплиментированием. метод read(int)
+// потом тут появится спринг дата
 @Log4j2
 @Repository
-public class CurrencyRateDAOImpl //implements  IMaintainableDAO<CurrencyRate>
+public class CurrencyRateDAOImpl// implements  IMaintainableDAO<CurrencyRate>
 {
 
-    @Autowired
+
     MongoCollection currencyRatesMongoCollection;// = MongoClientFactoryAndSetUp.getMongoCollection("CurrencyRates", CustomDocument.class);
 
     public CurrencyRateDAOImpl() {
+    }
+    @Autowired
+    public CurrencyRateDAOImpl(MongoCollection currencyRatesMongoCollection) {
+        this.currencyRatesMongoCollection = currencyRatesMongoCollection;
     }
 
     //@Override
@@ -38,10 +42,10 @@ public class CurrencyRateDAOImpl //implements  IMaintainableDAO<CurrencyRate>
         obj.setBank(null);
         //todo ask set bankId to null?
 
-        CustomDocument document = (CustomDocument) currencyRatesMongoCollection.
+        MongoDocumentForEachBankRates document = (MongoDocumentForEachBankRates) currencyRatesMongoCollection.
                 find(eq("bankId", obj.getBankId())).first();
         if (document == null) {
-            document = new CustomDocument();
+            document = new MongoDocumentForEachBankRates();
             List<CurrencyRate> list = new ArrayList<>();
             list.add(obj);
             document.setCurrencies(list);
@@ -64,16 +68,17 @@ public class CurrencyRateDAOImpl //implements  IMaintainableDAO<CurrencyRate>
         return 1;
     }
 
+    //todo сюда я даю ИД банка. и получаю лист его курсов. интерфейс не понимает,
+    // так как он привык получать ИД сущности и ее возвращать
     public List<CurrencyRate> read(int key) {
         //todo null exc
-        CustomDocument o3 = (CustomDocument) currencyRatesMongoCollection.find(eq("bankId", key)).first();
+        MongoDocumentForEachBankRates o3 = (MongoDocumentForEachBankRates) currencyRatesMongoCollection.find(eq("bankId", key)).first();
         if (o3 == null) {
             List<CurrencyRate> empty = new ArrayList<>();
             return empty;
         } else {
             return o3.getCurrencies();
         }
-
     }
 
     public CurrencyRate read(int key, Currency c) {
@@ -87,7 +92,7 @@ public class CurrencyRateDAOImpl //implements  IMaintainableDAO<CurrencyRate>
     }
 
     public void delete(int key) {
-
+//todo реализовать ее?
     }
 
     public void update(CurrencyRate obj, Session conn) throws SQLException {

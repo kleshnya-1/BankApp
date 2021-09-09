@@ -1,11 +1,13 @@
 package ru.laptseu.bankapp.services;
 
+import org.springframework.stereotype.Service;
 import ru.laptseu.bankapp.dao.DaoFactory;
 import ru.laptseu.bankapp.dao.IMaintainableDAO;
 import ru.laptseu.bankapp.models.TransferHistory;
 
 import java.sql.SQLException;
 
+@Service
 public class TransferHistoryService implements IMaintainableService<TransferHistory> {
     IMaintainableDAO<TransferHistory> transactionDao = DaoFactory.get(TransferHistory.class);
 

@@ -11,6 +11,7 @@ import ru.laptseu.bankapp.utilities.HibernateSessionFactoryUtil;
 
 import java.sql.SQLException;
 
+//todo ask Это же не репозиторий?
 //@Repository
 public interface IMaintainableDAO<T extends EntityModel> {
 
@@ -26,8 +27,6 @@ public interface IMaintainableDAO<T extends EntityModel> {
             return obj.getId();
         }
     }
-//todo fix by default
-    //T read(int key);
 
     default void update(T obj) throws SQLException {
         Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();

@@ -14,8 +14,7 @@ import java.util.List;
 @Component
 @Getter
 @Setter
-//todo rename it
-public class CustomDocument {
+public class MongoDocumentForEachBankRates {
     @BsonProperty("_id")
     @BsonId
     private ObjectId id;

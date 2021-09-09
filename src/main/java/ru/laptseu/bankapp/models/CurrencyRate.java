@@ -6,10 +6,9 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Component;
 
 @Log4j2
-@Component
 @Getter
 @Setter
-//@Entity
+//@Entity тут нет. его в дао банка дао курса подставляет
 //todo in progress.
 //todo ask should it have any ID?
 public class CurrencyRate extends EntityModel {
@@ -25,7 +24,6 @@ public class CurrencyRate extends EntityModel {
     }
 
     public CurrencyRate() {
-
     }
 
     @Override
@@ -44,7 +42,5 @@ public class CurrencyRate extends EntityModel {
         }
         return currency.equals(c.getCurrency()) &&
                 rateToByn == c.getRateToByn();
-
     }
-
 }

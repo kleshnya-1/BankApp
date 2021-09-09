@@ -3,29 +3,121 @@ import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.laptseu.bankapp.core.Main;
 import ru.laptseu.bankapp.dao.BankDAOImpl;
 import ru.laptseu.bankapp.dao.CurrencyRateDAOImpl;
-import ru.laptseu.bankapp.models.Bank;
-import ru.laptseu.bankapp.models.Currency;
-import ru.laptseu.bankapp.models.CurrencyRate;
+import ru.laptseu.bankapp.models.*;
+import ru.laptseu.bankapp.services.AccountService;
+import ru.laptseu.bankapp.services.BankService;
+import ru.laptseu.bankapp.services.ClientService;
+import ru.laptseu.bankapp.services.CurrencyRateService;
 
 import java.util.Calendar;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertNull;
 
 @RunWith(SpringRunner.class)
 //@ComponentScan("main.ru.laptseu.bankapp")
-@SpringBootTest(classes= Main.class)
+@SpringBootTest(classes = Main.class)
 public class TestingWebApplicationTests {
 
     @Autowired
     BankDAOImpl bankDAO;
-@Autowired
+    @Autowired
     CurrencyRateDAOImpl currencyRateDAO;
+
+    @Autowired
+    AccountService accountService ;
+  //  @Autowired
+    BankService bankService = new BankService();
+   // @Autowired
+    ClientService clientService = new ClientService();
+    @Autowired
+    CurrencyRateService currencyRateService ;
+
+    @SneakyThrows
+    @Test
+    public void testTransfer() {
+
+        Bank bank = new Bank();
+        Bank bank1 = new Bank();
+        bank.setName("testTransfer01 " + Calendar.getInstance().getTime());
+        bank.setTransferFeeInPercent(10);
+        bank.setTransferFeeInPercentForNotNaturalPersons(20);
+
+        bank1.setTransferFeeInPercent(15);
+        bank1.setTransferFeeInPercentForNotNaturalPersons(25);
+        bank1.setName("testTransfer02 " + Calendar.getInstance().getTime());
+        bankService.persist(bank);
+        bankService.persist(bank1);
+
+        CurrencyRate currencyRateUsd = new CurrencyRate();
+        CurrencyRate currencyRateEur = new CurrencyRate();
+        currencyRateUsd.setCurrency(Currency.USD);
+        currencyRateUsd.setRateToByn(130);
+        currencyRateUsd.setBank(bank);
+        currencyRateEur.setCurrency(Currency.EUR);
+        currencyRateEur.setRateToByn(150);
+        currencyRateEur.setBank(bank);
+
+        CurrencyRate currencyRateUsd1 = new CurrencyRate();
+        CurrencyRate currencyRateEur1 = new CurrencyRate();
+        currencyRateUsd1.setCurrency(Currency.USD);
+        currencyRateUsd1.setRateToByn(230);
+        currencyRateUsd1.setBank(bank);
+        currencyRateEur1.setCurrency(Currency.EUR);
+        currencyRateEur1.setRateToByn(250);
+        currencyRateEur1.setBank(bank1);
+
+        currencyRateService.persist(currencyRateEur);
+        currencyRateService.persist(currencyRateEur1);
+        currencyRateService.persist(currencyRateUsd);
+        currencyRateService.persist(currencyRateUsd1);
+        bankService.update(bank);
+        bankService.update(bank1);
+
+        Client client1 = new Client();
+        Client client2 = new Client();
+        client1.setName("ClientTransactionTest");
+        client1.setNaturalPerson(true);
+        client2.setName("ClientTransactionTest1");
+        client2.setNaturalPerson(false);
+        clientService.persist(client1);
+        clientService.persist(client2);
+
+        Account account1 = new Account();
+        Account account1p2 = new Account();
+        Account account2 = new Account();
+        account1.setAmount(1000);
+        account1.setBank(bank);
+        account1.setCurrency(Currency.EUR);
+        account1p2.setAmount(1200);
+        account1p2.setBank(bank1);
+        account1p2.setCurrency(Currency.USD);
+        account2.setAmount(2000);
+        account2.setBank(bank1);
+        account2.setCurrency(Currency.USD);
+
+        accountService.persist(account1);
+        accountService.persist(account1p2);
+        accountService.persist(account2);
+        client1.getAccounts().add(account1);
+        client1.getAccounts().add(account1p2);
+        client2.getAccounts().add(account2);
+
+        // bank.addAccount(account1);
+        // bank.addAccount(account1p2);
+        // bank1.addAccount(account2);
+        bankService.update(bank);
+        bankService.update(bank1);
+        clientService.update(client1);
+        clientService.update(client2);
+
+        Account account1fDB = accountService.read(account1.getId());
+        Account account2fDB = accountService.read(account2.getId());
+        accountService.transferAmount(account1fDB, account2fDB, 50);
+    }
 
     @SneakyThrows
     @Test

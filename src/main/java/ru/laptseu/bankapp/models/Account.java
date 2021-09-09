@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 import javax.persistence.*;
 
 @Log4j2
-@Component
 @Getter
 @Setter
 @Entity
@@ -23,5 +22,7 @@ public class Account extends EntityModel {
     @Enumerated(EnumType.STRING)
     private Currency currency;
     private double amount;
+    // TODO: 09.09.2021 check how it works
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer accNumber;
 }

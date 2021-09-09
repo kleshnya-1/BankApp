@@ -9,7 +9,7 @@ import org.bson.codecs.configuration.CodecRegistry;
 import org.bson.codecs.pojo.ClassModel;
 import org.bson.codecs.pojo.PojoCodecProvider;
 import ru.laptseu.bankapp.models.CurrencyRate;
-import ru.laptseu.bankapp.models.CustomDocument;
+import ru.laptseu.bankapp.models.MongoDocumentForEachBankRates;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -34,7 +34,7 @@ public class MongoClientFactoryAndSetUpUnstatic {
                         .register(
                                 ClassModel.builder(CurrencyRate.class).enableDiscriminator(true).build(),
                                 ClassModel.builder(Set.class).enableDiscriminator(true).build(),
-                                ClassModel.builder(CustomDocument.class).enableDiscriminator(true).build()
+                                ClassModel.builder(MongoDocumentForEachBankRates.class).enableDiscriminator(true).build()
                         ).automatic(true)
                         .build()
                 )

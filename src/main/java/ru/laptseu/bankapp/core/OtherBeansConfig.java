@@ -1,18 +1,11 @@
 package ru.laptseu.bankapp.core;
 
 import com.mongodb.client.MongoCollection;
-import lombok.Data;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import ru.laptseu.bankapp.dao.BankDAOImpl;
 import ru.laptseu.bankapp.models.*;
 import ru.laptseu.bankapp.utilities.HibernateSessionFactoryUnstatic;
-import ru.laptseu.bankapp.utilities.HibernateSessionFactoryUtil;
 import ru.laptseu.bankapp.utilities.MongoClientFactoryAndSetUp;
 
 @Configuration
@@ -28,7 +21,7 @@ public class OtherBeansConfig {
     //todo set name for CurrencyRates
     @Bean
     public MongoCollection mongoCollection() {
-        return MongoClientFactoryAndSetUp.getMongoCollection("CurrencyRates", CustomDocument.class);
+        return MongoClientFactoryAndSetUp.getMongoCollection("CurrencyRates", MongoDocumentForEachBankRates.class);
     }
 
     @Bean

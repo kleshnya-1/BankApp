@@ -1,10 +1,7 @@
 package ru.laptseu.bankapp.core;
 
-import com.mongodb.client.MongoCollection;
-import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
@@ -12,10 +9,6 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import ru.laptseu.bankapp.dao.BankDAOImpl;
-import ru.laptseu.bankapp.models.CustomDocument;
-import ru.laptseu.bankapp.utilities.HibernateSessionFactoryUtil;
-import ru.laptseu.bankapp.utilities.MongoClientFactoryAndSetUp;
 
 import javax.sql.DataSource;
 import java.util.Properties;
