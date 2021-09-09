@@ -5,6 +5,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 import ru.laptseu.bankapp.models.Bank;
 import ru.laptseu.bankapp.models.CurrencyRate;
 import ru.laptseu.bankapp.utilities.HibernateSessionFactoryUtil;
@@ -12,19 +13,19 @@ import ru.laptseu.bankapp.utilities.HibernateSessionFactoryUtil;
 import java.sql.SQLException;
 
 @Log4j2
-@Component
+@Repository
 public class BankDAOImpl implements IMaintainableDAO<Bank> {
 //todo ask i use DAO, not SERVICE?
 
-
+    @Autowired
     private CurrencyRateDAOImpl currencyRateDAO;
 
     public BankDAOImpl() {
     }
-@Autowired
-    public BankDAOImpl(CurrencyRateDAOImpl currencyRateDAO) {
-        this.currencyRateDAO = currencyRateDAO;
-    }
+
+//    public BankDAOImpl(CurrencyRateDAOImpl currencyRateDAO) {
+//        this.currencyRateDAO = currencyRateDAO;
+//    }
 
     @Override
     public int save(Bank obj) throws SQLException {

@@ -11,10 +11,8 @@ import ru.laptseu.bankapp.utilities.HibernateSessionFactoryUtil;
 
 import java.sql.SQLException;
 
-@Repository
+//@Repository
 public interface IMaintainableDAO<T extends EntityModel> {
-
-
 
     default int save(T obj) throws SQLException {
         //todo ref and reuse it

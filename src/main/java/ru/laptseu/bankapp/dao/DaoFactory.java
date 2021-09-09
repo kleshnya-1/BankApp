@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Log4j2
-@Component
+//@Component
 public class DaoFactory {
     private static final Map<Class, IMaintainableDAO> factoryMap = new HashMap<>();
 

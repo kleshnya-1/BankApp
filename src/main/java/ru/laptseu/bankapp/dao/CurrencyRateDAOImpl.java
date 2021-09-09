@@ -6,6 +6,7 @@ import lombok.extern.log4j.Log4j2;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 import ru.laptseu.bankapp.models.Currency;
 import ru.laptseu.bankapp.models.CurrencyRate;
 import ru.laptseu.bankapp.models.CustomDocument;
@@ -20,7 +21,7 @@ import static com.mongodb.client.model.Filters.eq;
 
 //todo круцти спринг дату
 @Log4j2
-@Component
+@Repository
 public class CurrencyRateDAOImpl //implements  IMaintainableDAO<CurrencyRate>
 {
 

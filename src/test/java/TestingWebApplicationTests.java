@@ -97,6 +97,9 @@ public class TestingWebApplicationTests {
         currencyRateDAO.save(cr3);
         currencyRateDAO.save(cr4);
 
+        CurrencyRate a = currencyRateDAO.read(cr1.getBankId(), cr1.getCurrency());
+        CurrencyRate a1 = currencyRateDAO.read(cr4.getBankId(), cr4.getCurrency());
+
         assertEquals(cr1, currencyRateDAO.read(cr1.getBankId(), cr1.getCurrency()));
         assertEquals(cr4, currencyRateDAO.read(cr4.getBankId(), cr4.getCurrency()));
 
