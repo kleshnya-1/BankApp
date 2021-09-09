@@ -76,10 +76,12 @@ public class HibernateConfig {
         return transactionManager;
     }
 
+    //todo set name for CurrencyRates
     @Bean
     public MongoCollection mongoCollection() {
         return MongoClientFactoryAndSetUp.getMongoCollection("CurrencyRates", CustomDocument.class);
     }
+
 //    @Bean
 //    public BankDAOImpl bankDAO() {
 //        return new BankDAOImpl();

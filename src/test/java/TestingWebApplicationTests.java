@@ -26,6 +26,7 @@ public class TestingWebApplicationTests {
     BankDAOImpl bankDAO;
 @Autowired
     CurrencyRateDAOImpl currencyRateDAO;
+
     @SneakyThrows
     @Test
     public void testBankCRUD() {

@@ -18,6 +18,7 @@ import java.util.List;
 
 import static com.mongodb.client.model.Filters.eq;
 
+//todo круцти спринг дату
 @Log4j2
 @Component
 public class CurrencyRateDAOImpl //implements  IMaintainableDAO<CurrencyRate>
