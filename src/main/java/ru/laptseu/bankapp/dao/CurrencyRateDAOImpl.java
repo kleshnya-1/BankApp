@@ -77,8 +77,12 @@ public class CurrencyRateDAOImpl// implements  IMaintainableDAO<CurrencyRate>
         //todo null exc
         CustomDocument o3 = (CustomDocument) currencyRatesMongoCollection.find(eq("bankId", key)).first();
         //todo check with null
-        List<CurrencyRate> rates = new ArrayList<>(o3.getCurrencies());
-        rates.stream().forEach(currencyRate -> currencyRate.setBankId(key));
+        List<CurrencyRate> rates ;
+        System.out.println(o3);
+        if (o3!=null && o3.getCurrencies()!=null) {
+            rates = o3.getCurrencies();
+            rates.stream().forEach(currencyRate -> currencyRate.setBankId(key));
+        }else rates = new ArrayList<>();
         return  rates;
     }
 

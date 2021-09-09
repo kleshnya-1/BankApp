@@ -45,7 +45,7 @@ public class BankDAOImpl implements IMaintainableDAO<Bank> {
 
     @Override
     public Bank read(int key) {
-        Bank b;
+        Bank b ;
         //todo close session
         try (Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession()) {
             b = session.get(Bank.class, key);

@@ -165,8 +165,8 @@ public class TestingSpring {
     public void testCurrencyRateCRUD() {
         Bank b1 = new Bank();
         Bank b2 = new Bank();
-        b1.setName("TestBank1" + Calendar.getInstance().getTime());
-        b2.setName("TestBank2" + Calendar.getInstance().getTime());
+        b1.setName("TestBank1 for CurrRate CRUD" + Calendar.getInstance().getTime());
+        b2.setName("TestBank2 for CurrRate CRUD" + Calendar.getInstance().getTime());
 
         CurrencyRate cr1 = new CurrencyRate();
         cr1.setCurrency(Currency.EUR);
@@ -196,11 +196,6 @@ public class TestingSpring {
         currencyRateDAO.save(cr3);
         currencyRateDAO.save(cr4);
 
-        CurrencyRate a = currencyRateDAO.read(cr1.getBankId(), cr1.getCurrency());
-        CurrencyRate a1 = currencyRateDAO.read(cr4.getBankId(), cr4.getCurrency());
-
-        CurrencyRate ccccc = currencyRateDAO.read(cr1.getBank().getId(), cr1.getCurrency());
-        CurrencyRate ccccc2 = currencyRateDAO.read(cr4.getBank().getId(), cr4.getCurrency());
         assertEquals(cr1, currencyRateDAO.read(cr1.getBank().getId(), cr1.getCurrency()));
         assertEquals(cr4, currencyRateDAO.read(cr4.getBank().getId(), cr4.getCurrency()));
 
