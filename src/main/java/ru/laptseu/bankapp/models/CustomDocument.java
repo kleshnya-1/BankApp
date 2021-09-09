@@ -14,7 +14,9 @@ import java.util.List;
 @Component
 @Getter
 @Setter
-public class MongoDocumentForEachBankRates {
+public class CustomDocument {
+    //todo ask. не могу переименовать. его потом спринг бин не находит. я через shift+f6.
+    // при том поиск по проекту нигде кроме закоментированного не находит старого имени.
     @BsonProperty("_id")
     @BsonId
     private ObjectId id;

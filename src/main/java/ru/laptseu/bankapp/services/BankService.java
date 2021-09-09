@@ -1,11 +1,15 @@
 package ru.laptseu.bankapp.services;
 
+import org.springframework.stereotype.Service;
 import ru.laptseu.bankapp.dao.DaoFactory;
 import ru.laptseu.bankapp.dao.IMaintainableDAO;
 import ru.laptseu.bankapp.models.Bank;
 
 import java.sql.SQLException;
 
+
+//todo in progress. not for checking
+@Service
 public class BankService implements IMaintainableService<Bank> {
 
     IMaintainableDAO<Bank> bankDao = DaoFactory.get(Bank.class);

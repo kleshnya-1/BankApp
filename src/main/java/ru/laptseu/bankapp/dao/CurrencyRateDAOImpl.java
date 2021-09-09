@@ -6,9 +6,10 @@ import lombok.extern.log4j.Log4j2;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import ru.laptseu.bankapp.models.Bank;
 import ru.laptseu.bankapp.models.Currency;
 import ru.laptseu.bankapp.models.CurrencyRate;
-import ru.laptseu.bankapp.models.MongoDocumentForEachBankRates;
+import ru.laptseu.bankapp.models.CustomDocument;
 import ru.laptseu.bankapp.utilities.MongoClientFactoryAndSetUp;
 
 import java.sql.SQLException;
@@ -24,28 +25,27 @@ import static com.mongodb.client.model.Filters.eq;
 @Repository
 public class CurrencyRateDAOImpl// implements  IMaintainableDAO<CurrencyRate>
 {
+    //вызывает цикличный вызов
+//@Autowired
+//    BankDAOImpl bankDAO ;//= new BankDAOImpl();
 
-
-    MongoCollection currencyRatesMongoCollection;// = MongoClientFactoryAndSetUp.getMongoCollection("CurrencyRates", CustomDocument.class);
+    MongoCollection currencyRatesMongoCollection = MongoClientFactoryAndSetUp.getMongoCollection("CurrencyRates", CustomDocument.class);
 
     public CurrencyRateDAOImpl() {
-    }
-    @Autowired
-    public CurrencyRateDAOImpl(MongoCollection currencyRatesMongoCollection) {
-        this.currencyRatesMongoCollection = currencyRatesMongoCollection;
     }
 
     //@Override
     public int save(CurrencyRate obj) throws SQLException {
         obj.setBankId(obj.getBank().getId());
-        //manual @Transient
+        Bank savedBank = obj.getBank();
+        //todo ask manual @Transient иначе цикличная зависимость
         obj.setBank(null);
         //todo ask set bankId to null?
 
-        MongoDocumentForEachBankRates document = (MongoDocumentForEachBankRates) currencyRatesMongoCollection.
+        CustomDocument document = (CustomDocument) currencyRatesMongoCollection.
                 find(eq("bankId", obj.getBankId())).first();
         if (document == null) {
-            document = new MongoDocumentForEachBankRates();
+            document = new CustomDocument();
             List<CurrencyRate> list = new ArrayList<>();
             list.add(obj);
             document.setCurrencies(list);
@@ -56,8 +56,10 @@ public class CurrencyRateDAOImpl// implements  IMaintainableDAO<CurrencyRate>
             //todo ask replaceOne()?
             currencyRatesMongoCollection.replaceOne(eq("bankId", obj.getBankId()), document);
         }
+        //todo ask как-то так. так сущность сохранится без него, но оставнийся объект может нормально функционировать
+        obj.setBank(savedBank);
 //todo close session and fix return
-        return 0;
+        return 1;
     }
 
     public int save(List<CurrencyRate> list) throws SQLException {
@@ -71,14 +73,13 @@ public class CurrencyRateDAOImpl// implements  IMaintainableDAO<CurrencyRate>
     //todo сюда я даю ИД банка. и получаю лист его курсов. интерфейс не понимает,
     // так как он привык получать ИД сущности и ее возвращать
     public List<CurrencyRate> read(int key) {
+       // Bank bankOwner = bankDAO.read(key);
         //todo null exc
-        MongoDocumentForEachBankRates o3 = (MongoDocumentForEachBankRates) currencyRatesMongoCollection.find(eq("bankId", key)).first();
-        if (o3 == null) {
-            List<CurrencyRate> empty = new ArrayList<>();
-            return empty;
-        } else {
-            return o3.getCurrencies();
-        }
+        CustomDocument o3 = (CustomDocument) currencyRatesMongoCollection.find(eq("bankId", key)).first();
+        //todo check with null
+        List<CurrencyRate> rates = new ArrayList<>(o3.getCurrencies());
+        rates.stream().forEach(currencyRate -> currencyRate.setBankId(key));
+        return  rates;
     }
 
     public CurrencyRate read(int key, Currency c) {

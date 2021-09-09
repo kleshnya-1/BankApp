@@ -9,7 +9,7 @@ import org.bson.codecs.configuration.CodecRegistry;
 import org.bson.codecs.pojo.ClassModel;
 import org.bson.codecs.pojo.PojoCodecProvider;
 import ru.laptseu.bankapp.models.CurrencyRate;
-import ru.laptseu.bankapp.models.MongoDocumentForEachBankRates;
+import ru.laptseu.bankapp.models.CustomDocument;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -27,14 +27,14 @@ public class MongoClientFactoryAndSetUpUnstatic {
         classMap.put(CurrencyRate.class, "-'st bank rates");
     }
 
-    private  CodecRegistry getCodeсRegistry() {
+    private CodecRegistry getCodeсRegistry() {
         CodecRegistry codecRegistry = CodecRegistries.fromRegistries(
                 MongoClientSettings.getDefaultCodecRegistry(),
                 CodecRegistries.fromProviders(PojoCodecProvider.builder()
                         .register(
                                 ClassModel.builder(CurrencyRate.class).enableDiscriminator(true).build(),
                                 ClassModel.builder(Set.class).enableDiscriminator(true).build(),
-                                ClassModel.builder(MongoDocumentForEachBankRates.class).enableDiscriminator(true).build()
+                                ClassModel.builder(CustomDocument.class).enableDiscriminator(true).build()
                         ).automatic(true)
                         .build()
                 )
@@ -42,7 +42,7 @@ public class MongoClientFactoryAndSetUpUnstatic {
         return codecRegistry;
     }
 
-    public  MongoCollection getMongoCollection(Integer id, Class clazz) {
+    public MongoCollection getMongoCollection(Integer id, Class clazz) {
         CodecRegistry codecRegistry = getCodeсRegistry();
 
         // String collectionName = classMap.get(clazz);
@@ -55,7 +55,7 @@ public class MongoClientFactoryAndSetUpUnstatic {
         return collection;
     }
 
-    public  MongoCollection getMongoCollection(String collectionName, Class clazz) {
+    public MongoCollection getMongoCollection(String collectionName, Class clazz) {
         CodecRegistry codecRegistry = getCodeсRegistry();
         MongoClient mongoClient = new MongoClient(new MongoClientURI(MONGO_URL));
         MongoCollection collection = mongoClient

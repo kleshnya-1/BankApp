@@ -7,7 +7,7 @@ import ru.laptseu.bankapp.models.CurrencyRate;
 
 import java.sql.SQLException;
 @Service
-//todo in progress. road to NoSQL
+//todo in progress. not for checking
 public class CurrencyRateService implements IMaintainableService<CurrencyRate> {
 
     //todo  getLastCurrency() ref

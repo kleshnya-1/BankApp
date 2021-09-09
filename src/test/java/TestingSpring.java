@@ -1,5 +1,5 @@
 import lombok.SneakyThrows;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @RunWith(SpringRunner.class)
 //@ComponentScan("main.ru.laptseu.bankapp")
 @SpringBootTest(classes = Main.class)
-public class TestingWebApplicationTests {
+public class TestingSpring {
 
     @Autowired
     BankDAOImpl bankDAO;
@@ -28,13 +28,13 @@ public class TestingWebApplicationTests {
     CurrencyRateDAOImpl currencyRateDAO;
 
     @Autowired
-    AccountService accountService ;
-  //  @Autowired
-    BankService bankService = new BankService();
-   // @Autowired
-    ClientService clientService = new ClientService();
+    AccountService accountService;
     @Autowired
-    CurrencyRateService currencyRateService ;
+    BankService bankService;//= new BankService();
+    @Autowired
+    ClientService clientService;// = new ClientService();
+    @Autowired
+    CurrencyRateService currencyRateService;
 
     @SneakyThrows
     @Test
@@ -65,15 +65,20 @@ public class TestingWebApplicationTests {
         CurrencyRate currencyRateEur1 = new CurrencyRate();
         currencyRateUsd1.setCurrency(Currency.USD);
         currencyRateUsd1.setRateToByn(230);
-        currencyRateUsd1.setBank(bank);
+        currencyRateUsd1.setBank(bank1);
         currencyRateEur1.setCurrency(Currency.EUR);
         currencyRateEur1.setRateToByn(250);
         currencyRateEur1.setBank(bank1);
 
-        currencyRateService.persist(currencyRateEur);
-        currencyRateService.persist(currencyRateEur1);
-        currencyRateService.persist(currencyRateUsd);
-        currencyRateService.persist(currencyRateUsd1);
+        bank.getCurrencyRates().add(currencyRateUsd);
+        bank.getCurrencyRates().add(currencyRateEur);
+        bank1.getCurrencyRates().add(currencyRateUsd1);
+        bank1.getCurrencyRates().add(currencyRateEur1);
+
+//        currencyRateService.persist(currencyRateEur);
+//        currencyRateService.persist(currencyRateEur1);
+//        currencyRateService.persist(currencyRateUsd);
+//        currencyRateService.persist(currencyRateUsd1);
         bankService.update(bank);
         bankService.update(bank1);
 
@@ -184,6 +189,8 @@ public class TestingWebApplicationTests {
         b2.getCurrencyRates().add(cr2);
         b2.getCurrencyRates().add(cr3);
         b2.getCurrencyRates().add(cr4);
+        bankDAO.save(b1);
+        bankDAO.save(b2);
         currencyRateDAO.save(cr1);
         currencyRateDAO.save(cr2);
         currencyRateDAO.save(cr3);
@@ -192,8 +199,10 @@ public class TestingWebApplicationTests {
         CurrencyRate a = currencyRateDAO.read(cr1.getBankId(), cr1.getCurrency());
         CurrencyRate a1 = currencyRateDAO.read(cr4.getBankId(), cr4.getCurrency());
 
-        assertEquals(cr1, currencyRateDAO.read(cr1.getBankId(), cr1.getCurrency()));
-        assertEquals(cr4, currencyRateDAO.read(cr4.getBankId(), cr4.getCurrency()));
+        CurrencyRate ccccc = currencyRateDAO.read(cr1.getBank().getId(), cr1.getCurrency());
+        CurrencyRate ccccc2 = currencyRateDAO.read(cr4.getBank().getId(), cr4.getCurrency());
+        assertEquals(cr1, currencyRateDAO.read(cr1.getBank().getId(), cr1.getCurrency()));
+        assertEquals(cr4, currencyRateDAO.read(cr4.getBank().getId(), cr4.getCurrency()));
 
     }
 

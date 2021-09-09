@@ -20,9 +20,6 @@ import java.sql.SQLException;
 @ComponentScan("ru.laptseu.bankapp")
 //@RestController
 public class Main {
-
-
-    @SneakyThrows
     public static void main(String[] args) {
         ApplicationContext context =            new AnnotationConfigApplicationContext("ru.laptseu.bankapp");
         context.getBean(BankDAOImpl.class);
@@ -30,7 +27,7 @@ public class Main {
         context.getBean(Session.class);
 
         context.getBeanDefinitionNames().toString();
-     //   SpringApplication.run(Main.class, args);
+      //  SpringApplication.run(Main.class, args);
 
     }
 }

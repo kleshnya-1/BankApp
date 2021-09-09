@@ -4,7 +4,9 @@ import com.mongodb.client.MongoCollection;
 import org.hibernate.Session;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import ru.laptseu.bankapp.models.*;
+import ru.laptseu.bankapp.dao.BankDAOImpl;
+import ru.laptseu.bankapp.dao.CurrencyRateDAOImpl;
+import ru.laptseu.bankapp.models.CustomDocument;
 import ru.laptseu.bankapp.utilities.HibernateSessionFactoryUnstatic;
 import ru.laptseu.bankapp.utilities.MongoClientFactoryAndSetUp;
 
@@ -13,31 +15,32 @@ import ru.laptseu.bankapp.utilities.MongoClientFactoryAndSetUp;
 
 public class OtherBeansConfig {
 
-//    @Bean
-//    public BankDAOImpl bankDAO(){
-//        return new BankDAOImpl();
-//    }
-//todo перенес сюда из хайб конфигa
+    //todo перенес сюда из хайб конфигa
     //todo set name for CurrencyRates
     @Bean
     public MongoCollection mongoCollection() {
-        return MongoClientFactoryAndSetUp.getMongoCollection("CurrencyRates", MongoDocumentForEachBankRates.class);
+        return MongoClientFactoryAndSetUp.getMongoCollection("CurrencyRates", CustomDocument.class);
+    }
+
+    @Bean
+    public CurrencyRateDAOImpl currencyRateDAO() {
+        return new CurrencyRateDAOImpl();
     }
 
     @Bean
     public Session sessionBean(HibernateSessionFactoryUnstatic hibernateSessionFactoryUnstatic) {
         return hibernateSessionFactoryUnstatic.getSessionFactory().openSession();
     }
+
+    @Bean
+    public BankDAOImpl bankDAO() {
+        return new BankDAOImpl();
+    }
 //    @Bean
 //    public HibernateSessionFactoryUnstatic hibernateSessionFactoryUnstatic() {
 //        return new HibernateSessionFactoryUnstatic();
 //    }
 
-
-//    @Bean
-//    public BankDAOImpl bankDAO() {
-//        return new BankDAOImpl();
-//    }
 //    @Bean
 //    public CurrencyRateDAOImpl currencyRateDAO() {
 //        return new CurrencyRateDAOImpl();
@@ -48,7 +51,6 @@ public class OtherBeansConfig {
 //    }
 
     // private final ApplicationContext applicationContext;
-
 
 //        @Bean
 //    public MongoCollection mongoCollection() {

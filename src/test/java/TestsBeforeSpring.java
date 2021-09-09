@@ -15,7 +15,7 @@ import java.util.Calendar;
 import static org.junit.jupiter.api.Assertions.*;
 
 @Log4j2
-public class workingTest {
+public class TestsBeforeSpring {
 
     @SneakyThrows
     @Test
@@ -70,8 +70,8 @@ public class workingTest {
         currencyRateDAO.save(cr3);
         currencyRateDAO.save(cr4);
 
-        assertEquals(cr1, currencyRateDAO.read(cr1.getBankId(), cr1.getCurrency()));
-        assertEquals(cr4, currencyRateDAO.read(cr4.getBankId(), cr4.getCurrency()));
+        assertEquals(cr1, currencyRateDAO.read(cr1.getBank().getId(), cr1.getCurrency()));
+        assertEquals(cr4, currencyRateDAO.read(cr4.getBank().getId(), cr4.getCurrency()));
 
     }
 
@@ -143,12 +143,12 @@ public class workingTest {
         currencyRateEur1.setBank(b1);
         currencyRateUsd2.setBank(b2);
         currencyRateEur2.setBank(b2);
-        currencyRateUsd.setBankId(b1.getId());
-        currencyRateEur.setBankId(b1.getId());
-        currencyRateUsd1.setBankId(b1.getId());
-        currencyRateEur1.setBankId(b1.getId());
-        currencyRateUsd2.setBankId(b2.getId());
-        currencyRateEur2.setBankId(b2.getId());
+        currencyRateUsd.getBank().setId(b1.getId());
+        currencyRateEur.getBank().setId(b1.getId());
+        currencyRateUsd1.getBank().setId(b1.getId());
+        currencyRateEur1.getBank().setId(b1.getId());
+        currencyRateUsd2.getBank().setId(b2.getId());
+        currencyRateEur2.getBank().setId(b2.getId());
 
         b1.getCurrencyRates().add(currencyRateUsd);
         b1.getCurrencyRates().add(currencyRateEur);

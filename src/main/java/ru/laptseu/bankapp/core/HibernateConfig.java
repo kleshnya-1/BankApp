@@ -13,6 +13,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import javax.sql.DataSource;
 import java.util.Properties;
 
+//todo ask без этого класса он ругается на источник данных. хотя не знаю, где он его применяет на данном
+// этапе. судя по всему из-за того, что драйвер пордключен и без конфигурации
 @Configuration
 @EnableTransactionManagement
 @PropertySource(value = "classpath:db.properties")

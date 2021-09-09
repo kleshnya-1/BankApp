@@ -1,5 +1,6 @@
 package ru.laptseu.bankapp.services;
 
+import org.springframework.stereotype.Service;
 import ru.laptseu.bankapp.dao.DaoFactory;
 import ru.laptseu.bankapp.dao.IMaintainableDAO;
 import ru.laptseu.bankapp.models.Client;
@@ -7,6 +8,7 @@ import ru.laptseu.bankapp.models.Client;
 import java.sql.SQLException;
 
 //todo in progress
+@Service
 public class ClientService implements IMaintainableService<Client> {
 
     IMaintainableDAO<Client> clientDao = DaoFactory.get(Client.class);
