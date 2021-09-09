@@ -21,11 +21,9 @@ import javax.sql.DataSource;
 import java.util.Properties;
 
 @Configuration
-@ComponentScan("ru.laptseu.bankapp")
 @EnableTransactionManagement
 @PropertySource(value = "classpath:db.properties")
 public class HibernateConfig {
-
     private Environment environment;
 
     @Autowired
@@ -78,19 +76,4 @@ public class HibernateConfig {
         return transactionManager;
     }
 
-    //todo set name for CurrencyRates
-    @Bean
-    public MongoCollection mongoCollection() {
-        return MongoClientFactoryAndSetUp.getMongoCollection("CurrencyRates", CustomDocument.class);
-    }
-
-    @Bean
-    public Session sessionBean() {
-        return HibernateSessionFactoryUtil.getSessionFactory().openSession();
-    }
-
-//    @Bean
-//    public BankDAOImpl bankDAO() {
-//        return new BankDAOImpl();
-//    }
 }

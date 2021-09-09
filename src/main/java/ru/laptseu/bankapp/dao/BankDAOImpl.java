@@ -15,17 +15,14 @@ import java.sql.SQLException;
 @Log4j2
 @Repository
 public class BankDAOImpl implements IMaintainableDAO<Bank> {
-//todo ask i use DAO, not SERVICE?
-
-    @Autowired
+//todo ask i use for currency access DAO, not SERVICE?
     private CurrencyRateDAOImpl currencyRateDAO;
-
     public BankDAOImpl() {
     }
-
-//    public BankDAOImpl(CurrencyRateDAOImpl currencyRateDAO) {
-//        this.currencyRateDAO = currencyRateDAO;
-//    }
+    @Autowired
+    public BankDAOImpl(CurrencyRateDAOImpl currencyRateDAO) {
+        this.currencyRateDAO = currencyRateDAO;
+    }
 
     @Override
     public int save(Bank obj) throws SQLException {
