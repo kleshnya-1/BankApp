@@ -10,7 +10,10 @@ import ru.laptseu.bankapp.models.TransferHistory;
 
 public class HibernateSessionFactoryUtil {
     private static SessionFactory sessionFactory;
-    private HibernateSessionFactoryUtil() {    }
+
+    private HibernateSessionFactoryUtil() {
+    }
+
     public static SessionFactory getSessionFactory() {
         if (sessionFactory == null) {
             try {

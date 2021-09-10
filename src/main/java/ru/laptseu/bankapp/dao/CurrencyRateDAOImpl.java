@@ -4,7 +4,6 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
 import lombok.extern.log4j.Log4j2;
 import org.hibernate.Session;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import ru.laptseu.bankapp.models.Bank;
 import ru.laptseu.bankapp.models.Currency;
@@ -71,19 +70,19 @@ public class CurrencyRateDAOImpl// implements  IMaintainableDAO<CurrencyRate>
     }
 
     //todo сюда я даю ИД банка. и получаю лист его курсов. интерфейс не понимает,
-    // так как он привык получать ИД сущности и ее возвращать
+    // так как он привык получать ИД сущности и ее возвращать (дженерик)
     public List<CurrencyRate> read(int key) {
-       // Bank bankOwner = bankDAO.read(key);
+        // Bank bankOwner = bankDAO.read(key);
         //todo null exc
         CustomDocument o3 = (CustomDocument) currencyRatesMongoCollection.find(eq("bankId", key)).first();
         //todo check with null
-        List<CurrencyRate> rates ;
+        List<CurrencyRate> rates;
         System.out.println(o3);
-        if (o3!=null && o3.getCurrencies()!=null) {
+        if (o3 != null && o3.getCurrencies() != null) {
             rates = o3.getCurrencies();
             rates.stream().forEach(currencyRate -> currencyRate.setBankId(key));
-        }else rates = new ArrayList<>();
-        return  rates;
+        } else rates = new ArrayList<>();
+        return rates;
     }
 
     public CurrencyRate read(int key, Currency c) {

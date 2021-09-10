@@ -1,5 +1,6 @@
 package ru.laptseu.bankapp.utilities;
 
+// TODO: 10.09.2021 remove 
 public class Commands {
     public static void demo() {
         System.out.println("\nОбращениее к приложению выполняется в формате КОМАНДА СУЩНОСТЬ");

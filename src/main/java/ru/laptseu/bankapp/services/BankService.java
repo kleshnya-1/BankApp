@@ -9,7 +9,7 @@ import ru.laptseu.bankapp.models.Currency;
 import java.sql.SQLException;
 
 
-//todo in progress. not for checking
+//todo in progress. this and rest of services is not for checking
 @Service
 public class BankService implements IMaintainableService<Bank> {
 
@@ -37,7 +37,7 @@ public class BankService implements IMaintainableService<Bank> {
 
     @Override
     public Bank read(Currency currency, int key) throws SQLException {
-        throw  new  UnsupportedOperationException("Only for currencyRate");
+        throw new UnsupportedOperationException("Only for currencyRate");
     }
 
     @Override

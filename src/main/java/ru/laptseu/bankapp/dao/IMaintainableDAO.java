@@ -2,11 +2,8 @@ package ru.laptseu.bankapp.dao;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
 import ru.laptseu.bankapp.models.Bank;
 import ru.laptseu.bankapp.models.EntityModel;
-import ru.laptseu.bankapp.utilities.HibernateSessionFactoryUnstatic;
 import ru.laptseu.bankapp.utilities.HibernateSessionFactoryUtil;
 
 import java.sql.SQLException;

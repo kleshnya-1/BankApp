@@ -5,7 +5,7 @@ import ru.laptseu.bankapp.models.Client;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-
+// TODO: 10.09.2021 remove 
 public class NumberGeneratorForAccounts {
     //todo нужно бы его на уникальность проверять. при 2мрд вариантов она имеет вероятность быть
     public static int generate(Bank b, Client c) {

@@ -10,14 +10,16 @@ import ru.laptseu.bankapp.models.Bank;
 import ru.laptseu.bankapp.models.Client;
 import ru.laptseu.bankapp.models.TransferHistory;
 
-
+// TODO: 10.09.2021 нестатичное, чтоб его можно было вызвать как бин. или так не делается?
 @Component
 public class HibernateSessionFactoryUnstatic {
     @Autowired
-    public   SessionFactory sessionFactory;
-    public HibernateSessionFactoryUnstatic() {    }
+    public SessionFactory sessionFactory;
 
-    public  SessionFactory getSessionFactory() {
+    public HibernateSessionFactoryUnstatic() {
+    }
+
+    public SessionFactory getSessionFactory() {
         if (sessionFactory == null) {
             try {
                 Configuration configuration = new Configuration().configure();

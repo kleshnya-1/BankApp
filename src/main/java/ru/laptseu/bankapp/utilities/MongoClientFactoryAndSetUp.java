@@ -8,7 +8,6 @@ import org.bson.codecs.configuration.CodecRegistries;
 import org.bson.codecs.configuration.CodecRegistry;
 import org.bson.codecs.pojo.ClassModel;
 import org.bson.codecs.pojo.PojoCodecProvider;
-import ru.laptseu.bankapp.models.Bank;
 import ru.laptseu.bankapp.models.CurrencyRate;
 import ru.laptseu.bankapp.models.CustomDocument;
 

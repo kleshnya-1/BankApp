@@ -3,7 +3,6 @@ package ru.laptseu.bankapp.dao;
 import lombok.extern.log4j.Log4j2;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import ru.laptseu.bankapp.models.Bank;
 import ru.laptseu.bankapp.models.CurrencyRate;
@@ -16,14 +15,12 @@ import java.util.List;
 @Repository
 public class BankDAOImpl implements IMaintainableDAO<Bank> {
     //todo ask i use for currency access DAO, not SERVICE?
-
     //@Autowired
     //todo сюда в тестах не подтягивается бин. хоть его и видно, если на зерно нажать
     CurrencyRateDAOImpl currencyRateDAO = new CurrencyRateDAOImpl();
 
     public BankDAOImpl() {
     }
-
 
 //    public BankDAOImpl(CurrencyRateDAOImpl currencyRateDAO) {
 //        this.currencyRateDAO = currencyRateDAO;
@@ -46,7 +43,7 @@ public class BankDAOImpl implements IMaintainableDAO<Bank> {
 
     @Override
     public Bank read(int key) {
-        Bank b ;
+        Bank b;
         //todo close session
         try (Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession()) {
             b = session.get(Bank.class, key);
@@ -70,11 +67,11 @@ public class BankDAOImpl implements IMaintainableDAO<Bank> {
         System.out.println(currencyRateDAO.toString());
         int iii = currencyRateDAO.save(listik);
         update(obj, session);
+        // TODO: 10.09.2021 одна из версий кода. не пригодилось.
         //todo if-for-if но у меня иначе нет идей. хайбернейт сам их не связывает. банк для экономии
         // места обнуляется при сохранении в бд (можно бы и переопрделить объект курса и в нем убрать
         // ид банка. ид банка нужен при операциях с курсом как с объектом отдельно, но не нужен уже после
         // того, как его сохранили.
-//        Bank j1 = obj;
 //        if (!obj.getCurrencyRates().isEmpty())  {
 //            for (CurrencyRate cr: obj.getCurrencyRates()){
 //                if (cr.getBankId()==0) cr.setBankId(obj.getId());

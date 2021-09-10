@@ -6,12 +6,10 @@ import ru.laptseu.bankapp.models.Currency;
 import ru.laptseu.bankapp.models.CurrencyRate;
 
 import java.sql.SQLException;
-import java.util.List;
 
 @Service
 //todo in progress. not for checking
-public class CurrencyRateService implements IMaintainableService<CurrencyRate>
-{
+public class CurrencyRateService implements IMaintainableService<CurrencyRate> {
 
     //todo  getLastCurrency() ref
     CurrencyRateDAOImpl currencyRateDao = new CurrencyRateDAOImpl();
@@ -37,6 +35,7 @@ public class CurrencyRateService implements IMaintainableService<CurrencyRate>
     public CurrencyRate read(int key) throws SQLException {
         throw new UnsupportedOperationException("no reason for reading rate without choosing currency");
     }
+
     public CurrencyRate read(Currency currency, int key) throws SQLException {
         return currencyRateDao.getLastCurrency(currency, key);
     }

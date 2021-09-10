@@ -12,6 +12,7 @@ import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.Scanner;
 
+// TODO: 10.09.2021 for removing
 @Log4j2
 public class AdminPage implements IPages {
 

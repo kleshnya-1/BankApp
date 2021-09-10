@@ -3,7 +3,6 @@ package ru.laptseu.bankapp.services;
 import ru.laptseu.bankapp.models.Currency;
 
 import java.sql.SQLException;
-import java.util.List;
 
 public interface IMaintainableService<T> {
     // TODO: 09.09.2021 remove it

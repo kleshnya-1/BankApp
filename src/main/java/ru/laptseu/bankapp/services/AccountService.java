@@ -18,7 +18,7 @@ import java.sql.SQLException;
 @Service
 public class AccountService implements IMaintainableService<Account> {
     //todo ask. я правильно пишу аннотации или они должны быть над классом?
-    // дефолтные методы тут появятся со spring boot. до этого нет возможности вызвать ДАО, пока у них разные имена
+    // дефолтные методы тут появятся со spring boot. до этого нет возможности вызвать ДАО, пока у них разные имена (accountDao, bankDao...)
 
     // TODO: 09.09.2021 replace as constructor
     @Autowired
@@ -41,6 +41,7 @@ public class AccountService implements IMaintainableService<Account> {
         return num;
     }
 
+    // TODO: 10.09.2021 for removing
     @Override
     //creating models from array of parameters
     public Account create(String[] paramArr) throws SQLException {
@@ -54,14 +55,14 @@ public class AccountService implements IMaintainableService<Account> {
 
     @Override
     public Account read(int key) throws SQLException {
-        //todo ask. тут запрашиваем пока по Ид. а надо по номеру аккаунта, а не ИД? мы же из сервисов
-        // понятия не имеем, как там у ид дела
+        //todo ask. тут запрашиваем пока по Ид. а надо по номеру аккаунта, а не ИД?
+        // мы же из сервисов понятия не имеем, как там у ид дела
         return accountDao.read(key);
     }
 
     @Override
     public Account read(Currency currency, int key) throws SQLException {
-        throw  new  UnsupportedOperationException("Only for currencyRate");
+        throw new UnsupportedOperationException("Only for currencyRate");
     }
 
     @Override
@@ -82,7 +83,6 @@ public class AccountService implements IMaintainableService<Account> {
         accountDao.delete(key);
     }
 
-    //todo. refactor
     public void transferAmount(Account sourceAcc, Account targetAcc, double amount) throws SQLException {
         double commission = 0;
         double totalAmount = amount;

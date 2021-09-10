@@ -35,7 +35,7 @@ public class ClientService implements IMaintainableService<Client> {
 
     @Override
     public Client read(Currency currency, int key) throws SQLException {
-        throw  new  UnsupportedOperationException("Only for currencyRate");
+        throw new UnsupportedOperationException("Only for currencyRate");
     }
 
     @Override
