@@ -33,8 +33,13 @@ public interface IMaintainableDAO<T extends EntityModel> {
     }
 
     default void update(T obj, Session conn) throws SQLException {
-        if (!conn.getTransaction().isActive()) conn.beginTransaction();
-        conn.update(obj);
+        // тут что-то не так
+        Session session = conn;
+        if (!session.getTransaction().isActive()) {
+            session.beginTransaction();
+        }
+        session.update(obj);
+
     }
 
     default void delete(int key) {

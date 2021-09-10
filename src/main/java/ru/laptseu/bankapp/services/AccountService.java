@@ -99,11 +99,11 @@ public class AccountService implements IMaintainableService<Account> {
         sourceAcc.setAmount(sourceAcc.getAmount() - commission - totalAmount);
         targetAcc.setAmount(targetAcc.getAmount() + totalAmount);
 
-        try (Session session = accountDao.getSession()) {
-            accountDao.update(sourceAcc, session);
-            accountDao.update(targetAcc, session);
-            session.getTransaction().commit();
-            session.close();
+        try (Session accountDaoSession = accountDao.getSession()) {
+            accountDao.update(sourceAcc, accountDaoSession);
+            accountDao.update(targetAcc, accountDaoSession);
+            accountDaoSession.getTransaction().commit();
+            accountDaoSession.close();
             log.info("\nfrom acc ID " + sourceAcc.getId() + "(" + sourceAcc.getClient().getName() + ")" + " to acc ID" +
                     targetAcc.getId() + "(" + targetAcc.getClient().getName() + ") transfered " + amount + sourceAcc.getCurrency()
                     + " (as " + totalAmount + "" + targetAcc.getCurrency() + ") with  commission " + commission + "" + sourceAcc.getCurrency());

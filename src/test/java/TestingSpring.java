@@ -1,10 +1,12 @@
 import lombok.SneakyThrows;
 import org.hibernate.Hibernate;
 import org.junit.Test;
+import org.junit.jupiter.api.function.Executable;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+import ru.laptseu.bankapp.EntityNotFoundException;
 import ru.laptseu.bankapp.core.Main;
 import ru.laptseu.bankapp.dao.BankDAOImpl;
 import ru.laptseu.bankapp.dao.CurrencyRateDAOImpl;
@@ -161,10 +163,12 @@ public class TestingSpring {
 
         bankDAO.delete(b1);
         bankDAO.delete(b2);
-        b1Fdb = bankDAO.read(n1);
-        b2Fdb = bankDAO.read(n2);
-        assertNull(b1Fdb);
-        assertNull(b2Fdb);
+        assertThrows(EntityNotFoundException.class, ()->{
+            bankDAO.read(n1);
+        } );
+        assertThrows(EntityNotFoundException.class, ()->{
+            bankDAO.read(n2);
+        } );
     }
 
     @SneakyThrows

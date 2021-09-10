@@ -37,7 +37,7 @@ public class CurrencyRateService implements IMaintainableService<CurrencyRate> {
     }
 
     public CurrencyRate read(Currency currency, int key) throws SQLException {
-        return currencyRateDao.getLastCurrency(currency, key);
+        return currencyRateDao.read(key,currency);
     }
 
 

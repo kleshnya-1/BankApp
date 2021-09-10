@@ -7,7 +7,6 @@ import org.springframework.context.annotation.Configuration;
 import ru.laptseu.bankapp.dao.BankDAOImpl;
 import ru.laptseu.bankapp.dao.CurrencyRateDAOImpl;
 import ru.laptseu.bankapp.models.CustomDocument;
-import ru.laptseu.bankapp.utilities.HibernateSessionFactoryUnstatic;
 import ru.laptseu.bankapp.utilities.MongoClientFactoryAndSetUp;
 
 @Configuration
@@ -27,10 +26,10 @@ public class OtherBeansConfig {
         return new CurrencyRateDAOImpl();
     }
 
-    @Bean
-    public Session sessionBean(HibernateSessionFactoryUnstatic hibernateSessionFactoryUnstatic) {
-        return hibernateSessionFactoryUnstatic.getSessionFactory().openSession();
-    }
+//    @Bean
+//    public Session sessionBean(HibernateSessionFactoryUnstatic hibernateSessionFactoryUnstatic) {
+//        return hibernateSessionFactoryUnstatic.getSessionFactory().openSession();
+//    }
 
     @Bean
     public BankDAOImpl bankDAO() {
