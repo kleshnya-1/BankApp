@@ -4,6 +4,7 @@ import lombok.extern.log4j.Log4j2;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.springframework.stereotype.Repository;
+import ru.laptseu.bankapp.EntityNotFoundException;
 import ru.laptseu.bankapp.models.Bank;
 import ru.laptseu.bankapp.models.CurrencyRate;
 import ru.laptseu.bankapp.utilities.HibernateSessionFactoryUtil;
@@ -14,7 +15,7 @@ import java.util.List;
 @Log4j2
 @Repository
 public class BankDAOImpl implements IMaintainableDAO<Bank> {
-    //todo ask i use for currency access DAO, not SERVICE?
+
     //@Autowired
     //todo сюда в тестах не подтягивается бин. хоть его и видно, если на зерно нажать
     CurrencyRateDAOImpl currencyRateDAO = new CurrencyRateDAOImpl();
@@ -37,24 +38,26 @@ public class BankDAOImpl implements IMaintainableDAO<Bank> {
             tx1.commit();
         } finally {
             session.close();
+            // TODO: 10.09.2021 esxeption 
             return obj.getId();
         }
     }
 
     @Override
     public Bank read(int key) {
-        Bank b;
+        Bank b; // TODO: 10.09.2021 exc no point 
         //todo close session
         try (Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession()) {
             b = session.get(Bank.class, key);
             //todo ref with stream
+
             if (b != null) {
                 b.setCurrencyRates(currencyRateDAO.read(b.getId()));
                 for (CurrencyRate cr : b.getCurrencyRates()) {
                     cr.setBank(b);
                     cr.setBankId(b.getId());
                 }
-            }
+            } else throw new EntityNotFoundException("Bank not found with ID: "+key);
         }
         return b;
     }

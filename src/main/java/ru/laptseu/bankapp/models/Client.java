@@ -22,5 +22,6 @@ public class Client extends EntityModel {
     @Type(type = "yes_no")
     private boolean isNaturalPerson;
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
+    // TODO: 10.09.2021 зачем это. убрать 
     private Set<Account> accounts = new HashSet<>();
 }

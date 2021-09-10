@@ -8,7 +8,7 @@ import ru.laptseu.bankapp.utilities.HibernateSessionFactoryUtil;
 @Log4j2
 @Repository
 public class AccountDAOImpl implements IMaintainableDAO<Account> {
-
+    // TODO: 10.09.2021 fixxx
     @Override
     public Account read(int key) {
         //todo close session

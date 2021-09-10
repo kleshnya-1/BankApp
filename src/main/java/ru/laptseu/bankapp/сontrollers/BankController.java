@@ -1,4 +1,4 @@
-package ru.laptseu.bankapp.Controllers;
+package ru.laptseu.bankapp.сontrollers;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

@@ -17,6 +17,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static com.mongodb.client.model.Filters.eq;
+import static com.mongodb.client.model.Filters.ne;
 
 //todo проблема с имплиментированием. метод read(int)
 // потом тут появится спринг дата
@@ -96,7 +97,7 @@ public class CurrencyRateDAOImpl// implements  IMaintainableDAO<CurrencyRate>
     }
 
     public void delete(int key) {
-//todo реализовать ее?
+throw new UnsupportedOperationException();
     }
 
     public void update(CurrencyRate obj, Session conn) throws SQLException {

@@ -12,8 +12,8 @@ import lombok.extern.log4j.Log4j2;
 //todo ask should it have any ID?
 public class CurrencyRate extends EntityModel {
 
-    Bank bank;
-    int bankId;
+    private Bank bank;
+    private int bankId;
     private Currency currency;
     private double rateToByn;
 

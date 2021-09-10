@@ -1,4 +1,4 @@
-package ru.laptseu.bankapp.core;
+package ru.laptseu.bankapp.config;
 
 import com.mongodb.client.MongoCollection;
 import org.hibernate.Session;

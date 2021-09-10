@@ -8,10 +8,9 @@ import ru.laptseu.bankapp.utilities.HibernateSessionFactoryUtil;
 
 import java.sql.SQLException;
 
-//todo ask Это же не репозиторий?
-//@Repository
-public interface IMaintainableDAO<T extends EntityModel> {
 
+public interface IMaintainableDAO<T extends EntityModel> {
+    // TODO: 10.09.2021 переделать на трай с ресурсами 
     default int save(T obj) throws SQLException {
         //todo ref and reuse it
         Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
@@ -26,6 +25,7 @@ public interface IMaintainableDAO<T extends EntityModel> {
     }
 
     default void update(T obj) throws SQLException {
+        // TODO: 10.09.2021 и тут тоже. и дальше
         Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
         update(obj, session);
         session.getTransaction().commit();
@@ -33,9 +33,8 @@ public interface IMaintainableDAO<T extends EntityModel> {
     }
 
     default void update(T obj, Session conn) throws SQLException {
-        Session session = conn;
-        if (!session.getTransaction().isActive()) session.beginTransaction();
-        session.update(obj);
+        if (!conn.getTransaction().isActive()) conn.beginTransaction();
+        conn.update(obj);
     }
 
     default void delete(int key) {

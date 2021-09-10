@@ -13,7 +13,7 @@ import java.util.GregorianCalendar;
 @Getter
 @Setter
 @Entity
-@Table(name = "Transfer_History")
+@Table(name = "transfer_history")
 public class TransferHistory extends EntityModel {
     //todo make custom hibernate converter
     //private final DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");

@@ -10,8 +10,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
-@Log4j2
-@Component
 @Getter
 @Setter
 @MappedSuperclass

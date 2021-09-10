@@ -1,4 +1,4 @@
-package ru.laptseu.bankapp.core;
+package ru.laptseu.bankapp.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

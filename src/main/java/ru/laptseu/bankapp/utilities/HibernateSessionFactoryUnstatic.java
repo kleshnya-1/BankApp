@@ -15,10 +15,6 @@ import ru.laptseu.bankapp.models.TransferHistory;
 public class HibernateSessionFactoryUnstatic {
     @Autowired
     public SessionFactory sessionFactory;
-
-    public HibernateSessionFactoryUnstatic() {
-    }
-
     public SessionFactory getSessionFactory() {
         if (sessionFactory == null) {
             try {

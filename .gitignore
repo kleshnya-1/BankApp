@@ -6,4 +6,3 @@
 *.ipr
 /target/
 /.idea/
-/src/main/java/ru/laptseu/bankapp/pages/

@@ -11,9 +11,6 @@ import ru.laptseu.bankapp.models.TransferHistory;
 public class HibernateSessionFactoryUtil {
     private static SessionFactory sessionFactory;
 
-    private HibernateSessionFactoryUtil() {
-    }
-
     public static SessionFactory getSessionFactory() {
         if (sessionFactory == null) {
             try {
@@ -28,6 +25,7 @@ public class HibernateSessionFactoryUtil {
                 StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties());
                 sessionFactory = configuration.buildSessionFactory(builder.build());
             } catch (Exception e) {
+                // TODO: 10.09.2021 looger 
                 System.out.println("Исключение!" + e);
             }
         }
