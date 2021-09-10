@@ -35,7 +35,7 @@ public class CurrencyRateService implements IMaintainableService<CurrencyRate>
 
     //key - bankId
     public CurrencyRate read(int key) throws SQLException {
-        throw new UnsupportedOperationException("no reason for reading rate without choosing currency")
+        throw new UnsupportedOperationException("no reason for reading rate without choosing currency");
     }
     public CurrencyRate read(Currency currency, int key) throws SQLException {
         return currencyRateDao.getLastCurrency(currency, key);

@@ -3,6 +3,7 @@ package ru.laptseu.bankapp.services;
 import org.springframework.stereotype.Service;
 import ru.laptseu.bankapp.dao.DaoFactory;
 import ru.laptseu.bankapp.dao.IMaintainableDAO;
+import ru.laptseu.bankapp.models.Currency;
 import ru.laptseu.bankapp.models.TransferHistory;
 
 import java.sql.SQLException;
@@ -35,6 +36,11 @@ public class TransferHistoryService implements IMaintainableService<TransferHist
     @Override
     public TransferHistory read(int key) throws SQLException {
         return transactionDao.read(key);
+    }
+
+    @Override
+    public TransferHistory read(Currency currency, int key) throws SQLException {
+        throw  new  UnsupportedOperationException("Only for currencyRate");
     }
 
     @Override

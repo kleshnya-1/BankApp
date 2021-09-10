@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import ru.laptseu.bankapp.dao.DaoFactory;
 import ru.laptseu.bankapp.dao.IMaintainableDAO;
 import ru.laptseu.bankapp.models.Bank;
+import ru.laptseu.bankapp.models.Currency;
 
 import java.sql.SQLException;
 
@@ -32,6 +33,11 @@ public class BankService implements IMaintainableService<Bank> {
     @Override
     public Bank read(int key) throws SQLException {
         return bankDao.read(key);
+    }
+
+    @Override
+    public Bank read(Currency currency, int key) throws SQLException {
+        throw  new  UnsupportedOperationException("Only for currencyRate");
     }
 
     @Override

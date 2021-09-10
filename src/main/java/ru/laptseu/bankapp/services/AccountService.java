@@ -60,6 +60,11 @@ public class AccountService implements IMaintainableService<Account> {
     }
 
     @Override
+    public Account read(Currency currency, int key) throws SQLException {
+        throw  new  UnsupportedOperationException("Only for currencyRate");
+    }
+
+    @Override
     public void update(String[] paramArr) throws SQLException {
         Account account;
         account = create(paramArr);
