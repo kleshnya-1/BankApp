@@ -10,15 +10,16 @@ import ru.laptseu.bankapp.models.CurrencyRate;
 import ru.laptseu.bankapp.utilities.HibernateSessionFactoryUtil;
 
 import java.sql.SQLException;
+import java.util.List;
 
 @Log4j2
 @Repository
 public class BankDAOImpl implements IMaintainableDAO<Bank> {
     //todo ask i use for currency access DAO, not SERVICE?
 
-    @Autowired
+    //@Autowired
     //todo сюда в тестах не подтягивается бин. хоть его и видно, если на зерно нажать
-    CurrencyRateDAOImpl currencyRateDAO ;//= new CurrencyRateDAOImpl();
+    CurrencyRateDAOImpl currencyRateDAO = new CurrencyRateDAOImpl();
 
     public BankDAOImpl() {
     }
@@ -64,8 +65,11 @@ public class BankDAOImpl implements IMaintainableDAO<Bank> {
     @Override
     public void update(Bank obj) throws SQLException {
         Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
+        //todo этот зоопарк для проверки того, что не подтягтвается ДАО в тесте трансфера.
+        List<CurrencyRate> listik = obj.getCurrencyRates();
+        System.out.println(currencyRateDAO.toString());
+        int iii = currencyRateDAO.save(listik);
         update(obj, session);
-        currencyRateDAO.save(obj.getCurrencyRates());
         //todo if-for-if но у меня иначе нет идей. хайбернейт сам их не связывает. банк для экономии
         // места обнуляется при сохранении в бд (можно бы и переопрделить объект курса и в нем убрать
         // ид банка. ид банка нужен при операциях с курсом как с объектом отдельно, но не нужен уже после

@@ -1,4 +1,5 @@
 import lombok.SneakyThrows;
+import org.hibernate.Hibernate;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -108,8 +109,11 @@ public class TestingSpring {
         accountService.persist(account1p2);
         accountService.persist(account2);
         client1.getAccounts().add(account1);
+        account1.setClient(client1);
         client1.getAccounts().add(account1p2);
+        account1p2.setClient(client1);
         client2.getAccounts().add(account2);
+        account2.setClient(client2);
 
         // bank.addAccount(account1);
         // bank.addAccount(account1p2);
@@ -121,6 +125,9 @@ public class TestingSpring {
 
         Account account1fDB = accountService.read(account1.getId());
         Account account2fDB = accountService.read(account2.getId());
+        // вот так вот. иначе он не переводит в энтити даже вызовом и присваиванием
+        account1fDB.setBank((Bank) Hibernate.unproxy(account1fDB.getBank()));
+        account2fDB.setBank((Bank) Hibernate.unproxy(account2fDB.getBank()));
         accountService.transferAmount(account1fDB, account2fDB, 50);
     }
 

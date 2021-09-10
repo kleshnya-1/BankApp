@@ -82,8 +82,8 @@ public class AccountService implements IMaintainableService<Account> {
         double commission = 0;
         double totalAmount = amount;
         // TODO: 09.09.2021 ask это для понимания. или сразу стоит такое вклчать в конструктор?
-        CurrencyRate source = currencyRateService.read(sourceAcc.getBank().getId());
-        CurrencyRate target = currencyRateService.read(targetAcc.getBank().getId());
+        CurrencyRate source = currencyRateService.read(sourceAcc.getCurrency(), sourceAcc.getBank().getId());
+        CurrencyRate target = currencyRateService.read(targetAcc.getCurrency(), targetAcc.getBank().getId());
 
         if (!sourceAcc.getBank().equals(targetAcc.getBank())) {
             commission = commissionCalculator.calculate(targetAcc, amount);

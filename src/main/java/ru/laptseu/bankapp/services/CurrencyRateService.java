@@ -6,14 +6,17 @@ import ru.laptseu.bankapp.models.Currency;
 import ru.laptseu.bankapp.models.CurrencyRate;
 
 import java.sql.SQLException;
+import java.util.List;
+
 @Service
 //todo in progress. not for checking
-public class CurrencyRateService implements IMaintainableService<CurrencyRate> {
+public class CurrencyRateService implements IMaintainableService<CurrencyRate>
+{
 
     //todo  getLastCurrency() ref
     CurrencyRateDAOImpl currencyRateDao = new CurrencyRateDAOImpl();
 
-    @Override
+
     public CurrencyRate create(String[] paramArr) throws SQLException {
         CurrencyRate currencyRate = new CurrencyRate();
         currencyRate.getBank().setId(Integer.parseInt(paramArr[0]));
@@ -22,20 +25,23 @@ public class CurrencyRateService implements IMaintainableService<CurrencyRate> {
         return currencyRate;
     }
 
-    @Override
+
     public int persist(CurrencyRate obj) throws SQLException {
         int id = currencyRateDao.save(obj);
         return id;
     }
 
     //todo fix
-    @Override
+
     //key - bankId
     public CurrencyRate read(int key) throws SQLException {
-        return null;//currencyRateDao.read(key);
+        throw new UnsupportedOperationException("no reason for reading rate without choosing currency")
+    }
+    public CurrencyRate read(Currency currency, int key) throws SQLException {
+        return currencyRateDao.getLastCurrency(currency, key);
     }
 
-    @Override
+
     public void update(String[] paramArr) throws SQLException {
         CurrencyRate cr;
         cr = create(paramArr);
@@ -43,12 +49,12 @@ public class CurrencyRateService implements IMaintainableService<CurrencyRate> {
         currencyRateDao.update(cr);
     }
 
-    @Override
+
     public void update(CurrencyRate currencyRate) throws SQLException {
         currencyRateDao.update(currencyRate);
     }
 
-    @Override
+
     public void delete(int key) throws SQLException {
     }
 

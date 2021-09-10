@@ -23,6 +23,7 @@ public class Account extends EntityModel {
     private Currency currency;
     private double amount;
     // TODO: 09.09.2021 check how it works
+    //никак
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer accNumber;
 }
