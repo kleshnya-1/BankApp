@@ -1,5 +1,6 @@
 package ru.laptseu.bankapp.services;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.laptseu.bankapp.dao.CurrencyRateDAOImpl;
 import ru.laptseu.bankapp.models.Currency;
@@ -12,7 +13,8 @@ import java.sql.SQLException;
 public class CurrencyRateService implements IMaintainableService<CurrencyRate> {
 
     //todo  getLastCurrency() ref
-    CurrencyRateDAOImpl currencyRateDao = new CurrencyRateDAOImpl();
+    @Autowired
+    CurrencyRateDAOImpl currencyRateDao;//= new CurrencyRateDAOImpl();
 
     public int persist(CurrencyRate obj) throws SQLException {
         int id = currencyRateDao.save(obj);
@@ -35,9 +37,5 @@ public class CurrencyRateService implements IMaintainableService<CurrencyRate> {
     }
 
     public void delete(int key) throws SQLException {
-    }
-
-    public CurrencyRate getLastCurrency(Currency curr, int bankId) {
-        return currencyRateDao.getLastCurrency(curr, bankId);
     }
 }

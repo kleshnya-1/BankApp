@@ -27,7 +27,7 @@ import java.util.Properties;
 @EnableTransactionManagement
 @PropertySource(value = "classpath:db.properties")
 public class HibernateConfig {
-
+    //todo property to YAML
     private Environment environment;
 
     @Autowired

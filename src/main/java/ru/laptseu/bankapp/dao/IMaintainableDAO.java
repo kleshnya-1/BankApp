@@ -2,17 +2,13 @@ package ru.laptseu.bankapp.dao;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-import ru.laptseu.bankapp.EntityNotFoundException;
-import ru.laptseu.bankapp.models.Account;
 import ru.laptseu.bankapp.models.EntityModel;
 
 import java.sql.SQLException;
-import java.text.DecimalFormat;
 
 public interface IMaintainableDAO<T extends EntityModel> {
-       SessionFactory getSessionFactory();
-       //todo ask можно сразу на getSession написать. Это +поле, но лучть короче. есть в этом смысл?
+    SessionFactory getSessionFactory();
+    //todo ask можно сразу на getSession написать. Это +поле, но лучть короче. есть в этом смысл?
 
     //todo DRY it
     default int save(T obj) throws SQLException {
@@ -55,26 +51,8 @@ public interface IMaintainableDAO<T extends EntityModel> {
         }
     }
 
-    public T read(int key);
-
-    //todo ask.
-//    default T read(int key) {
-//        Class c = this.getClass();
-//        return (T) getSessionFactory().openSession().get(EntityModel.class, key);
-//    }
-
     //todo ask. мого его по аналогии с сессией организовать.
     // но мне это не очень нравится. как можно пулучить класс от этого дженерика
     // и естьл и вэтом смысл?
-//    default T read(int key) {
-//        T b;
-//
-//        try (Session session = getSessionFactory().openSession()) {
-//            b = session.get(Class(T), key);
-//            //todo ref with stream
-//            if (b != null) {
-//                return b;
-//            } else throw new EntityNotFoundException("Account not found with ID: " + key);
-//        }
-//    }
+    T read(int key);
 }

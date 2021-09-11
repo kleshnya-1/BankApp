@@ -1,15 +1,15 @@
 package ru.laptseu.bankapp.dao;
 
 import com.mongodb.client.MongoCollection;
-import com.mongodb.client.model.Filters;
 import lombok.extern.log4j.Log4j2;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import ru.laptseu.bankapp.models.Bank;
 import ru.laptseu.bankapp.models.Currency;
 import ru.laptseu.bankapp.models.CurrencyRate;
 import ru.laptseu.bankapp.models.CustomDocument;
-import ru.laptseu.bankapp.utilities.MongoClientFactoryAndSetUp;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -24,16 +24,17 @@ import static com.mongodb.client.model.Filters.eq;
 @Repository
 public class CurrencyRateDAOImpl// implements  IMaintainableDAO<CurrencyRate>
 {
-    //вызывает цикличный вызов
-//@Autowired
-//    BankDAOImpl bankDAO ;//= new BankDAOImpl();
+    MongoCollection currencyRatesMongoCollection;
 
-    MongoCollection currencyRatesMongoCollection = MongoClientFactoryAndSetUp.getMongoCollection("CurrencyRates", CustomDocument.class);
-
-    public CurrencyRateDAOImpl() {
+    @Autowired
+    public CurrencyRateDAOImpl(MongoCollection currencyRatesMongoCollection) {
+        this.currencyRatesMongoCollection = currencyRatesMongoCollection;
     }
 
-    //@Override
+    public SessionFactory getSessionFactory() {
+        throw new UnsupportedOperationException("No sessionFactory in Mongo DB");
+    }
+
     public int save(CurrencyRate obj) throws SQLException {
         obj.setBankId(obj.getBank().getId());
         Bank savedBank = obj.getBank();
@@ -57,7 +58,7 @@ public class CurrencyRateDAOImpl// implements  IMaintainableDAO<CurrencyRate>
         }
         //todo ask как-то так. так сущность сохранится без него, но оставнийся объект может нормально функционировать
         obj.setBank(savedBank);
-//todo close session and fix return
+        //todo close session and fix return
         return 1;
     }
 
@@ -69,11 +70,15 @@ public class CurrencyRateDAOImpl// implements  IMaintainableDAO<CurrencyRate>
         return 1;
     }
 
-    //todo сюда я даю ИД банка. и получаю лист его курсов. интерфейс не понимает,
-    // так как он привык получать ИД сущности и ее возвращать (дженерик)
+    //todo в интерфейсе возврящается один обънет. а у меня лист. в связи с
+    // этим либо в остальные классы заглушку, либо не имплиментировать. а как лучше?
+    // (сюда я даю ИД банка. и получаю лист его курсов. интерфейс не понимает,
+    // так как он привык получать ИД сущности и ее возвращать (дженерик))
     public List<CurrencyRate> read(int key) {
         // Bank bankOwner = bankDAO.read(key);
         //todo null exc
+        MongoCollection aa = currencyRatesMongoCollection;
+        System.out.println(aa.toString());
         CustomDocument o3 = (CustomDocument) currencyRatesMongoCollection.find(eq("bankId", key)).first();
         //todo check with null
         List<CurrencyRate> rates;
@@ -99,16 +104,11 @@ public class CurrencyRateDAOImpl// implements  IMaintainableDAO<CurrencyRate>
         throw new UnsupportedOperationException();
     }
 
+    public void delete(CurrencyRate key) {
+        throw new UnsupportedOperationException();
+    }
+
     public void update(CurrencyRate obj, Session conn) throws SQLException {
         throw new UnsupportedOperationException();
-    }
-
-    public Session getSession() {
-        throw new UnsupportedOperationException();
-    }
-
-    public CurrencyRate getLastCurrency(Currency curr, int bankId) {
-        currencyRatesMongoCollection = MongoClientFactoryAndSetUp.getMongoCollection(bankId, CurrencyRate.class);
-        return (CurrencyRate) currencyRatesMongoCollection.find(Filters.eq("currency", curr.toString())).first();
     }
 }
