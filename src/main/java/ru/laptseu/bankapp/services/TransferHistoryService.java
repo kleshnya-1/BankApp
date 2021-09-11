@@ -12,13 +12,8 @@ import java.sql.SQLException;
 public class TransferHistoryService implements IMaintainableService<TransferHistory> {
     IMaintainableDAO<TransferHistory> transactionDao = DaoFactory.get(TransferHistory.class);
 
-    @Override
-    public TransferHistory create(String[] paramArr) throws SQLException {
-        throw new UnsupportedOperationException();
-    }
-
     public TransferHistory create(String clientSourceName, String clientTargetName,
-                                  int accSourceNum, int accTargetNum, String bankSourceName,
+                                  String accSourceNum, String accTargetNum, String bankSourceName,
                                   String bankTargetName, String currency, double amount) throws SQLException {
 
         return new TransferHistory(clientSourceName, clientTargetName,
@@ -41,11 +36,6 @@ public class TransferHistoryService implements IMaintainableService<TransferHist
     @Override
     public TransferHistory read(Currency currency, int key) throws SQLException {
         throw new UnsupportedOperationException("Only for currencyRate");
-    }
-
-    @Override
-    public void update(String[] paramArr) throws SQLException {
-        throw new UnsupportedOperationException();
     }
 
     @Override

@@ -1,11 +1,8 @@
 package ru.laptseu.bankapp.config;
 
 import com.mongodb.client.MongoCollection;
-import org.hibernate.Session;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import ru.laptseu.bankapp.dao.BankDAOImpl;
-import ru.laptseu.bankapp.dao.CurrencyRateDAOImpl;
 import ru.laptseu.bankapp.models.CustomDocument;
 import ru.laptseu.bankapp.utilities.MongoClientFactoryAndSetUp;
 
@@ -21,20 +18,11 @@ public class OtherBeansConfig {
         return MongoClientFactoryAndSetUp.getMongoCollection("CurrencyRates", CustomDocument.class);
     }
 
-    @Bean
-    public CurrencyRateDAOImpl currencyRateDAO() {
-        return new CurrencyRateDAOImpl();
-    }
-
 //    @Bean
 //    public Session sessionBean(HibernateSessionFactoryUnstatic hibernateSessionFactoryUnstatic) {
 //        return hibernateSessionFactoryUnstatic.getSessionFactory().openSession();
 //    }
 
-    @Bean
-    public BankDAOImpl bankDAO() {
-        return new BankDAOImpl();
-    }
 //    @Bean
 //    public HibernateSessionFactoryUnstatic hibernateSessionFactoryUnstatic() {
 //        return new HibernateSessionFactoryUnstatic();

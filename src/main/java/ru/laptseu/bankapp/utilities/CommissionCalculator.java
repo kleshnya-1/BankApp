@@ -19,8 +19,7 @@ public class CommissionCalculator {
         Client targetClient = targetAcc.getClient();
         if (targetClient.isNaturalPerson()) {
             commissionPercent = targetBank.getTransferFeeInPercent();
-        }
-        else {
+        } else {
             commissionPercent = targetBank.getTransferFeeInPercentForNotNaturalPersons();
         }
         commission = commissionPercent * amount / 100;

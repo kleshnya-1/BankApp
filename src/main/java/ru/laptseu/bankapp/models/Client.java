@@ -24,4 +24,21 @@ public class Client extends EntityModel {
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
     // TODO: 10.09.2021 зачем это. убрать 
     private Set<Account> accounts = new HashSet<>();
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == this) {
+            return true;
+        }
+        if (!(o instanceof Client)) {
+            return false;
+        }
+        Client c = (Client) o;
+        return Integer.compare(
+                getId(), c.getId()) == 0 &&
+                name.equals(c.name) &&
+                isNaturalPerson == c.isNaturalPerson
+                // && accounts.size()==c.accounts.size() //&& c.accounts.containsAll(accounts)
+                ;
+    }
 }

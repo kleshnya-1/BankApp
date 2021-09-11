@@ -1,7 +1,9 @@
 package ru.laptseu.bankapp.services;
 
+import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.laptseu.bankapp.dao.IMaintainableDAO;
@@ -15,6 +17,7 @@ import ru.laptseu.bankapp.utilities.CurrencyConverter;
 import java.sql.SQLException;
 
 @Log4j2
+@Getter
 @Service
 public class AccountService implements IMaintainableService<Account> {
     //todo ask. я правильно пишу аннотации или они должны быть над классом?
@@ -22,35 +25,25 @@ public class AccountService implements IMaintainableService<Account> {
 
     // TODO: 09.09.2021 replace as constructor
     @Autowired
-    CommissionCalculator commissionCalculator;// = new CommissionCalculator();
+    CommissionCalculator commissionCalculator;
     @Autowired
-    IMaintainableDAO<Account> accountDao;// = DaoFactory.get(Account.class);
+    IMaintainableDAO<Account> accountDao;
     @Autowired
-    IMaintainableDAO<TransferHistory> transferHistoryDao;// = DaoFactory.get(TransferHistory.class);
+    IMaintainableDAO<TransferHistory> transferHistoryDao;
     @Autowired
-    TransferHistoryService transferHistoryService;// = new TransferHistoryService();
+    TransferHistoryService transferHistoryService;
     @Autowired
-    CurrencyConverter currencyConverter;// = new CurrencyConverter();
+    CurrencyConverter currencyConverter;
     @Autowired
     CurrencyRateService currencyRateService;
+    @Autowired
+    SessionFactory sessionFactory;
 
     @Override
     public int persist(Account o) throws SQLException {
         int num = accountDao.save(o);
         // TODO: 09.09.2021 check how it works
         return num;
-    }
-
-    // TODO: 10.09.2021 for removing
-    @Override
-    //creating models from array of parameters
-    public Account create(String[] paramArr) throws SQLException {
-        Account account = new Account();
-        //todo.ask ok? getBank.setId
-        account.getBank().setName(paramArr[1]);
-        account.setCurrency(Currency.valueOf(paramArr[2]));
-        account.setAmount(Double.parseDouble(paramArr[3]));
-        return account;
     }
 
     @Override
@@ -66,14 +59,6 @@ public class AccountService implements IMaintainableService<Account> {
     }
 
     @Override
-    public void update(String[] paramArr) throws SQLException {
-        Account account;
-        account = create(paramArr);
-        account.setId(Integer.parseInt(paramArr[paramArr.length]));
-        accountDao.update(account);
-    }
-
-    @Override
     public void update(Account account) throws SQLException {
         accountDao.update(account);
     }
@@ -83,9 +68,10 @@ public class AccountService implements IMaintainableService<Account> {
         accountDao.delete(key);
     }
 
-    public void transferAmount(Account sourceAcc, Account targetAcc, double amount) throws SQLException {
+    public int transferAmount(Account sourceAcc, Account targetAcc, double amount) throws SQLException {
         double commission = 0;
         double totalAmount = amount;
+        int historyId = -1;
         // TODO: 09.09.2021 ask это для понимания. или сразу стоит такое вклчать в конструктор?
         CurrencyRate source = currencyRateService.read(sourceAcc.getCurrency(), sourceAcc.getBank().getId());
         CurrencyRate target = currencyRateService.read(targetAcc.getCurrency(), targetAcc.getBank().getId());
@@ -99,18 +85,25 @@ public class AccountService implements IMaintainableService<Account> {
         sourceAcc.setAmount(sourceAcc.getAmount() - commission - totalAmount);
         targetAcc.setAmount(targetAcc.getAmount() + totalAmount);
 
-        try (Session accountDaoSession = accountDao.getSession()) {
-            accountDao.update(sourceAcc, accountDaoSession);
+        try (Session accountDaoSession = sessionFactory.openSession()) {
             accountDao.update(targetAcc, accountDaoSession);
+            accountDao.update(sourceAcc, accountDaoSession);
             accountDaoSession.getTransaction().commit();
             accountDaoSession.close();
             log.info("\nfrom acc ID " + sourceAcc.getId() + "(" + sourceAcc.getClient().getName() + ")" + " to acc ID" +
                     targetAcc.getId() + "(" + targetAcc.getClient().getName() + ") transfered " + amount + sourceAcc.getCurrency()
                     + " (as " + totalAmount + "" + targetAcc.getCurrency() + ") with  commission " + commission + "" + sourceAcc.getCurrency());
-            transferHistoryDao.save(transferHistoryService.create(sourceAcc.getClient().getName(), targetAcc.getClient().getName(),
-                    sourceAcc.getAccNumber(), targetAcc.getAccNumber(), sourceAcc.getBank().getName(),
-                    targetAcc.getBank().getName(), sourceAcc.getCurrency().toString(), amount));
+            historyId = transferHistoryDao.save(transferHistoryService.create(
+                    sourceAcc.getClient().getName(),
+                    targetAcc.getClient().getName(),
+                    sourceAcc.getAccNumber(),
+                    targetAcc.getAccNumber(),
+                    sourceAcc.getBank().getName(),
+                    targetAcc.getBank().getName(),
+                    sourceAcc.getCurrency().toString(),
+                    amount));
         }
+        return historyId;
     }
 }
 

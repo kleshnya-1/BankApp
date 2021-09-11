@@ -21,8 +21,8 @@ public class TransferHistory extends EntityModel {
     private Calendar date;
     private String clientSourceName;
     private String clientTargetName;
-    private int accSourceNum;
-    private int accTargetNum;
+    private String accSourceNum;
+    private String accTargetNum;
     private String bankSourceName;
     private String bankTargetName;
     private String currency;
@@ -32,7 +32,7 @@ public class TransferHistory extends EntityModel {
     }
 
     public TransferHistory(String clientSourceName, String clientTargetName,
-                           int accSourceNum, int accTargetNum, String bankSourceName,
+                           String accSourceNum, String accTargetNum, String bankSourceName,
                            String bankTargetName, String currency, double amount) {
         this.date = new GregorianCalendar();
         this.clientSourceName = clientSourceName;

@@ -1,76 +1,80 @@
 package ru.laptseu.bankapp.dao;
 
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import ru.laptseu.bankapp.models.Bank;
+import ru.laptseu.bankapp.EntityNotFoundException;
+import ru.laptseu.bankapp.models.Account;
 import ru.laptseu.bankapp.models.EntityModel;
-import ru.laptseu.bankapp.utilities.HibernateSessionFactoryUtil;
 
 import java.sql.SQLException;
-
+import java.text.DecimalFormat;
 
 public interface IMaintainableDAO<T extends EntityModel> {
-    // TODO: 10.09.2021 переделать на трай с ресурсами 
+       SessionFactory getSessionFactory();
+       //todo ask можно сразу на getSession написать. Это +поле, но лучть короче. есть в этом смысл?
+
+    //todo DRY it
     default int save(T obj) throws SQLException {
-        //todo ref and reuse it
-        Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
-        Transaction tx1 = session.beginTransaction();
-        try {
+        try (Session session = getSessionFactory().openSession()) {
+            session.beginTransaction();
             session.save(obj);
-            tx1.commit();
-        } finally {
-            session.close();
-            return obj.getId();
+            session.getTransaction().commit();
         }
+        return obj.getId();
     }
 
     default void update(T obj) throws SQLException {
-        // TODO: 10.09.2021 и тут тоже. и дальше
-        Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
-        update(obj, session);
-        session.getTransaction().commit();
-        session.close();
+        try (Session session = getSessionFactory().openSession()) {
+            session.beginTransaction();
+            update(obj, session);
+            session.getTransaction().commit();
+        }
     }
 
-    default void update(T obj, Session conn) throws SQLException {
-        // тут что-то не так
-        Session session = conn;
+    default void update(T obj, Session session) throws SQLException {
         if (!session.getTransaction().isActive()) {
             session.beginTransaction();
         }
         session.update(obj);
-
     }
 
     default void delete(int key) {
-        Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
-        Transaction tx1 = session.beginTransaction();
-        try {
+        try (Session session = getSessionFactory().openSession()) {
+            session.beginTransaction();
             session.delete(key);
-            tx1.commit();
-        } finally {
-            session.close();
+            session.getTransaction().commit();
         }
     }
 
-    default void delete(Bank key) {
-        Session session = getSession();
-        Transaction tx1 = session.beginTransaction();
-        try {
+    default void delete(T key) {
+        try (Session session = getSessionFactory().openSession()) {
+            session.beginTransaction();
             session.delete(key);
-            tx1.commit();
-        } finally {
-            session.close();
+            session.getTransaction().commit();
         }
     }
 
-    default Session getSession() {
-        return HibernateSessionFactoryUtil.getSessionFactory().openSession();
-    }
+    public T read(int key);
 
-    //todo fix if its possible for read()
-    default T read(int key) {
-        Class c = this.getClass();
-        return (T) HibernateSessionFactoryUtil.getSessionFactory().openSession().get(this.getClass(), key);
-    }
+    //todo ask.
+//    default T read(int key) {
+//        Class c = this.getClass();
+//        return (T) getSessionFactory().openSession().get(EntityModel.class, key);
+//    }
+
+    //todo ask. мого его по аналогии с сессией организовать.
+    // но мне это не очень нравится. как можно пулучить класс от этого дженерика
+    // и естьл и вэтом смысл?
+//    default T read(int key) {
+//        T b;
+//
+//        try (Session session = getSessionFactory().openSession()) {
+//            b = session.get(Class(T), key);
+//            //todo ref with stream
+//            if (b != null) {
+//                return b;
+//            } else throw new EntityNotFoundException("Account not found with ID: " + key);
+//        }
+//    }
 }

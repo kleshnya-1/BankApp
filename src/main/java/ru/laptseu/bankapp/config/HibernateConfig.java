@@ -1,6 +1,10 @@
 package ru.laptseu.bankapp.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration;
+import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
@@ -16,9 +20,14 @@ import java.util.Properties;
 //todo ask без этого класса он ругается на источник данных. хотя не знаю, где он его применяет на данном
 // этапе. судя по всему из-за того, что драйвер пордключен и без конфигурации
 @Configuration
+@EnableAutoConfiguration(exclude = { //
+        DataSourceAutoConfiguration.class, //
+        DataSourceTransactionManagerAutoConfiguration.class, //
+        HibernateJpaAutoConfiguration.class})
 @EnableTransactionManagement
 @PropertySource(value = "classpath:db.properties")
 public class HibernateConfig {
+
     private Environment environment;
 
     @Autowired
@@ -33,19 +42,8 @@ public class HibernateConfig {
         return properties;
     }
 
-    //todo info вот так вот не работает. хоть и идентично, вроде.
-//    @Bean
-//    public DataSource dataSource() {
-//        DriverManagerDataSource dataSource = new DriverManagerDataSource();
-//        dataSource.setDriverClassName(environment.getRequiredProperty("jdbc.driverClassName"));
-//        dataSource.setUrl(environment.getRequiredProperty("jdbc.url"));
-//        dataSource.setUsername(environment.getRequiredProperty("jdbc.username"));
-//        dataSource.setPassword(environment.getRequiredProperty("jdbc.password"));
-//        return dataSource;
-//    }
-
     //todo info вот так вот работает. хоть и идентично, вроде.
-    @Bean
+    @Bean(name = "dataSource")
     public DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName("org.postgresql.Driver");
@@ -55,7 +53,7 @@ public class HibernateConfig {
         return dataSource;
     }
 
-    @Bean
+    @Bean(name = "sessionFactory")
     public LocalSessionFactoryBean sessionFactory() {
         LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
         sessionFactory.setDataSource(dataSource());

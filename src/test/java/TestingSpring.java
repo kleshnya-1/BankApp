@@ -1,7 +1,5 @@
 import lombok.SneakyThrows;
-import org.hibernate.Hibernate;
 import org.junit.Test;
-import org.junit.jupiter.api.function.Executable;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -9,38 +7,48 @@ import org.springframework.test.context.junit4.SpringRunner;
 import ru.laptseu.bankapp.EntityNotFoundException;
 import ru.laptseu.bankapp.core.Main;
 import ru.laptseu.bankapp.dao.BankDAOImpl;
+import ru.laptseu.bankapp.dao.ClientDAOImpl;
 import ru.laptseu.bankapp.dao.CurrencyRateDAOImpl;
 import ru.laptseu.bankapp.models.*;
-import ru.laptseu.bankapp.services.AccountService;
-import ru.laptseu.bankapp.services.BankService;
-import ru.laptseu.bankapp.services.ClientService;
-import ru.laptseu.bankapp.services.CurrencyRateService;
+import ru.laptseu.bankapp.services.*;
 
 import java.util.Calendar;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @RunWith(SpringRunner.class)
-//@ComponentScan("main.ru.laptseu.bankapp")
 @SpringBootTest(classes = Main.class)
 public class TestingSpring {
 
     @Autowired
     BankDAOImpl bankDAO;
     @Autowired
+    ClientDAOImpl clientDAO;
+    @Autowired
     CurrencyRateDAOImpl currencyRateDAO;
 
     @Autowired
     AccountService accountService;
     @Autowired
-    BankService bankService;//= new BankService();
+    BankService bankService;
     @Autowired
-    ClientService clientService;// = new ClientService();
+    ClientService clientService;
     @Autowired
     CurrencyRateService currencyRateService;
+    @Autowired
+    TransferHistoryService transferHistoryService;
+
+    //todo in progress
+//    @SneakyThrows
+//    @Test
+//    public void testTransferMethod() {
+//        TransferHistory tHfromDb = transferHistoryService.read(accountService.transferAmount(account1fDB, account2fDB, 50));
+//        assertEquals(12.5, tHfromDb.get );
+//    }
 
     @SneakyThrows
     @Test
+
     public void testTransfer() {
 
         Bank bank = new Bank();
@@ -58,16 +66,16 @@ public class TestingSpring {
         CurrencyRate currencyRateUsd = new CurrencyRate();
         CurrencyRate currencyRateEur = new CurrencyRate();
         currencyRateUsd.setCurrency(Currency.USD);
-        currencyRateUsd.setRateToByn(130);
+        currencyRateUsd.setRateToByn(50);
         currencyRateUsd.setBank(bank);
         currencyRateEur.setCurrency(Currency.EUR);
-        currencyRateEur.setRateToByn(150);
+        currencyRateEur.setRateToByn(100);
         currencyRateEur.setBank(bank);
 
         CurrencyRate currencyRateUsd1 = new CurrencyRate();
         CurrencyRate currencyRateEur1 = new CurrencyRate();
         currencyRateUsd1.setCurrency(Currency.USD);
-        currencyRateUsd1.setRateToByn(230);
+        currencyRateUsd1.setRateToByn(200);
         currencyRateUsd1.setBank(bank1);
         currencyRateEur1.setCurrency(Currency.EUR);
         currencyRateEur1.setRateToByn(250);
@@ -78,10 +86,11 @@ public class TestingSpring {
         bank1.getCurrencyRates().add(currencyRateUsd1);
         bank1.getCurrencyRates().add(currencyRateEur1);
 
-//        currencyRateService.persist(currencyRateEur);
-//        currencyRateService.persist(currencyRateEur1);
-//        currencyRateService.persist(currencyRateUsd);
-//        currencyRateService.persist(currencyRateUsd1);
+        currencyRateDAO.save(currencyRateUsd);
+        currencyRateDAO.save(currencyRateEur);
+        currencyRateDAO.save(currencyRateUsd1);
+        currencyRateDAO.save(currencyRateEur1);
+
         bankService.update(bank);
         bankService.update(bank1);
 
@@ -117,9 +126,6 @@ public class TestingSpring {
         client2.getAccounts().add(account2);
         account2.setClient(client2);
 
-        // bank.addAccount(account1);
-        // bank.addAccount(account1p2);
-        // bank1.addAccount(account2);
         bankService.update(bank);
         bankService.update(bank1);
         clientService.update(client1);
@@ -127,9 +133,9 @@ public class TestingSpring {
 
         Account account1fDB = accountService.read(account1.getId());
         Account account2fDB = accountService.read(account2.getId());
-        // вот так вот. иначе он не переводит в энтити даже вызовом и присваиванием
-        account1fDB.setBank((Bank) Hibernate.unproxy(account1fDB.getBank()));
-        account2fDB.setBank((Bank) Hibernate.unproxy(account2fDB.getBank()));
+        //как это было с ленивой инициализацией
+        //  account1fDB.setClient((Client) Hibernate.unproxy(account1fDB.getClient()));
+        //account2fDB.setClient((Client) Hibernate.unproxy(account2fDB.getClient()));
         accountService.transferAmount(account1fDB, account2fDB, 50);
     }
 
@@ -163,12 +169,50 @@ public class TestingSpring {
 
         bankDAO.delete(b1);
         bankDAO.delete(b2);
-        assertThrows(EntityNotFoundException.class, ()->{
+        assertThrows(EntityNotFoundException.class, () -> {
             bankDAO.read(n1);
-        } );
-        assertThrows(EntityNotFoundException.class, ()->{
+        });
+        assertThrows(EntityNotFoundException.class, () -> {
             bankDAO.read(n2);
-        } );
+        });
+    }
+
+    @SneakyThrows
+    @Test
+    public void testClientCRUD() {
+        Client c1 = new Client();
+        Client c2 = new Client();
+        c1.setName("testClientCRUD1 " + Calendar.getInstance().getTime());
+        c2.setName("testClientCRUD2 " + Calendar.getInstance().getTime());
+        c1.setNaturalPerson(true);
+        c2.setNaturalPerson(false);
+        int n1 = clientDAO.save(c1);
+        int n2 = clientDAO.save(c2);
+        Client c1Fdb = clientDAO.read(n1);
+        Client c2Fdb = clientDAO.read(n2);
+        assertEquals(c1, c1Fdb);
+        assertEquals(c2, c2Fdb);
+
+        c1.setNaturalPerson(false);
+        c2.setNaturalPerson(true);
+        clientDAO.update(c1);
+        clientDAO.update(c2);
+        assertNotEquals(c1, c1Fdb);
+        assertNotEquals(c2, c2Fdb);
+
+        c1Fdb = clientDAO.read(n1);
+        c2Fdb = clientDAO.read(n2);
+        assertEquals(c1, c1Fdb);
+        assertEquals(c2, c2Fdb);
+
+        clientDAO.delete(c1);
+        clientDAO.delete(c2);
+        assertThrows(EntityNotFoundException.class, () -> {
+            clientDAO.read(n1);
+        });
+        assertThrows(EntityNotFoundException.class, () -> {
+            clientDAO.read(n2);
+        });
     }
 
     @SneakyThrows
