@@ -10,6 +10,7 @@ import java.util.Map;
 
 @Log4j2
 //@Component
+//todo remove it? spring replaced it
 public class DaoFactory {
     private static final Map<Class, IMaintainableDAO> factoryMap = new HashMap<>();
 

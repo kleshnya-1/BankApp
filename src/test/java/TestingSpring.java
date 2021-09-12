@@ -3,6 +3,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.laptseu.bankapp.EntityNotFoundException;
 import ru.laptseu.bankapp.core.Main;
@@ -13,6 +14,8 @@ import ru.laptseu.bankapp.models.*;
 import ru.laptseu.bankapp.services.*;
 
 import java.util.Calendar;
+
+import static com.mongodb.client.model.Filters.eq;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -25,8 +28,7 @@ public class TestingSpring {
     @Autowired
     ClientDAOImpl clientDAO;
     @Autowired
-    CurrencyRateDAOImpl currencyRateDAO;
-
+CurrencyRateDAOImpl currencyRateDAO;
     @Autowired
     AccountService accountService;
     @Autowired
@@ -37,20 +39,12 @@ public class TestingSpring {
     CurrencyRateService currencyRateService;
     @Autowired
     TransferHistoryService transferHistoryService;
-
-    //todo in progress
-//    @SneakyThrows
-//    @Test
-//    public void testTransferMethod() {
-//        TransferHistory tHfromDb = transferHistoryService.read(accountService.transferAmount(account1fDB, account2fDB, 50));
-//        assertEquals(12.5, tHfromDb.get );
-//    }
+    @Autowired
+    MongoTemplate mongoTemplate;
 
     @SneakyThrows
     @Test
-
     public void testTransfer() {
-
         Bank bank = new Bank();
         Bank bank1 = new Bank();
         bank.setName("testTransfer01 " + Calendar.getInstance().getTime());

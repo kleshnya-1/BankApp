@@ -2,9 +2,6 @@ package ru.laptseu.bankapp.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration;
-import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
@@ -12,19 +9,20 @@ import org.springframework.core.env.Environment;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
 import java.util.Properties;
 
-//todo ask без этого класса он ругается на источник данных. хотя не знаю, где он его применяет на данном
-// этапе. судя по всему из-за того, что драйвер пордключен и без конфигурации
 @Configuration
-@EnableAutoConfiguration(exclude = { //
-        DataSourceAutoConfiguration.class, //
-        DataSourceTransactionManagerAutoConfiguration.class, //
-        HibernateJpaAutoConfiguration.class})
-@EnableTransactionManagement
+@EnableAutoConfiguration
+//это рекомендоввали исключить. но спринг же сам поймет, что мы переопределили.
+// не понимаю, зачем исключать. и да, работает нормально.
+// (exclude = { //
+//        DataSourceAutoConfiguration.class, //
+//        DataSourceTransactionManagerAutoConfiguration.class, //
+//        HibernateJpaAutoConfiguration.class})
+//эта аннотация не подходит, так как у нас операция с транзакцией на хайбере, а не на дате. но я сохранил
+//@EnableTransactionManagement
 @PropertySource(value = "classpath:db.properties")
 public class HibernateConfig {
     //todo property to YAML
@@ -46,10 +44,10 @@ public class HibernateConfig {
     @Bean(name = "dataSource")
     public DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName("org.postgresql.Driver");
-        dataSource.setUrl("jdbc:postgresql://localhost:5432/database_bank");
-        dataSource.setUsername("postgres");
-        dataSource.setPassword("1");
+        dataSource.setDriverClassName(environment.getRequiredProperty("jdbc.driverClassName"));
+        dataSource.setUrl(environment.getRequiredProperty("jdbc.url"));
+        dataSource.setUsername(environment.getRequiredProperty("jdbc.username"));
+        dataSource.setPassword(environment.getRequiredProperty("jdbc.password"));
         return dataSource;
     }
 

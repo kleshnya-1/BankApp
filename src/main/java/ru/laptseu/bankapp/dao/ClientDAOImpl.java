@@ -34,17 +34,4 @@ public class ClientDAOImpl implements IMaintainableDAO<Client> {
         }
     }
 
-//    @Override
-//    public int save(Client obj) throws SQLException {
-//        try (Session session = getSessionFactory().openSession()) {
-//            session.save(obj);
-//        }
-//        return obj.getId();
-//    }
-//
-//    @Override
-//    public SessionFactory getSessionFactory() {
-//        return sessionFactory;
-//    }
-
 }

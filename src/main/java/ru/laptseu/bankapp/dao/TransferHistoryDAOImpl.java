@@ -11,8 +11,14 @@ import ru.laptseu.bankapp.models.TransferHistory;
 @Getter
 @Repository
 public class TransferHistoryDAOImpl implements IMaintainableDAO<TransferHistory> {
-    @Autowired
     SessionFactory sessionFactory;
+
+    public TransferHistoryDAOImpl() {
+    }
+    @Autowired
+    public TransferHistoryDAOImpl(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
 
     @Override
     public TransferHistory read(int key) {

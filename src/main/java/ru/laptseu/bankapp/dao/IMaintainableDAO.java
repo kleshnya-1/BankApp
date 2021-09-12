@@ -7,8 +7,13 @@ import ru.laptseu.bankapp.models.EntityModel;
 import java.sql.SQLException;
 
 public interface IMaintainableDAO<T extends EntityModel> {
+
     SessionFactory getSessionFactory();
-    //todo ask можно сразу на getSession написать. Это +поле, но лучть короче. есть в этом смысл?
+    //todo ask можно сразу на getSession написать.
+    // getSession(){
+    // return getSessionFactory().openSession()
+    // }
+    // Это +поле, но в DAOImpl самих короче. есть в этом смысл?
 
     //todo DRY it
     default int save(T obj) throws SQLException {
@@ -51,7 +56,7 @@ public interface IMaintainableDAO<T extends EntityModel> {
         }
     }
 
-    //todo ask. мого его по аналогии с сессией организовать.
+    //todo ask. могe его по аналогии с сессией организовать.
     // но мне это не очень нравится. как можно пулучить класс от этого дженерика
     // и естьл и вэтом смысл?
     T read(int key);

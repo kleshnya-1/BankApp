@@ -6,6 +6,7 @@ import lombok.extern.log4j.Log4j2;
 import org.bson.codecs.pojo.annotations.BsonId;
 import org.bson.codecs.pojo.annotations.BsonProperty;
 import org.bson.types.ObjectId;
+import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -14,6 +15,7 @@ import java.util.List;
 @Component
 @Getter
 @Setter
+@Document(collection = "CurrencyRates")
 public class CustomDocument {
     //BankRateListDocument failed to decode error
     //todo ask. не могу переименовать. его потом спринг бин не находит. я через shift+f6.

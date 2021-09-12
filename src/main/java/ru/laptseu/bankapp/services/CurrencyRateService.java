@@ -33,7 +33,7 @@ public class CurrencyRateService implements IMaintainableService<CurrencyRate> {
     }
 
     public void update(CurrencyRate currencyRate) throws SQLException {
-        currencyRateDao.update(currencyRate);
+        throw new UnsupportedOperationException();
     }
 
     public void delete(int key) throws SQLException {

@@ -13,10 +13,17 @@ import ru.laptseu.bankapp.models.Account;
 @Getter
 @Repository
 public class AccountDAOImpl implements IMaintainableDAO<Account> {
-    @Autowired
-    SessionFactory sessionFactory;
-    // TODO: 10.09.2021 fix in Interface
 
+    SessionFactory sessionFactory;
+    @Autowired
+    public AccountDAOImpl(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
+    public AccountDAOImpl(){
+
+    }
+
+// TODO:  fix to default method in Interface
     @Override
     public Account read(int key) {
         Account b;

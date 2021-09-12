@@ -12,10 +12,10 @@ import java.sql.SQLException;
 @Log4j2
 public class CommissionCalculator {
 
-    public double calculate(Account targetAcc, double amount) throws SQLException {
+    public double calculate(Account targetAcc, double amount) {
         double commission = 0;
         double commissionPercent = 0;
-        Bank targetBank = targetAcc.getBank();//bankDaoImpl.read(targetAcc.getBankId());
+        Bank targetBank = targetAcc.getBank();
         Client targetClient = targetAcc.getClient();
         if (targetClient.isNaturalPerson()) {
             commissionPercent = targetBank.getTransferFeeInPercent();

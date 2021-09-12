@@ -24,20 +24,28 @@ public class AccountService implements IMaintainableService<Account> {
     // дефолтные методы тут появятся со spring boot. до этого нет возможности вызвать ДАО, пока у них разные имена (accountDao, bankDao...)
 
     // TODO: 09.09.2021 replace as constructor
-    @Autowired
+
     CommissionCalculator commissionCalculator;
-    @Autowired
     IMaintainableDAO<Account> accountDao;
-    @Autowired
     IMaintainableDAO<TransferHistory> transferHistoryDao;
-    @Autowired
     TransferHistoryService transferHistoryService;
-    @Autowired
     CurrencyConverter currencyConverter;
-    @Autowired
     CurrencyRateService currencyRateService;
-    @Autowired
     SessionFactory sessionFactory;
+    @Autowired
+    public AccountService(CommissionCalculator commissionCalculator, IMaintainableDAO<Account> accountDao, IMaintainableDAO<TransferHistory> transferHistoryDao, TransferHistoryService transferHistoryService, CurrencyConverter currencyConverter, CurrencyRateService currencyRateService, SessionFactory sessionFactory) {
+        this.commissionCalculator = commissionCalculator;
+        this.accountDao = accountDao;
+        this.transferHistoryDao = transferHistoryDao;
+        this.transferHistoryService = transferHistoryService;
+        this.currencyConverter = currencyConverter;
+        this.currencyRateService = currencyRateService;
+        this.sessionFactory = sessionFactory;
+    }
+
+    //for DAO factory.
+    public AccountService(){
+    }
 
     @Override
     public int persist(Account o) throws SQLException {
@@ -64,7 +72,7 @@ public class AccountService implements IMaintainableService<Account> {
     }
 
     @Override
-    public void delete(int key) throws SQLException {
+    public void delete(int key)  {
         accountDao.delete(key);
     }
 
