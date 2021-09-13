@@ -19,9 +19,6 @@ public class AccountDAOImpl implements IMaintainableDAO<Account> {
     public AccountDAOImpl(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
-    public AccountDAOImpl(){
-
-    }
 
 // TODO:  fix to default method in Interface
     @Override

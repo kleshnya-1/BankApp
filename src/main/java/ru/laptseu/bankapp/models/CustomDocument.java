@@ -12,7 +12,6 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Log4j2
-@Component
 @Getter
 @Setter
 @Document(collection = "CurrencyRates")

@@ -13,6 +13,7 @@ import java.sql.SQLException;
 public class CommissionCalculator {
 
     public double calculate(Account targetAcc, double amount) {
+        // TODO: 13.09.2021 check for null 
         double commission = 0;
         double commissionPercent = 0;
         Bank targetBank = targetAcc.getBank();

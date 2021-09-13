@@ -8,13 +8,18 @@ import ru.laptseu.bankapp.services.CurrencyRateService;
 @Log4j2
 @Component
 public class CurrencyConverter {
+       CurrencyRateService currencyRateService;
     @Autowired
-    CurrencyRateService currencyRateService;// = new CurrencyRateService();
+    public CurrencyConverter(CurrencyRateService currencyRateService) {
+        this.currencyRateService = currencyRateService;
+    }
 
-    public double convert(Double sourceRate, Double targetRate, Double amount) {
+    public double convert(Double sourceRate, Double targetRate, Double amount) throws RuntimeException {
         if (sourceRate == null || targetRate == null || amount == null) {
-            log.error("source: " + sourceRate + " target: " + targetRate + " returned 0");
-            return 0;
+            RuntimeException e = new NullPointerException("source: " + sourceRate + " target: " + targetRate + " amount: "+amount);
+            log.error(e);
+            // TODO: 13.09.2021 throw exc
+            throw e;
         }
         return sourceRate * amount / targetRate;
     }

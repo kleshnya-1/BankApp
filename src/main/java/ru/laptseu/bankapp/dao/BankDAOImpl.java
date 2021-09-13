@@ -18,20 +18,13 @@ import java.sql.SQLException;
 @Setter
 @Repository
 public class BankDAOImpl implements IMaintainableDAO<Bank> {
-
-    @Autowired
     CurrencyRateDAOImpl currencyRateDAO;
+   SessionFactory sessionFactory;
 
-    @Autowired
-    SessionFactory sessionFactory;
-
-    public BankDAOImpl() {
+    public BankDAOImpl(CurrencyRateDAOImpl currencyRateDAO, SessionFactory sessionFactory) {
+        this.currencyRateDAO = currencyRateDAO;
+        this.sessionFactory = sessionFactory;
     }
-
-//    @Autowired
-//    public void setCurrencyRateDAO(CurrencyRateDAOImpl currencyRateDAO) {
-//        this.currencyRateDAO = currencyRateDAO;
-//    }
 
     @Override
     public int save(Bank obj) throws SQLException {

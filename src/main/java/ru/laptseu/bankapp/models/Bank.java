@@ -22,8 +22,7 @@ public class Bank extends EntityModel {
     @OneToMany(mappedBy = "bank", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Account> accounts = new HashSet<>();
 
-    // todo mongo
-    @OneToMany(mappedBy = "bank", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany
     @Transient
     private List<CurrencyRate> currencyRates = new ArrayList<>();
 
