@@ -11,7 +11,8 @@ public interface IMaintainableDAO<T extends EntityModel> {
 
    //todo ref
 
-     Object getRepos();
+     Object getEntity();
+     Object getRep();
 
     //todo DRY it
      int save(T obj) ;

@@ -15,22 +15,17 @@ import ru.laptseu.bankapp.models.Account;
 @Getter
 @Repository
 @RequiredArgsConstructor
-public class AccountDAOImpl implements IMaintainableDAO<Account>, AccountRepo {
+public class AccountDAOImpl implements IMaintainableDAO<Account> {
 
-    @NonNull SessionFactory sessionFactory;
+    @Autowired AccountRepo rep;
+    Account entity = new Account();
 
 // TODO:  fix to default method in Interface
     @Override
     public Account read(int key) {
-        Account b;
-        //todo close session
-        try (Session session = sessionFactory.openSession()) {
-            b = session.get(Account.class, key);
-            session.close();
-            //todo ref with stream
-            if (b != null) {
-                return b;
-            } else throw new EntityNotFoundException("Account not found with ID: " + key);
-        }
+
+
+
     }
+    //else throw new EntityNotFoundException("Account not found with ID: " + key);
 }
