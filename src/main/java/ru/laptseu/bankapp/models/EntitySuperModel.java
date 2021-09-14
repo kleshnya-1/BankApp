@@ -1,6 +1,6 @@
 package ru.laptseu.bankapp.models;
 
-public class uperED {
+public class EntitySuperModel {
     // TODO: 14.09.2021 rename
 
 

@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: bankAppOk
+  datasource:
+    username: postgres
+    password: 1
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/database_bank2
+  jpa:
+    hibernate:
+      ddl-auto: none

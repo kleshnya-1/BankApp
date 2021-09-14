@@ -14,7 +14,6 @@ import ru.laptseu.bankapp.models.TransferHistory;
 @RequiredArgsConstructor
 public class TransferHistoryDAOImpl implements IMaintainableDAO<TransferHistory> {
 
-    @Autowired
-    TransHisRep rep;
-    TransferHistory entity = new TransferHistory();
+    private final TransHisRep rep;
+    private final TransferHistory entity = new TransferHistory();
 }

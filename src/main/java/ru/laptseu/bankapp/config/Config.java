@@ -1,23 +1,51 @@
 package ru.laptseu.bankapp.config;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import ru.laptseu.bankapp.dao.*;
+
+import javax.sql.DataSource;
 
 @Configuration
 @RequiredArgsConstructor
+@EnableAutoConfiguration
+@PropertySource(value = "classpath:db.properties")
 public class Config {
-    //part for factories
-    private final AccountDAOImpl accountDAO;
-    private final BankDAOImpl bankDAO;
-    private final ClientDAOImpl clientDAO;
-    private final MongoBankRateDAOImpl currencyRateDAO;
-    private final TransferHistoryDAOImpl transferHistoryDAO;
-//    @Bean
-//    DaoFactory daoFactory() {
-//        return new DaoFactory(accountDAO, bankDAO, clientDAO, currencyRateDAO, transferHistoryDAO);
+
+   private final Environment environment;
+
+    @Bean(name = "dataSource")
+    public DataSource dataSource() {
+        DriverManagerDataSource dataSource = new DriverManagerDataSource();
+        dataSource.setDriverClassName(environment.getRequiredProperty("jdbc.driverClassName"));
+        dataSource.setUrl(environment.getRequiredProperty("jdbc.url"));
+        dataSource.setUsername(environment.getRequiredProperty("jdbc.username"));
+        dataSource.setPassword(environment.getRequiredProperty("jdbc.password"));
+        return dataSource;
+    }
+/*
+вот это не работает. при том апликэйшн он хорошо видит. даже сам создал базу после указания
+jpa:
+hibernate:
+ddl-auto: create
+а вот это никак
+      */
+//    @Bean(name = "dataSource")
+//    @ConfigurationProperties(prefix="datasource")
+//    public DataSource dataSource(){
+//        return DataSourceBuilder
+//                .create()
+//                .build();
 //    }
+
+
+
 
 
 
@@ -37,16 +65,9 @@ public class Config {
 
 //
 //   private final
-//    EntityManagerFactory factory;
+//EntityManagerFactory factory;
 //   private final
-//    DataSource dataSource;
-//
-//    @Bean//(name = “transactionManager”)
-//    public PlatformTransactionManager platformTransactionManager() {
-//        JpaTransactionManager tm =
-//                new JpaTransactionManager();
-//        tm.setEntityManagerFactory(factory);
-//        tm.setDataSource(dataSource);
-//        return tm;
-    //  }
+//   DataSource dataSource;
+
 }
+

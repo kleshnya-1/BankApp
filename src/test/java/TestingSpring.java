@@ -7,7 +7,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.laptseu.bankapp.dao.BankDAOImpl;
 import ru.laptseu.bankapp.dao.ClientDAOImpl;
-import ru.laptseu.bankapp.dao.MongoBankRateDAOImpl;
+import ru.laptseu.bankapp.dao.CurrRateDocumentsDAO;
 import ru.laptseu.bankapp.exceptions.EntityNotFoundException;
 import ru.laptseu.bankapp.Main;
 import ru.laptseu.bankapp.models.*;
@@ -41,7 +41,7 @@ public class TestingSpring {
     @Autowired
     MongoTemplate mongoTemplate;
     @Autowired
-    MongoBankRateDAOImpl mongoBankRateDAO;
+    CurrRateDocumentsDAO mongoBankRateDAO;
 
 
     @SneakyThrows
@@ -260,9 +260,9 @@ public class TestingSpring {
     @SneakyThrows
     @Test
     public void testDocumentInMongoCRUD() {
-        CustomDocument cd1 =new CustomDocument();
-        CustomDocument cd2 =new CustomDocument();
-        CustomDocument cd3 =new CustomDocument();
+        BankRateListDocument cd1 =new BankRateListDocument();
+        BankRateListDocument cd2 =new BankRateListDocument();
+        BankRateListDocument cd3 =new BankRateListDocument();
 
         cd1.setBankId(Integer.valueOf("-1000"+Calendar.getInstance().get(Calendar.MILLISECOND)));
         cd2.setBankId(Integer.valueOf("-2000"+Calendar.getInstance().get(Calendar.MILLISECOND)));
@@ -302,9 +302,9 @@ public class TestingSpring {
         int s2 = mongoBankRateDAO.save(cd2).getBankId();
         int s3 = mongoBankRateDAO.save(cd3).getBankId();
 
-        CustomDocument cd1fDB =mongoBankRateDAO.read(s1);
-        CustomDocument cd2fDB =mongoBankRateDAO.read(s2);
-        CustomDocument cd3fDB =mongoBankRateDAO.read(s3);
+        BankRateListDocument cd1fDB =mongoBankRateDAO.readByBankId(s1);
+        BankRateListDocument cd2fDB =mongoBankRateDAO.readByBankId(s2);
+        BankRateListDocument cd3fDB =mongoBankRateDAO.readByBankId(s3);
 
         assertEquals(cd1, cd1fDB);
         assertEquals(cd2, cd2fDB);

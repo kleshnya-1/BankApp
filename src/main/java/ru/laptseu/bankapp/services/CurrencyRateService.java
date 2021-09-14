@@ -1,25 +1,28 @@
 package ru.laptseu.bankapp.services;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
-import ru.laptseu.bankapp.dao.MongoBankRateDAOImpl;
+import ru.laptseu.bankapp.dao.CurrRateDocumentsDAO;
+import ru.laptseu.bankapp.exceptions.EntityNotFoundException;
 import ru.laptseu.bankapp.models.Bank;
 import ru.laptseu.bankapp.models.Currency;
 import ru.laptseu.bankapp.models.CurrencyRate;
-import ru.laptseu.bankapp.models.CustomDocument;
+import ru.laptseu.bankapp.models.BankRateListDocument;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+@Log4j2
 @Service
 @RequiredArgsConstructor
 //todo in progress. not for checking
 public class CurrencyRateService //implements IMaintainableService<CurrencyRate>
 {
 
-    private final MongoBankRateDAOImpl bankRateListDocumentDAO;
+    private final CurrRateDocumentsDAO bankRateListDocumentDAO;
 
 
     public int save(CurrencyRate obj) throws Throwable {
@@ -36,10 +39,15 @@ public class CurrencyRateService //implements IMaintainableService<CurrencyRate>
         }
         //manual @Transient иначе цикличная зависимость и лишние поля в БСОНе
         obj.setBank(null);
+        BankRateListDocument document =null;
+        try {
+            document = bankRateListDocumentDAO.readByBankId(obj.getBankId());
+        } catch (EntityNotFoundException e){
+            log.error(e);
+        }
 
-        CustomDocument document = bankRateListDocumentDAO.readByBankId(obj.getBankId());
         if (document == null) {
-            document = new CustomDocument();
+            document = new BankRateListDocument();
             List<CurrencyRate> list = new ArrayList<>();
             list.add(obj);
             document.setCurrencies(list);
@@ -71,7 +79,7 @@ public class CurrencyRateService //implements IMaintainableService<CurrencyRate>
     public List<CurrencyRate> read(int key) throws Throwable {
         // Bank bankOwner = bankDAO.read(key);
         //todo null exc
-        CustomDocument o3 = bankRateListDocumentDAO.readByBankId(key);
+        BankRateListDocument o3 = bankRateListDocumentDAO.readByBankId(key);
         //todo check with null
         List<CurrencyRate> rates;
         System.out.println(o3);

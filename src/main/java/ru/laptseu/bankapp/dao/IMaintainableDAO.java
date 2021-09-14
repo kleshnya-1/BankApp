@@ -1,14 +1,12 @@
 package ru.laptseu.bankapp.dao;
 
-import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.repository.CrudRepository;
 import ru.laptseu.bankapp.dao.repos.CurrRateDocumentsRepoInMongoExtends;
 import ru.laptseu.bankapp.exceptions.EntityNotFoundException;
-import ru.laptseu.bankapp.models.CustomDocument;
-import ru.laptseu.bankapp.models.EntityModel;
-import ru.laptseu.bankapp.models.uperED;
+import ru.laptseu.bankapp.models.BankRateListDocument;
+import ru.laptseu.bankapp.models.EntitySuperModel;
 
-public interface IMaintainableDAO<T extends uperED> {
+public interface IMaintainableDAO<T extends EntitySuperModel> {
 
     T getEntity();
 
@@ -22,13 +20,14 @@ public interface IMaintainableDAO<T extends uperED> {
         return (T) getRep().findById(id).orElseThrow(()-> new EntityNotFoundException(getEntity().getClass()+" with ID "+ id +" not found"));
     }
 
-    default CustomDocument readByBankId(int id)   {
+    //так как читаем из монго мы не по ИД сущности, а по ИД банка
+    default BankRateListDocument readByBankId(int id)   {
         CurrRateDocumentsRepoInMongoExtends mr = (CurrRateDocumentsRepoInMongoExtends) getRep();
-        CustomDocument cd = mr.findByBankId(id);
+        BankRateListDocument cd = mr.findByBankId(id);
         if (cd == null) {
             throw new EntityNotFoundException(getEntity().getClass() + " with ID " + id + " not found");
         }
-        return null;
+        return cd;
     }
 
     //update = save
