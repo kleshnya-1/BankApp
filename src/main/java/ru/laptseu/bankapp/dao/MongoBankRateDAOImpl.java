@@ -12,10 +12,9 @@ import ru.laptseu.bankapp.models.*;
 @Getter
 @Repository
 @RequiredArgsConstructor
-public class MongoBankRateDAOImpl implements  IMaintainableDAOforMongo<CustomDocument>
+public class MongoBankRateDAOImpl implements  IMaintainableDAO<CustomDocument>
 {
     private final CurrRateDocumentsRepoInMongoExtends rep;
     private final CustomDocument entity = new CustomDocument();
-
 
 }

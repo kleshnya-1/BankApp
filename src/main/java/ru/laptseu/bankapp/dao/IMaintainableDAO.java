@@ -2,9 +2,11 @@ package ru.laptseu.bankapp.dao;
 
 import org.springframework.data.repository.CrudRepository;
 import ru.laptseu.bankapp.exceptions.EntityNotFoundException;
+import ru.laptseu.bankapp.models.CustomDocument;
 import ru.laptseu.bankapp.models.EntityModel;
+import ru.laptseu.bankapp.models.uperED;
 
-public interface IMaintainableDAO<T extends EntityModel> {
+public interface IMaintainableDAO<T extends uperED> {
 
     T getEntity();
 

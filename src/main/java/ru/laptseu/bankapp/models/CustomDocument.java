@@ -17,7 +17,7 @@ import java.util.List;
 @Getter
 @Setter
 @Document(collection = "CurrencyRates")
-public class CustomDocument //extends EntityModel
+public class CustomDocument extends uperED
 {
     //BankRateListDocument failed to decode error
     //todo ask. не могу переименовать. его потом спринг бин не находит. я через shift+f6.

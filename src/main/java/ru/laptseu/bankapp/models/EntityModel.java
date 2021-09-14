@@ -11,7 +11,7 @@ import javax.persistence.MappedSuperclass;
 @Getter
 @Setter
 @MappedSuperclass
-public class EntityModel {
+public class EntityModel extends uperED {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
