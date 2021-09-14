@@ -37,17 +37,17 @@ public class CurrencyRateService //implements IMaintainableService<CurrencyRate>
         //manual @Transient иначе цикличная зависимость и лишние поля в БСОНе
         obj.setBank(null);
 
-       // CustomDocument document = bankRateListDocumentDAO.read(obj.getBankId());
-//        if (document == null) {
-//            document = new CustomDocument();
-//            List<CurrencyRate> list = new ArrayList<>();
-//            list.add(obj);
-//            document.setCurrencies(list);
-//            document.setBankId(obj.getBankId());
-//        } else {
-//            document.getCurrencies().add(obj);
-//        }
-       // bankRateListDocumentDAO.save(document);
+        CustomDocument document = bankRateListDocumentDAO.readByBankId(obj.getBankId());
+        if (document == null) {
+            document = new CustomDocument();
+            List<CurrencyRate> list = new ArrayList<>();
+            list.add(obj);
+            document.setCurrencies(list);
+            document.setBankId(obj.getBankId());
+        } else {
+            document.getCurrencies().add(obj);
+        }
+        bankRateListDocumentDAO.save(document);
 
         //todo ask как-то так. так сущность сохранится без него,
         // но оставнийся объект может нормально функционировать
@@ -71,7 +71,7 @@ public class CurrencyRateService //implements IMaintainableService<CurrencyRate>
     public List<CurrencyRate> read(int key) throws Throwable {
         // Bank bankOwner = bankDAO.read(key);
         //todo null exc
-        CustomDocument o3 = bankRateListDocumentDAO.read(key);
+        CustomDocument o3 = bankRateListDocumentDAO.readByBankId(key);
         //todo check with null
         List<CurrencyRate> rates;
         System.out.println(o3);
