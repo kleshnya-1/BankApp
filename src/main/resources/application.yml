@@ -1,9 +1,6 @@
 spring:
-  jooq:
-    sql-dialect: org.hibernate.dialect.PostgreSQL9Dialect
-
-  jpa:
-    show-sql: true
+  application:
+    name: bankAppOk
   datasource:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/database_bank

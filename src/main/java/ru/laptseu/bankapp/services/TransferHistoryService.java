@@ -23,7 +23,7 @@ public class TransferHistoryService implements IMaintainableService<TransferHist
     }
 
     @Override
-    public int persist(TransferHistory obj) throws SQLException {
+    public int save(TransferHistory obj) throws SQLException {
         int id = transactionDao.save(obj);
         return id;
     }
@@ -33,7 +33,7 @@ public class TransferHistoryService implements IMaintainableService<TransferHist
         return transactionDao.read(key);
     }
 
-    @Override
+   // @Override
     public TransferHistory read(Currency currency, int key) throws SQLException {
         throw new UnsupportedOperationException("Only for currencyRate");
     }

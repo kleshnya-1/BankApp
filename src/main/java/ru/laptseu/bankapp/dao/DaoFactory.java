@@ -15,11 +15,11 @@ public class DaoFactory {
     private static final Map<Class, IMaintainableDAO> factoryMap = new HashMap<>();
 
     static {
-        factoryMap.put(Account.class, new AccountDAOImpl());
-        factoryMap.put(Bank.class, new BankDAOImpl());
+       // factoryMap.put(Account.class, new AccountDAOImpl());
+     //   factoryMap.put(Bank.class, new BankDAOImpl());
         //factoryMap.put(Client.class, new ClientDAOImpl());
         // factoryMap.put(CurrencyRate.class, new CurrencyRateDAOImpl());//new DB
-        factoryMap.put(TransferHistory.class, new TransferHistoryDAOImpl());
+        //factoryMap.put(TransferHistory.class, new TransferHistoryDAOImpl());
     }
 
     public static IMaintainableDAO get(Class clazz) {

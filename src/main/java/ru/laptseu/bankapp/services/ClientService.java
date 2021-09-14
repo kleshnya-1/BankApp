@@ -2,7 +2,7 @@ package ru.laptseu.bankapp.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.laptseu.bankapp.dao.ClientDAOImpl;
+import ru.laptseu.bankapp.dao.ClientRepo;
 import ru.laptseu.bankapp.models.Client;
 import ru.laptseu.bankapp.models.Currency;
 
@@ -15,11 +15,11 @@ public class ClientService implements IMaintainableService<Client> {
     //IMaintainableDAO<Client> clientDao = DaoFactory.get(Client.class);
 
     @Autowired
-    ClientDAOImpl clientDao;
+    ClientRepo clientDao;
 
     @Override
-    public int persist(Client o) throws SQLException {
-        int id = clientDao.save(o);
+    public int save(Client o) throws SQLException {
+        int id = clientDao.save(o).getId();
         return id;
     }
 
@@ -28,7 +28,7 @@ public class ClientService implements IMaintainableService<Client> {
         return clientDao.read(key);
     }
 
-    @Override
+    //@Override
     public Client read(Currency currency, int key) throws SQLException {
         throw new UnsupportedOperationException("Only for currencyRate");
     }

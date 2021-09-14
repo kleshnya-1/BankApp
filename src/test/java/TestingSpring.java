@@ -7,15 +7,12 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.laptseu.bankapp.EntityNotFoundException;
 import ru.laptseu.bankapp.core.Main;
-import ru.laptseu.bankapp.dao.BankDAOImpl;
-import ru.laptseu.bankapp.dao.ClientDAOImpl;
-import ru.laptseu.bankapp.dao.CurrencyRateDAOImpl;
+import ru.laptseu.bankapp.dao.BankRepo;
+import ru.laptseu.bankapp.dao.ClientRepo;
 import ru.laptseu.bankapp.models.*;
 import ru.laptseu.bankapp.services.*;
 
 import java.util.Calendar;
-
-import static com.mongodb.client.model.Filters.eq;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -24,11 +21,11 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TestingSpring {
 
     @Autowired
-    BankDAOImpl bankDAO;
+    BankRepo bankDAO;
     @Autowired
-    ClientDAOImpl clientDAO;
-    @Autowired
-CurrencyRateDAOImpl currencyRateDAO;
+    ClientRepo clientDAO;
+    @Autowired//todo rename
+CurrencyRateService currencyRateDAO;
     @Autowired
     AccountService accountService;
     @Autowired
@@ -54,8 +51,8 @@ CurrencyRateDAOImpl currencyRateDAO;
         bank1.setTransferFeeInPercent(15);
         bank1.setTransferFeeInPercentForNotNaturalPersons(25);
         bank1.setName("testTransfer02 " + Calendar.getInstance().getTime());
-        bankService.persist(bank);
-        bankService.persist(bank1);
+        bankService.save(bank);
+        bankService.save(bank1);
 
         CurrencyRate currencyRateUsd = new CurrencyRate();
         CurrencyRate currencyRateEur = new CurrencyRate();
@@ -94,8 +91,8 @@ CurrencyRateDAOImpl currencyRateDAO;
         client1.setNaturalPerson(true);
         client2.setName("ClientTransactionTest1");
         client2.setNaturalPerson(false);
-        clientService.persist(client1);
-        clientService.persist(client2);
+        clientService.save(client1);
+        clientService.save(client2);
 
         Account account1 = new Account();
         Account account1p2 = new Account();
@@ -110,9 +107,9 @@ CurrencyRateDAOImpl currencyRateDAO;
         account2.setBank(bank1);
         account2.setCurrency(Currency.USD);
 
-        accountService.persist(account1);
-        accountService.persist(account1p2);
-        accountService.persist(account2);
+        accountService.save(account1);
+        accountService.save(account1p2);
+        accountService.save(account2);
         client1.getAccounts().add(account1);
         account1.setClient(client1);
         client1.getAccounts().add(account1p2);
@@ -142,8 +139,8 @@ CurrencyRateDAOImpl currencyRateDAO;
         b2.setName("testBankCRUD2 " + Calendar.getInstance().getTime());
         b1.setTransferFeeInPercentForNotNaturalPersons(70);
         b2.setTransferFeeInPercentForNotNaturalPersons(70);
-        int n1 = bankDAO.save(b1);
-        int n2 = bankDAO.save(b2);
+        int n1 = bankDAO.save(b1).getId();
+        int n2 = bankDAO.save(b2).getId();
         Bank b1Fdb = bankDAO.read(n1);
         Bank b2Fdb = bankDAO.read(n2);
         assertEquals(b1, b1Fdb);
@@ -180,8 +177,8 @@ CurrencyRateDAOImpl currencyRateDAO;
         c2.setName("testClientCRUD2 " + Calendar.getInstance().getTime());
         c1.setNaturalPerson(true);
         c2.setNaturalPerson(false);
-        int n1 = clientDAO.save(c1);
-        int n2 = clientDAO.save(c2);
+        int n1 = clientDAO.save(c1).getId();
+        int n2 = clientDAO.save(c2).getId();
         Client c1Fdb = clientDAO.read(n1);
         Client c2Fdb = clientDAO.read(n2);
         assertEquals(c1, c1Fdb);

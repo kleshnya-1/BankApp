@@ -1,6 +1,8 @@
 package ru.laptseu.bankapp.dao;
 
 import lombok.Getter;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -12,13 +14,10 @@ import ru.laptseu.bankapp.models.Account;
 @Log4j2
 @Getter
 @Repository
-public class AccountDAOImpl implements IMaintainableDAO<Account> {
+@RequiredArgsConstructor
+public class AccountDAOImpl implements IMaintainableDAO<Account>, AccountRepo {
 
-    SessionFactory sessionFactory;
-    @Autowired
-    public AccountDAOImpl(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
-    }
+    @NonNull SessionFactory sessionFactory;
 
 // TODO:  fix to default method in Interface
     @Override

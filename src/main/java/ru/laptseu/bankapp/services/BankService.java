@@ -20,7 +20,7 @@ public class BankService implements IMaintainableService<Bank> {
     }
 
     @Override
-    public int persist(Bank obj) throws SQLException {
+    public int save(Bank obj) throws SQLException {
         int id = bankDao.save(obj);
         return id;
     }
@@ -30,7 +30,7 @@ public class BankService implements IMaintainableService<Bank> {
         return bankDao.read(key);
     }
 
-    @Override
+    //@Override
     public Bank read(Currency currency, int key) throws SQLException {
         throw new UnsupportedOperationException("Only for currencyRate");
     }
