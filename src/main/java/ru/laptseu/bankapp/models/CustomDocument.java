@@ -6,16 +6,19 @@ import lombok.extern.log4j.Log4j2;
 import org.bson.codecs.pojo.annotations.BsonId;
 import org.bson.codecs.pojo.annotations.BsonProperty;
 import org.bson.types.ObjectId;
+import org.springframework.data.mongodb.core.aggregation.DateOperators;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.stereotype.Component;
 
+import java.util.Calendar;
 import java.util.List;
 
 @Log4j2
 @Getter
 @Setter
 @Document(collection = "CurrencyRates")
-public class CustomDocument {
+public class CustomDocument //extends EntityModel
+{
     //BankRateListDocument failed to decode error
     //todo ask. не могу переименовать. его потом спринг бин не находит. я через shift+f6.
     // при том поиск по проекту нигде кроме закоментированного не находит старого имени.
@@ -33,4 +36,18 @@ Decoding errored with: A class could not be found for the discriminator: 'ru.lap
     @BsonProperty("bankId")
     private int bankId;
     private List<CurrencyRate> currencies;
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == this) {
+            return true;
+        }
+
+        if (!(o instanceof CustomDocument)) {
+            return false;
+        }
+
+        CustomDocument c = (CustomDocument) o;
+        return this.getId().equals(c.getId());
+    }
 }

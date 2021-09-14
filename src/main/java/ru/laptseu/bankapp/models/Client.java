@@ -37,8 +37,6 @@ public class Client extends EntityModel {
         return Integer.compare(
                 getId(), c.getId()) == 0 &&
                 name.equals(c.name) &&
-                isNaturalPerson == c.isNaturalPerson
-                // && accounts.size()==c.accounts.size() //&& c.accounts.containsAll(accounts)
-                ;
+                isNaturalPerson == c.isNaturalPerson                ;
     }
 }

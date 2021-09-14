@@ -1,28 +1,25 @@
 package ru.laptseu.bankapp.dao;
 
+import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
-import ru.laptseu.bankapp.models.Account;
-import ru.laptseu.bankapp.models.Bank;
-import ru.laptseu.bankapp.models.TransferHistory;
+import org.springframework.stereotype.Component;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
 @Log4j2
-//@Component
-//todo remove it? spring replaced it
 public class DaoFactory {
-    private static final Map<Class, IMaintainableDAO> factoryMap = new HashMap<>();
+    private Map<Class, IMaintainableDAO> factoryMap = new HashMap<>();
 
-    static {
-       // factoryMap.put(Account.class, new AccountDAOImpl());
-     //   factoryMap.put(Bank.class, new BankDAOImpl());
-        //factoryMap.put(Client.class, new ClientDAOImpl());
-        // factoryMap.put(CurrencyRate.class, new CurrencyRateDAOImpl());//new DB
-        //factoryMap.put(TransferHistory.class, new TransferHistoryDAOImpl());
+    // TODO: 14.09.2021 ask фабрике конструктор не нужен, но а если вот такой? 
+    public DaoFactory(IMaintainableDAO... iMaintainableDAOS) {
+        Arrays.stream(iMaintainableDAOS).forEach(iMaintainableDAO -> {
+            factoryMap.put(iMaintainableDAO.getEntity().getClass(), iMaintainableDAO);
+        });
     }
 
-    public static IMaintainableDAO get(Class clazz) {
+    public IMaintainableDAO get(Class clazz) {
         return factoryMap.get(clazz);
     }
 }

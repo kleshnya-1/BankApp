@@ -5,7 +5,7 @@ import ru.laptseu.bankapp.models.*;
 import java.util.HashMap;
 import java.util.Map;
 
-//remove it?
+// TODO: 14.09.2021 in progress. not for checking 
 public class ServiceFactory {
     private static final Map<Class, IMaintainableService> factoryMap = new HashMap<>();
 

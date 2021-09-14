@@ -1,0 +1,9 @@
+#spring:
+#  application:
+#    name: bankAppOk
+#  datasource:
+#    driver-class-name: org.postgresql.Driver
+#    url: jdbc:postgresql://localhost:5432/database_bank
+#    username: postgres
+#    password: 1
+#

@@ -1,4 +1,4 @@
-package ru.laptseu.bankapp.dao;
+package ru.laptseu.bankapp.dao.repos;
 
 import org.bson.types.ObjectId;
 import org.springframework.context.annotation.Configuration;
@@ -11,8 +11,7 @@ import ru.laptseu.bankapp.models.TransferHistory;
 //it's not in DAO package and it's a configuration, isn't it?
 @Repository
 @EnableMongoRepositories(basePackages = "ru.laptseu.bankapp.config")
-public interface CurrRateRepoMongoExtends extends MongoRepository<CustomDocument, ObjectId> {
+public interface CurrRateDocumentsRepoInMongoExtends extends MongoRepository<CustomDocument, ObjectId> {
     CustomDocument findByBankId(int bankId);
-
-    <S extends CustomDocument> S save(S entity);
+    void deleteByBankId(int i);
 }

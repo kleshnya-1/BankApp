@@ -1,12 +1,11 @@
 package ru.laptseu.bankapp.services;
 
-import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.laptseu.bankapp.dao.AccountRepo;
-import ru.laptseu.bankapp.dao.TransHisRep;
+import ru.laptseu.bankapp.dao.AccountDAOImpl;
+import ru.laptseu.bankapp.dao.TransferHistoryDAOImpl;
 import ru.laptseu.bankapp.models.Account;
 import ru.laptseu.bankapp.models.Currency;
 import ru.laptseu.bankapp.utilities.CommissionCalculator;
@@ -15,54 +14,45 @@ import ru.laptseu.bankapp.utilities.CurrencyConverter;
 import java.sql.SQLException;
 
 @Log4j2
-@Getter
 @Service
+@RequiredArgsConstructor
 public class AccountService implements IMaintainableService<Account> {
-    //todo ask. я правильно пишу аннотации или они должны быть над классом?
-    // дефолтные методы тут появятся со spring boot. до этого нет возможности вызвать ДАО, пока у них разные имена (accountDao, bankDao...)
 
     // TODO: 09.09.2021 replace as constructor
 
-    @Autowired private CommissionCalculator commissionCalculator;
-    @Autowired private  AccountRepo accountRepo;
-    @Autowired private TransHisRep transHisRep;
-    @Autowired private  TransferHistoryService transferHistoryService;
-    @Autowired private CurrencyConverter currencyConverter;
-    @Autowired private CurrencyRateService currencyRateService;
-    @Autowired private   SessionFactory sessionFactory;
-
-
-    //for DAO factory.
-    public AccountService(){
-    }
+    private final CommissionCalculator commissionCalculator;
+    private final AccountDAOImpl accountDAO;
+    private final TransferHistoryDAOImpl transferHistoryDAO;
+    private final TransferHistoryService transferHistoryService;
+    private final CurrencyConverter currencyConverter;
+    private final CurrencyRateService currencyRateService;
+    private final SessionFactory sessionFactory;
 
     @Override
     public int save(Account o) throws SQLException {
-        accountRepo.save(o);
+        // TODO: 14.09.2021 return id
+        accountDAO.save(o);
         // TODO: 09.09.2021 check how it works
         return 1;
     }
 
     @Override
-    public Account read(int key) throws SQLException {
+    public Account read(int key) throws Throwable {
         //todo ask. тут запрашиваем пока по Ид. а надо по номеру аккаунта, а не ИД?
         // мы же из сервисов понятия не имеем, как там у ид дела
-        return accountRepo.readById(key);
+        return accountDAO.read(key);
     }
 
-   // @Override
-    public Account read(Currency currency, int key) throws SQLException {
-        throw new UnsupportedOperationException("Only for currencyRate");
-    }
+
 
     @Override
     public void update(Account account) throws SQLException {
-        accountRepo.save(account);
+        accountDAO.save(account);
     }
 
     @Override
-    public void delete(int key)  {
-        accountRepo.deleteById(key);
+    public void delete(int key) {
+        accountDAO.delete(key);
     }
 
     public int transferAmount(Account sourceAcc, Account targetAcc, double amount) throws SQLException {

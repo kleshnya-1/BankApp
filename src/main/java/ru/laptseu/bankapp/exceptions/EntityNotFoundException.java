@@ -1,4 +1,4 @@
-package ru.laptseu.bankapp;
+package ru.laptseu.bankapp.exceptions;
 
 public class EntityNotFoundException extends RuntimeException {
 

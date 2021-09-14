@@ -6,12 +6,9 @@ import java.sql.SQLException;
 
 public interface IMaintainableService<T> {
 
-
     int save(T obj) throws SQLException;
 
-    T read(int key) throws SQLException;
-
-   // T read(Currency currency, int key) throws SQLException;
+    T read(int key) throws Throwable;
 
     void update(T obj) throws SQLException;
 

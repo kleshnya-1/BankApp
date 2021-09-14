@@ -10,6 +10,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 
 @Configuration
 public class MongoConfig {
+    // TODO: 14.09.2021 url and database to property
     private static final String MONGO_URL = "mongodb+srv://1:1@cluster0.vlexj.mongodb.net/test";
 
     @Bean

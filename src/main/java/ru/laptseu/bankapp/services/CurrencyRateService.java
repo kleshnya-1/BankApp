@@ -1,8 +1,8 @@
 package ru.laptseu.bankapp.services;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.laptseu.bankapp.dao.CurrRateRepoMongoExtends;
+import ru.laptseu.bankapp.dao.MongoBankRateDAOImpl;
 import ru.laptseu.bankapp.models.Bank;
 import ru.laptseu.bankapp.models.Currency;
 import ru.laptseu.bankapp.models.CurrencyRate;
@@ -14,15 +14,15 @@ import java.util.Collections;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 //todo in progress. not for checking
 public class CurrencyRateService //implements IMaintainableService<CurrencyRate>
 {
 
-    //todo  getLastCurrency() ref
-    @Autowired
-    CurrRateRepoMongoExtends currencyRateDao;
+    private final MongoBankRateDAOImpl bankRateListDocumentDAO;
 
-    public int save(CurrencyRate obj) {
+
+    public int save(CurrencyRate obj) throws Throwable {
         Bank savedBank = obj.getBank();
         //todo replace to INteger
         if (obj.getBank() == null & obj.getBankId() == 0)
@@ -37,17 +37,17 @@ public class CurrencyRateService //implements IMaintainableService<CurrencyRate>
         //manual @Transient иначе цикличная зависимость и лишние поля в БСОНе
         obj.setBank(null);
 
-        CustomDocument document = currencyRateDao.findByBankId(obj.getBankId());
-        if (document == null) {
-            document = new CustomDocument();
-            List<CurrencyRate> list = new ArrayList<>();
-            list.add(obj);
-            document.setCurrencies(list);
-            document.setBankId(obj.getBankId());
-        } else {
-            document.getCurrencies().add(obj);
-        }
-        currencyRateDao.save(document);
+       // CustomDocument document = bankRateListDocumentDAO.read(obj.getBankId());
+//        if (document == null) {
+//            document = new CustomDocument();
+//            List<CurrencyRate> list = new ArrayList<>();
+//            list.add(obj);
+//            document.setCurrencies(list);
+//            document.setBankId(obj.getBankId());
+//        } else {
+//            document.getCurrencies().add(obj);
+//        }
+       // bankRateListDocumentDAO.save(document);
 
         //todo ask как-то так. так сущность сохранится без него,
         // но оставнийся объект может нормально функционировать
@@ -56,7 +56,7 @@ public class CurrencyRateService //implements IMaintainableService<CurrencyRate>
         return 1;
     }
 
-    public int save(List<CurrencyRate> list) {
+    public int save(List<CurrencyRate> list) throws Throwable {
         //сохранять можно и сразу, но все равно придется перебрать весь массив и
         // удалить банки. потому так
         //todo stream and return
@@ -68,10 +68,10 @@ public class CurrencyRateService //implements IMaintainableService<CurrencyRate>
 
     //todo fix
 
-    public List<CurrencyRate> read(int key) {
+    public List<CurrencyRate> read(int key) throws Throwable {
         // Bank bankOwner = bankDAO.read(key);
         //todo null exc
-        CustomDocument o3 = currencyRateDao.findByBankId(key);
+        CustomDocument o3 = bankRateListDocumentDAO.read(key);
         //todo check with null
         List<CurrencyRate> rates;
         System.out.println(o3);
@@ -83,7 +83,7 @@ public class CurrencyRateService //implements IMaintainableService<CurrencyRate>
     }
 
 
-    public CurrencyRate read(int key, Currency c) {
+    public CurrencyRate read(int key, Currency c) throws Throwable {
         List<CurrencyRate> reversed = read(key);
         Collections.reverse(reversed);
         return reversed.stream().filter(cr -> cr.getCurrency().equals(c)).findFirst().orElse(null);

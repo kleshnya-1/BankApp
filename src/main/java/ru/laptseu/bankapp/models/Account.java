@@ -13,11 +13,7 @@ import java.util.Calendar;
 @Entity
 @Table(name = "accounts")
 public class Account extends EntityModel {
-    //проблемы. пришлось выключить ленивую инифиализацию.
-    // мои дао закрывают сессию. а эти сущности каким-то образом не
-    // инициализированны к моменту ее закрытия. вручную анпрокси
-    // невозможна из-за закрытой сессии. и аккаунт заходит на тест с ленивой
-    // инициализацией банка и клиента.
+
     @ManyToOne//(fetch = FetchType.LAZY)
     @JoinColumn(name = "bank_id")
     private Bank bank;

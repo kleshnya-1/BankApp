@@ -10,7 +10,8 @@ import lombok.extern.log4j.Log4j2;
 //@Entity тут нет. его в дао банка дао курса подставляет
 //todo in progress.
 //todo ask should it have any ID?
-public class CurrencyRate extends EntityModel {
+public class CurrencyRate extends EntityModel
+{
     //вообще у меня была идея связать банк, его курсы и документ связями в хайбернейт. чтоб
     // один банк->лист курсов<-один документ
     private Bank bank;

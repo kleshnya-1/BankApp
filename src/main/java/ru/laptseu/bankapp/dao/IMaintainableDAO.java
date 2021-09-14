@@ -1,31 +1,27 @@
 package ru.laptseu.bankapp.dao;
 
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import ru.laptseu.bankapp.models.Account;
+import org.springframework.data.repository.CrudRepository;
+import ru.laptseu.bankapp.exceptions.EntityNotFoundException;
 import ru.laptseu.bankapp.models.EntityModel;
-
-import java.sql.SQLException;
 
 public interface IMaintainableDAO<T extends EntityModel> {
 
-   //todo ref
+    T getEntity();
 
-     Object getEntity();
-     Object getRep();
+    CrudRepository getRep();
 
-    //todo DRY it
-     int save(T obj) ;
+    default T save(T obj) {
+        return (T) getRep().save(obj);
+    }
 
-     void update(T obj) ;
-
-     void delete(int key);
-
-     void delete(T key);
-
- T readById(int id);
-
-    default T read(int id){
-        return  readById(id);
+    default T read(int id) throws Throwable {
+        return (T) getRep().findById(id).orElseThrow(()-> new EntityNotFoundException(getEntity().getClass()+" with ID "+ id +" not found"));
+    }
+    //update = save
+    default void update(T obj) {
+        getRep().save(obj);
+    }
+    default void delete(int key) {
+        getRep().deleteById(key);
     }
 }

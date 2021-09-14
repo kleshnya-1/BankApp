@@ -1,42 +1,44 @@
 package ru.laptseu.bankapp.services;
 
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.laptseu.bankapp.dao.DaoFactory;
 import ru.laptseu.bankapp.dao.IMaintainableDAO;
+import ru.laptseu.bankapp.dao.TransferHistoryDAOImpl;
 import ru.laptseu.bankapp.models.Currency;
 import ru.laptseu.bankapp.models.TransferHistory;
 
 import java.sql.SQLException;
 
 @Service
+@RequiredArgsConstructor
 public class TransferHistoryService implements IMaintainableService<TransferHistory> {
-    IMaintainableDAO<TransferHistory> transactionDao = DaoFactory.get(TransferHistory.class);
 
-    public TransferHistory create(String clientSourceName, String clientTargetName,
-                                  String accSourceNum, String accTargetNum, String bankSourceName,
-                                  String bankTargetName, String currency, double amount) throws SQLException {
+    private final TransferHistoryDAOImpl transferHistoryDAO;
 
-        return new TransferHistory(clientSourceName, clientTargetName,
-                accSourceNum, accTargetNum, bankSourceName,
-                bankTargetName, currency, amount);
-
-    }
+//    public TransferHistory create(String clientSourceName, String clientTargetName,
+//                                  String accSourceNum, String accTargetNum, String bankSourceName,
+//                                  String bankTargetName, String currency, double amount) throws SQLException {
+//
+//        return new TransferHistory(clientSourceName, clientTargetName,
+//                accSourceNum, accTargetNum, bankSourceName,
+//                bankTargetName, currency, amount);
+//
+//    }
 
     @Override
     public int save(TransferHistory obj) throws SQLException {
-        int id = transactionDao.save(obj);
+        int id = transferHistoryDAO.save(obj).getId();
         return id;
     }
 
     @Override
-    public TransferHistory read(int key) throws SQLException {
-        return transactionDao.read(key);
+    public TransferHistory read(int key) throws Throwable {
+        return transferHistoryDAO.read(key);
     }
 
-   // @Override
-    public TransferHistory read(Currency currency, int key) throws SQLException {
-        throw new UnsupportedOperationException("Only for currencyRate");
-    }
+
 
     @Override
     public void update(TransferHistory obj) throws SQLException {
@@ -45,6 +47,6 @@ public class TransferHistoryService implements IMaintainableService<TransferHist
 
     @Override
     public void delete(int key) throws SQLException {
-        transactionDao.delete(key);
+        transferHistoryDAO.delete(key);
     }
 }

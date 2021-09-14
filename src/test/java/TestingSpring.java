@@ -5,14 +5,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
-import ru.laptseu.bankapp.EntityNotFoundException;
-import ru.laptseu.bankapp.core.Main;
-import ru.laptseu.bankapp.dao.BankRepo;
-import ru.laptseu.bankapp.dao.ClientRepo;
+import ru.laptseu.bankapp.dao.BankDAOImpl;
+import ru.laptseu.bankapp.dao.ClientDAOImpl;
+import ru.laptseu.bankapp.dao.MongoBankRateDAOImpl;
+import ru.laptseu.bankapp.exceptions.EntityNotFoundException;
+import ru.laptseu.bankapp.Main;
 import ru.laptseu.bankapp.models.*;
 import ru.laptseu.bankapp.services.*;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -21,11 +24,10 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TestingSpring {
 
     @Autowired
-    BankRepo bankDAO;
+    BankDAOImpl bankDAO;
     @Autowired
-    ClientRepo clientDAO;
-    @Autowired//todo rename
-CurrencyRateService currencyRateDAO;
+    ClientDAOImpl clientDAO;
+
     @Autowired
     AccountService accountService;
     @Autowired
@@ -38,6 +40,9 @@ CurrencyRateService currencyRateDAO;
     TransferHistoryService transferHistoryService;
     @Autowired
     MongoTemplate mongoTemplate;
+    @Autowired
+    MongoBankRateDAOImpl mongoBankRateDAO;
+
 
     @SneakyThrows
     @Test
@@ -77,10 +82,10 @@ CurrencyRateService currencyRateDAO;
         bank1.getCurrencyRates().add(currencyRateUsd1);
         bank1.getCurrencyRates().add(currencyRateEur1);
 
-        currencyRateDAO.save(currencyRateUsd);
-        currencyRateDAO.save(currencyRateEur);
-        currencyRateDAO.save(currencyRateUsd1);
-        currencyRateDAO.save(currencyRateEur1);
+        currencyRateService.save(currencyRateUsd);
+        currencyRateService.save(currencyRateEur);
+        currencyRateService.save(currencyRateUsd1);
+        currencyRateService.save(currencyRateEur1);
 
         bankService.update(bank);
         bankService.update(bank1);
@@ -128,6 +133,7 @@ CurrencyRateService currencyRateDAO;
         //  account1fDB.setClient((Client) Hibernate.unproxy(account1fDB.getClient()));
         //account2fDB.setClient((Client) Hibernate.unproxy(account2fDB.getClient()));
         accountService.transferAmount(account1fDB, account2fDB, 50);
+        // TODO: 14.09.2021 something to check. from history
     }
 
     @SneakyThrows
@@ -158,8 +164,8 @@ CurrencyRateService currencyRateDAO;
         assertEquals(b1, b1Fdb);
         assertEquals(b2, b2Fdb);
 
-        bankDAO.delete(b1);
-        bankDAO.delete(b2);
+        bankDAO.delete(b1.getId());
+        bankDAO.delete(b2.getId());
         assertThrows(EntityNotFoundException.class, () -> {
             bankDAO.read(n1);
         });
@@ -196,8 +202,8 @@ CurrencyRateService currencyRateDAO;
         assertEquals(c1, c1Fdb);
         assertEquals(c2, c2Fdb);
 
-        clientDAO.delete(c1);
-        clientDAO.delete(c2);
+        clientDAO.delete(c1.getId());
+        clientDAO.delete(c2.getId());
         assertThrows(EntityNotFoundException.class, () -> {
             clientDAO.read(n1);
         });
@@ -208,7 +214,7 @@ CurrencyRateService currencyRateDAO;
 
     @SneakyThrows
     @Test
-    public void testCurrencyRateCRUD() {
+    public void testCurrencyRateServiceCRUD() {
         Bank b1 = new Bank();
         Bank b2 = new Bank();
         b1.setName("TestBank1 for CurrRate CRUD" + Calendar.getInstance().getTime());
@@ -237,13 +243,86 @@ CurrencyRateService currencyRateDAO;
         b2.getCurrencyRates().add(cr4);
         bankDAO.save(b1);
         bankDAO.save(b2);
-        currencyRateDAO.save(cr1);
-        currencyRateDAO.save(cr2);
-        currencyRateDAO.save(cr3);
-        currencyRateDAO.save(cr4);
+        currencyRateService.save(cr1);
+        currencyRateService.save(cr2);
+        currencyRateService.save(cr3);
+        currencyRateService.save(cr4);
 
-        assertEquals(cr1, currencyRateDAO.read(cr1.getBank().getId(), cr1.getCurrency()));
-        assertEquals(cr4, currencyRateDAO.read(cr4.getBank().getId(), cr4.getCurrency()));
+        CurrencyRate cr1fDB = currencyRateService.read(cr1.getBank().getId(), cr1.getCurrency());
+        CurrencyRate cr4fDB = currencyRateService.read(cr4.getBank().getId(), cr4.getCurrency());
+
+
+        assertEquals(cr1, cr1fDB);
+        assertEquals(cr4, cr4fDB);
+
+    }
+
+    @SneakyThrows
+    @Test
+    public void testDocumentInMongoCRUD() {
+        CustomDocument cd1 =new CustomDocument();
+        CustomDocument cd2 =new CustomDocument();
+        CustomDocument cd3 =new CustomDocument();
+
+        cd1.setBankId(Integer.valueOf("-1000"+Calendar.getInstance().get(Calendar.MILLISECOND)));
+        cd2.setBankId(Integer.valueOf("-2000"+Calendar.getInstance().get(Calendar.MILLISECOND)));
+        cd3.setBankId(Integer.valueOf("-3000"+Calendar.getInstance().get(Calendar.MILLISECOND)));
+        Bank b1 = new Bank();
+        Bank b2 = new Bank();
+        b1.setName("testDocumentInMongoCRUD1 " + Calendar.getInstance().getTime());
+        b2.setName("testDocumentInMongoCRUD2 " + Calendar.getInstance().getTime());
+
+        CurrencyRate cr1 = new CurrencyRate();
+        cr1.setCurrency(Currency.EUR);
+        cr1.setRateToByn(260);
+        cr1.setBank(b1);
+        CurrencyRate cr2 = new CurrencyRate();
+        cr2.setCurrency(Currency.USD);
+        cr2.setRateToByn(360);
+        cr2.setBank(b2);
+        CurrencyRate cr3 = new CurrencyRate();
+        cr3.setCurrency(Currency.USD);
+        cr3.setRateToByn(361);
+        cr3.setBank(b2);
+        CurrencyRate cr4 = new CurrencyRate();
+        cr4.setCurrency(Currency.USD);
+        cr4.setRateToByn(362);
+        cr4.setBank(b2);
+
+        List <CurrencyRate> l1 = new ArrayList<>();
+        List <CurrencyRate> l2 = new ArrayList<>();
+        l1.add(cr1);
+        l1.add(cr2);
+        l1.add(cr3);
+        l2.add(cr4);
+        cd1.setCurrencies(l1);
+        cd2.setCurrencies(l2);
+
+        int s1 = mongoBankRateDAO.save(cd1).getBankId();
+        int s2 = mongoBankRateDAO.save(cd2).getBankId();
+        int s3 = mongoBankRateDAO.save(cd3).getBankId();
+
+        CustomDocument cd1fDB =mongoBankRateDAO.read(s1);
+        CustomDocument cd2fDB =mongoBankRateDAO.read(s2);
+        CustomDocument cd3fDB =mongoBankRateDAO.read(s3);
+
+        assertEquals(cd1, cd1fDB);
+        assertEquals(cd2, cd2fDB);
+        assertEquals(cd3, cd3fDB);
+
+        mongoBankRateDAO.delete(s1);
+        mongoBankRateDAO.delete(s2);
+        mongoBankRateDAO.delete(s3);
+
+        assertThrows(EntityNotFoundException.class, () -> {
+           mongoBankRateDAO.read(s1);;
+        });
+        assertThrows(EntityNotFoundException.class, () -> {
+            mongoBankRateDAO.read(s2);
+        });
+        assertThrows(EntityNotFoundException.class, () -> {
+            mongoBankRateDAO.read(s3);
+        });
 
     }
 
