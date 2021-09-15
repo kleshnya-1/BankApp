@@ -16,5 +16,4 @@ public class TransferHistoryService implements IMaintainableService<TransferHist
     public void update(TransferHistory obj) {
         throw new UnsupportedOperationException();
     }
-
 }

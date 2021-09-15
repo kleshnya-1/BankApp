@@ -53,7 +53,7 @@ public class AccountService implements IMaintainableService<Account> {
 
     @Transactional(rollbackFor = Exception.class)
         //must be overridable. я хотел сделать приватным
-    void saveAccsTroughTransaction(Account sourceAcc, Account targetAcc) {
+    public void saveAccsTroughTransaction(Account sourceAcc, Account targetAcc) {
         dao.save(sourceAcc);
         dao.save(targetAcc);
         log.debug("Transaction from " + sourceAcc.getAccNumber() + " to " + targetAcc.getAccNumber() + " finished");

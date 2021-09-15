@@ -47,18 +47,17 @@ public class CurrencyRateService {
     }
 
     public void save(List<CurrencyRate> list) {
-        if (list.size() == 0) {
+        if (list.isEmpty()) {
             throw new NullPointerException("list is empty");
         }
         //в данном случае мы не можем быть 100% уверены в том, что все курсы в листе будут от одного банка. по этой причине такая реализация.
         int firstBankId = list.get(0).getBankId();
         boolean singleBankList = true;
 
-        while (singleBankList) {
-            for (CurrencyRate cr : list) {
-                if (cr.getBankId() != firstBankId) {
-                    singleBankList = false;
-                }
+        for (CurrencyRate cr : list) {
+            if (cr.getBankId() != firstBankId) {
+                singleBankList = false;
+                break;
             }
         }
 
@@ -68,9 +67,7 @@ public class CurrencyRateService {
             dao.save(bankRateListDocument);
         } else {
             Collections.reverse(list); //для соблюдения LIFO в коллекции сохраняем по одному
-            list.stream().forEach(currencyRate -> {
-                save(currencyRate);
-            });
+            list.forEach(this::save);
         }
     }
 
@@ -86,7 +83,7 @@ public class CurrencyRateService {
 
         if (bankRateListDocument.getCurrencies() != null) {
             rates = bankRateListDocument.getCurrencies();
-            rates.stream().forEach(currencyRate -> currencyRate.setBankId(key));
+            rates.forEach(currencyRate -> currencyRate.setBankId(key));
         }
         return rates;
     }

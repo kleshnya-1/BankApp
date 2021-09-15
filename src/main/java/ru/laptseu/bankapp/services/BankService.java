@@ -7,11 +7,9 @@ import org.springframework.stereotype.Service;
 import ru.laptseu.bankapp.dao.BankDAOImpl;
 import ru.laptseu.bankapp.models.Bank;
 
-@Log4j2
 @Service
 @Getter
 @RequiredArgsConstructor
 public class BankService implements IMaintainableService<Bank> {
     private final BankDAOImpl dao;
-
 }
