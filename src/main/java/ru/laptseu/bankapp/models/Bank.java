@@ -21,10 +21,11 @@ public class Bank extends EntityModel {
     private double transferFeeInPercentForNotNaturalPersons;
     @OneToMany(mappedBy = "bank", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Account> accounts = new HashSet<>();
-
     @OneToMany
     @Transient
     private List<CurrencyRate> currencyRates = new ArrayList<>();
+    // TODO: 15.09.2021 ask у меня есть идея добавить сюда вместе (вместо) поле с документом.
+    //  и сделать связь 1-1. но мне кажется, что это увеличит нашу завязанность на монго.
 
     @Override
     public boolean equals(Object o) {

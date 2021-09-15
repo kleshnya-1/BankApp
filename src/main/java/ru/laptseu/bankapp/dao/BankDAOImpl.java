@@ -4,15 +4,12 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 import ru.laptseu.bankapp.dao.repos.BankRepo;
 import ru.laptseu.bankapp.models.Bank;
 
 @Log4j2
 @Getter
-@Setter
 @Repository
 @RequiredArgsConstructor
 public class BankDAOImpl implements IMaintainableDAO<Bank> {

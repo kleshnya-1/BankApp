@@ -1,17 +1,13 @@
 package ru.laptseu.bankapp;
 
-import lombok.SneakyThrows;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import java.sql.DriverManager;
-
 @SpringBootApplication
+@Log4j2
 public class Main {
     public static void main(String[] args) {
-      //  DriverManager.getConnection("jdbc:h2:mem:");
-
-
         SpringApplication.run(Main.class, args);
     }
 }

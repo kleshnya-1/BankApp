@@ -1,16 +1,12 @@
 package ru.laptseu.bankapp.services;
 
-import ru.laptseu.bankapp.models.Currency;
-
-import java.sql.SQLException;
-
 public interface IMaintainableService<T> {
 
-    int save(T obj) throws SQLException;
+    int save(T obj);
 
     T read(int key) throws Throwable;
 
-    void update(T obj) throws SQLException;
+    void update(T obj);
 
-    void delete(int key) throws SQLException;
+    void delete(int key);
 }

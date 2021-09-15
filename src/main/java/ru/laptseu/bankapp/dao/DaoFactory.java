@@ -9,14 +9,11 @@ import java.util.Map;
 @Log4j2
 @RequiredArgsConstructor
 public class DaoFactory {
-
     private final AccountDAOImpl accountDAO;
     private final BankDAOImpl bankDAO;
     private final ClientDAOImpl clientDAO;
     private final CurrRateDocumentsDAO currRateDocumentsDAO;
     private final TransferHistoryDAOImpl transferHistoryDAO;
-
-
     private Map<Class, IMaintainableDAO> factoryMap = new HashMap<>();
 
     private void fillMap(){
@@ -34,7 +31,7 @@ public class DaoFactory {
 
 /*
     //все по ТЗ. возвращает всегда нужный экземпляр и удобно добавлять новые. жаль, что не работает
-private final AccountDAOImpl accountDAO;
+    private final AccountDAOImpl accountDAO;
     private final BankDAOImpl bankDAO;
     private final ClientDAOImpl clientDAO;
     private final MongoBankRateDAOImpl currencyRateDAO;

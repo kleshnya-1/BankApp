@@ -9,5 +9,4 @@ public enum Currency {
     Currency(String label) {
         this.label = label;
     }
-
 }

@@ -2,7 +2,6 @@ package ru.laptseu.bankapp.utilities;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.laptseu.bankapp.services.CurrencyRateService;
 
@@ -10,7 +9,6 @@ import ru.laptseu.bankapp.services.CurrencyRateService;
 @Component
 @RequiredArgsConstructor
 public class CurrencyConverter {
-    private final    CurrencyRateService currencyRateService;
 
     public double convert(Double sourceRate, Double targetRate, Double amount) throws RuntimeException {
         if (sourceRate == null || targetRate == null || amount == null) {

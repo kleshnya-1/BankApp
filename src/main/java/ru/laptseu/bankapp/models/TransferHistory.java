@@ -15,9 +15,6 @@ import java.util.GregorianCalendar;
 @Entity
 @Table(name = "transfer_history")
 public class TransferHistory extends EntityModel {
-    //todo make custom hibernate converter
-    //private final DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-
     private Calendar date;
     private String clientSourceName;
     private String clientTargetName;
@@ -45,6 +42,7 @@ public class TransferHistory extends EntityModel {
         this.amount = amount;
     }
 
+    // TODO: 15.09.2021 ask. нужна была для консоли. в версии ВЕБ я бы ее не делал. вопрос: ее сейас удалить для чистоты?
     @Override
     public String toString() {
         return "from acc " + clientSourceName + " with № " + accSourceNum + " in bank " + bankSourceName + "\n" +

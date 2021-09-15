@@ -1,14 +1,9 @@
 package ru.laptseu.bankapp.services;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.laptseu.bankapp.dao.ClientDAOImpl;
-import ru.laptseu.bankapp.dao.repos.ClientRepo;
 import ru.laptseu.bankapp.models.Client;
-import ru.laptseu.bankapp.models.Currency;
-
-import java.sql.SQLException;
 
 //todo in progress
 @Service
@@ -19,7 +14,7 @@ public class ClientService implements IMaintainableService<Client> {
         private final ClientDAOImpl clientDao;
 
     @Override
-    public int save(Client o) throws SQLException {
+    public int save(Client o) {
         int id = clientDao.save(o).getId();
         return id;
     }
@@ -31,12 +26,12 @@ public class ClientService implements IMaintainableService<Client> {
 
 
     @Override
-    public void update(Client client) throws SQLException {
+    public void update(Client client) {
         clientDao.update(client);
     }
 
     @Override
-    public void delete(int key) throws SQLException {
+    public void delete(int key) {
         clientDao.delete(key);
     }
 }

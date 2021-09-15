@@ -7,7 +7,7 @@ import ru.laptseu.bankapp.models.BankRateListDocument;
 import ru.laptseu.bankapp.models.EntitySuperModel;
 
 public interface IMaintainableDAO<T extends EntitySuperModel> {
-
+    // TODO: 15.09.2021 exception process
     T getEntity();
 
     CrudRepository getRep();
@@ -21,17 +21,18 @@ public interface IMaintainableDAO<T extends EntitySuperModel> {
     }
 
     //так как читаем из монго мы не по ИД сущности, а по ИД банка
-    default BankRateListDocument readByBankId(int id)   {
+    default BankRateListDocument readByBankId(int id) throws EntityNotFoundException   {
         CurrRateDocumentsRepoInMongoExtends mr = (CurrRateDocumentsRepoInMongoExtends) getRep();
         BankRateListDocument cd = mr.findByBankId(id);
+        // TODO: 15.09.2021 surround with try catch for wrong interface calling
         if (cd == null) {
             throw new EntityNotFoundException(getEntity().getClass() + " with ID " + id + " not found");
         }
         return cd;
     }
 
-    //update = save
     default void update(T obj) {
+        //update = save
         getRep().save(obj);
     }
     default void delete(int key) {

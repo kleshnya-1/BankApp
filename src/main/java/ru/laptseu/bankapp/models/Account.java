@@ -13,15 +13,32 @@ import java.util.Calendar;
 @Entity
 @Table(name = "accounts")
 public class Account extends EntityModel {
-
-    @ManyToOne//(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "bank_id")
     private Bank bank;
-    @ManyToOne//(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "client_id")
     private Client client;
     @Enumerated(EnumType.STRING)
     private Currency currency;
     private double amount;
     private String accNumber = Calendar.getInstance().getTime() + "";
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == this) {
+            return true;
+        }
+        if (!(o instanceof Account)) {
+            return false;
+        }
+        Account c = (Account) o;
+        return Integer.compare(
+                getId(), c.getId()) == 0 &&
+                bank.equals(c.bank) &&
+                client.equals(c.client) &&
+                currency.equals(c.currency) &&
+                accNumber.equals(c.accNumber) &&
+                amount == c.amount;
+    }
 }

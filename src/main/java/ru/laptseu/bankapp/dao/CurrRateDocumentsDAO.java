@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Repository;
 import ru.laptseu.bankapp.dao.repos.CurrRateDocumentsRepoInMongoExtends;
-import ru.laptseu.bankapp.models.*;
+import ru.laptseu.bankapp.models.BankRateListDocument;
 
 //todo проблема с имплиментированием. метод read(int) дальше описание
 @Log4j2

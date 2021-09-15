@@ -6,16 +6,14 @@ import ru.laptseu.bankapp.models.Account;
 import ru.laptseu.bankapp.models.Bank;
 import ru.laptseu.bankapp.models.Client;
 
-import java.sql.SQLException;
-
 @Component
 @Log4j2
 public class CommissionCalculator {
 
     public double calculate(Account targetAcc, double amount) {
         // TODO: 13.09.2021 check for null 
-        double commission = 0;
-        double commissionPercent = 0;
+        double commission;
+        double commissionPercent;
         Bank targetBank = targetAcc.getBank();
         Client targetClient = targetAcc.getClient();
         if (targetClient.isNaturalPerson()) {
@@ -24,7 +22,7 @@ public class CommissionCalculator {
             commissionPercent = targetBank.getTransferFeeInPercentForNotNaturalPersons();
         }
         commission = commissionPercent * amount / 100;
-        log.info("Commission calculated " + commission + targetAcc.getCurrency() + " with percent " + commissionPercent + "% and amount + " + amount);
+        log.debug("Commission calculated " + commission + targetAcc.getCurrency() + " with percent " + commissionPercent + "% and amount + " + amount);
         return commission;
     }
 }

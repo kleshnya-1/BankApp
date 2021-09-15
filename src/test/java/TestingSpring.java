@@ -5,16 +5,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
+import ru.laptseu.bankapp.Main;
 import ru.laptseu.bankapp.dao.BankDAOImpl;
 import ru.laptseu.bankapp.dao.ClientDAOImpl;
 import ru.laptseu.bankapp.dao.CurrRateDocumentsDAO;
 import ru.laptseu.bankapp.exceptions.EntityNotFoundException;
-import ru.laptseu.bankapp.Main;
 import ru.laptseu.bankapp.models.*;
 import ru.laptseu.bankapp.services.*;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -47,6 +48,7 @@ public class TestingSpring {
     @SneakyThrows
     @Test
     public void testTransfer() {
+        Calendar startTime = new GregorianCalendar();
         Bank bank = new Bank();
         Bank bank1 = new Bank();
         bank.setName("testTransfer01 " + Calendar.getInstance().getTime());
@@ -129,13 +131,34 @@ public class TestingSpring {
 
         Account account1fDB = accountService.read(account1.getId());
         Account account2fDB = accountService.read(account2.getId());
-        //как это было с ленивой инициализацией
-        //  account1fDB.setClient((Client) Hibernate.unproxy(account1fDB.getClient()));
-        //account2fDB.setClient((Client) Hibernate.unproxy(account2fDB.getClient()));
-        accountService.transferAmount(account1fDB, account2fDB, 50);
-        // TODO: 14.09.2021 something to check. from history
+
+        double transferAmount = 50;
+       int historyNum= accountService.transferAmount(account1fDB, account2fDB, transferAmount);
+        Account account1fDB2 = accountService.read(account1.getId());
+        Account account2fDB2 = accountService.read(account2.getId());
+        assertEquals(account1fDB.getAmount(), 962.5);
+        assertEquals(account2fDB.getAmount(), 2025);
+        assertEquals(account1fDB, account1fDB2);
+        assertEquals(account2fDB, account2fDB2);
+        assertEquals(account1fDB2.getAmount(), 962.5);
+        assertEquals(account2fDB2.getAmount(), 2025);
+        // TODO: 15.09.2021 bad case test (mockito)
+
+        TransferHistory thFdb = transferHistoryService.read(historyNum);
+
+        assertTrue(thFdb.getDate().before(Calendar.getInstance()));
+        assertTrue(thFdb.getDate().after(startTime));
+        assertEquals(thFdb.getClientSourceName(), account1fDB.getClient().getName());
+        assertEquals(thFdb.getClientTargetName(), account2fDB.getClient().getName());
+        assertEquals(thFdb.getAccSourceNum(), account1fDB.getAccNumber());
+        assertEquals(thFdb.getAccTargetNum(), account2fDB.getAccNumber());
+        assertEquals(thFdb.getBankSourceName(), account1fDB.getBank().getName());
+        assertEquals(thFdb.getBankTargetName(), account2fDB.getBank().getName());
+        assertEquals(thFdb.getCurrency(), account1fDB.getCurrency().toString());
+        assertEquals(thFdb.getAmount(), transferAmount);
     }
 
+    // TODO: 15.09.2021 history persisting test
     @SneakyThrows
     @Test
     public void testBankCRUD() {
@@ -260,13 +283,13 @@ public class TestingSpring {
     @SneakyThrows
     @Test
     public void testDocumentInMongoCRUD() {
-        BankRateListDocument cd1 =new BankRateListDocument();
-        BankRateListDocument cd2 =new BankRateListDocument();
-        BankRateListDocument cd3 =new BankRateListDocument();
+        BankRateListDocument cd1 = new BankRateListDocument();
+        BankRateListDocument cd2 = new BankRateListDocument();
+        BankRateListDocument cd3 = new BankRateListDocument();
 
-        cd1.setBankId(Integer.valueOf("-1000"+Calendar.getInstance().get(Calendar.MILLISECOND)));
-        cd2.setBankId(Integer.valueOf("-2000"+Calendar.getInstance().get(Calendar.MILLISECOND)));
-        cd3.setBankId(Integer.valueOf("-3000"+Calendar.getInstance().get(Calendar.MILLISECOND)));
+        cd1.setBankId(Integer.valueOf("-1000" + Calendar.getInstance().get(Calendar.MILLISECOND)));
+        cd2.setBankId(Integer.valueOf("-2000" + Calendar.getInstance().get(Calendar.MILLISECOND)));
+        cd3.setBankId(Integer.valueOf("-3000" + Calendar.getInstance().get(Calendar.MILLISECOND)));
         Bank b1 = new Bank();
         Bank b2 = new Bank();
         b1.setName("testDocumentInMongoCRUD1 " + Calendar.getInstance().getTime());
@@ -289,8 +312,8 @@ public class TestingSpring {
         cr4.setRateToByn(362);
         cr4.setBank(b2);
 
-        List <CurrencyRate> l1 = new ArrayList<>();
-        List <CurrencyRate> l2 = new ArrayList<>();
+        List<CurrencyRate> l1 = new ArrayList<>();
+        List<CurrencyRate> l2 = new ArrayList<>();
         l1.add(cr1);
         l1.add(cr2);
         l1.add(cr3);
@@ -302,9 +325,9 @@ public class TestingSpring {
         int s2 = mongoBankRateDAO.save(cd2).getBankId();
         int s3 = mongoBankRateDAO.save(cd3).getBankId();
 
-        BankRateListDocument cd1fDB =mongoBankRateDAO.readByBankId(s1);
-        BankRateListDocument cd2fDB =mongoBankRateDAO.readByBankId(s2);
-        BankRateListDocument cd3fDB =mongoBankRateDAO.readByBankId(s3);
+        BankRateListDocument cd1fDB = mongoBankRateDAO.readByBankId(s1);
+        BankRateListDocument cd2fDB = mongoBankRateDAO.readByBankId(s2);
+        BankRateListDocument cd3fDB = mongoBankRateDAO.readByBankId(s3);
 
         assertEquals(cd1, cd1fDB);
         assertEquals(cd2, cd2fDB);
@@ -315,7 +338,8 @@ public class TestingSpring {
         mongoBankRateDAO.delete(s3);
 
         assertThrows(EntityNotFoundException.class, () -> {
-           mongoBankRateDAO.read(s1);;
+            mongoBankRateDAO.read(s1);
+            ;
         });
         assertThrows(EntityNotFoundException.class, () -> {
             mongoBankRateDAO.read(s2);
