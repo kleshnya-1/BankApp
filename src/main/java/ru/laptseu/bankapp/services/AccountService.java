@@ -1,12 +1,11 @@
 package ru.laptseu.bankapp.services;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.laptseu.bankapp.dao.AccountDAOImpl;
-import ru.laptseu.bankapp.dao.TransferHistoryDAOImpl;
 import ru.laptseu.bankapp.models.Account;
 import ru.laptseu.bankapp.models.CurrencyRate;
 import ru.laptseu.bankapp.models.TransferHistory;
@@ -17,46 +16,22 @@ import java.sql.SQLException;
 
 @Log4j2
 @Service
+@Getter
 @RequiredArgsConstructor
 public class AccountService implements IMaintainableService<Account> {
-
-    // TODO: 09.09.2021 replace as constructor
-
+    private final AccountDAOImpl dao;
     private final CommissionCalculator commissionCalculator;
-    private final AccountDAOImpl accountDAO;
-
     private final TransferHistoryService transferHistoryService;
     private final CurrencyConverter currencyConverter;
     private final CurrencyRateService currencyRateService;
 
-
-    @Override
-    public int save(Account o) {
-        // TODO: 09.09.2021 check how it works
-        return accountDAO.save(o).getId();
-    }
-
-    @Override
-    public Account read(int key) throws Throwable {
-        //todo ask. тут запрашиваем пока по Ид. а надо по номеру аккаунта, а не ИД?
-        // мы же из сервисов понятия не имеем, как там у ид дела
-        return accountDAO.read(key);
-    }
-
-    @Override
-    public void update(Account account) {
-        accountDAO.save(account);
-    }
-
-    @Override
-    public void delete(int key) {
-        accountDAO.delete(key);
-    }
+    //todo ask. тут вопрос по read() запрашиваем пока по Ид. а надо по номеру аккаунта же, а не ИД?
+    // мы из сервисов понятия не имеем, как там у ид дела
 
     public int transferAmount(Account sourceAcc, Account targetAcc, double amount) throws SQLException {
         double commission = 0;
         double totalAmount = amount;
-              CurrencyRate sourceRate = currencyRateService.read(sourceAcc.getBank().getId(), sourceAcc.getCurrency());
+        CurrencyRate sourceRate = currencyRateService.read(sourceAcc.getBank().getId(), sourceAcc.getCurrency());
         CurrencyRate targetRate = currencyRateService.read(targetAcc.getBank().getId(), targetAcc.getCurrency());
 
         if (!sourceAcc.getBank().equals(targetAcc.getBank())) {
@@ -73,15 +48,15 @@ public class AccountService implements IMaintainableService<Account> {
                 targetAcc.getAccNumber(), sourceAcc.getBank().getName(), targetAcc.getBank().getName(),
                 sourceAcc.getCurrency().toString(), amount);
         // TODO: 15.09.2021 ask. сервис взаимодействует с сервисом и в чужое ДАО не лезет. все так?
-        return transferHistoryService.save(saved);
+        return transferHistoryService.save(saved).getId();
     }
 
     @Transactional(rollbackFor = Exception.class)
         //must be overridable. я хотел сделать приватным
     void saveAccsTroughTransaction(Account sourceAcc, Account targetAcc) {
-        accountDAO.save(sourceAcc);
-        accountDAO.save(targetAcc);
-        log.debug("Transaction from "+sourceAcc.getAccNumber()+" to "+targetAcc.getAccNumber()+" finished" );
+        dao.save(sourceAcc);
+        dao.save(targetAcc);
+        log.debug("Transaction from " + sourceAcc.getAccNumber() + " to " + targetAcc.getAccNumber() + " finished");
     }
 }
 

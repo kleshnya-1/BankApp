@@ -4,10 +4,11 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
 
-import javax.persistence.*;
-import java.util.ArrayList;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Log4j2
@@ -21,11 +22,6 @@ public class Bank extends EntityModel {
     private double transferFeeInPercentForNotNaturalPersons;
     @OneToMany(mappedBy = "bank", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Account> accounts = new HashSet<>();
-    @OneToMany
-    @Transient
-    private List<CurrencyRate> currencyRates = new ArrayList<>();
-    // TODO: 15.09.2021 ask у меня есть идея добавить сюда вместе (вместо) поле с документом.
-    //  и сделать связь 1-1. но мне кажется, что это увеличит нашу завязанность на монго.
 
     @Override
     public boolean equals(Object o) {

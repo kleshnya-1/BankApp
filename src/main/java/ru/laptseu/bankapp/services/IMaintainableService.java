@@ -1,12 +1,28 @@
 package ru.laptseu.bankapp.services;
 
-public interface IMaintainableService<T> {
+import ru.laptseu.bankapp.dao.IMaintainableDAO;
+import ru.laptseu.bankapp.models.EntityModel;
 
-    int save(T obj);
+public interface IMaintainableService<T extends EntityModel> {
 
-    T read(int key) throws Throwable;
+    IMaintainableDAO getDao();
 
-    void update(T obj);
+    default T save(T obj) {
 
-    void delete(int key);
+        return (T) getDao().save(obj);
+    }
+
+    default T read(int id) throws Throwable {
+        return (T) getDao().read(id);
+    }
+
+    default void update(T obj) {
+        //update = save
+        getDao().save(obj);
+    }
+
+    default void delete(int key) {
+        getDao().delete(key);
+    }
+
 }

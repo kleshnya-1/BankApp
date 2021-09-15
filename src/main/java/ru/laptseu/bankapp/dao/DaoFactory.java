@@ -14,9 +14,9 @@ public class DaoFactory {
     private final ClientDAOImpl clientDAO;
     private final CurrRateDocumentsDAO currRateDocumentsDAO;
     private final TransferHistoryDAOImpl transferHistoryDAO;
-    private Map<Class, IMaintainableDAO> factoryMap = new HashMap<>();
+    private final Map<Class, IMaintainableDAO> factoryMap = new HashMap<>();
 
-    private void fillMap(){
+    private void fillMap() {
         factoryMap.put(accountDAO.getClass(), accountDAO);
         factoryMap.put(bankDAO.getClass(), bankDAO);
         factoryMap.put(clientDAO.getClass(), clientDAO);
@@ -28,25 +28,4 @@ public class DaoFactory {
         fillMap();
         return factoryMap.get(clazz);
     }
-
-/*
-    //все по ТЗ. возвращает всегда нужный экземпляр и удобно добавлять новые. жаль, что не работает
-    private final AccountDAOImpl accountDAO;
-    private final BankDAOImpl bankDAO;
-    private final ClientDAOImpl clientDAO;
-    private final MongoBankRateDAOImpl currencyRateDAO;
-    private final TransferHistoryDAOImpl transferHistoryDAO;
-
-  @Bean
-    DaoFactory daoFactory() {
-        return new DaoFactory(accountDAO, bankDAO, clientDAO, currencyRateDAO, transferHistoryDAO);
-    }
-     //а это конструктор
-     public DaoFactory(IMaintainableDAO... iMaintainableDAOS) {
-        Arrays.stream(iMaintainableDAOS).forEach(iMaintainableDAO -> {
-            factoryMap.put(iMaintainableDAO.getEntity().getClass(), iMaintainableDAO);
-        });
-    }
-*/
-
 }

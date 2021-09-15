@@ -11,7 +11,6 @@ import ru.laptseu.bankapp.models.Client;
 public class CommissionCalculator {
 
     public double calculate(Account targetAcc, double amount) {
-        // TODO: 13.09.2021 check for null 
         double commission;
         double commissionPercent;
         Bank targetBank = targetAcc.getBank();

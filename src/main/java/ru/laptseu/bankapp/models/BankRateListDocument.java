@@ -14,7 +14,7 @@ import java.util.List;
 @Getter
 @Setter
 @Document(collection = "Documents")
-public class BankRateListDocument extends EntitySuperModel{
+public class BankRateListDocument extends EntitySuperModel {
     @BsonProperty("_id")
     @BsonId
     private ObjectId id;

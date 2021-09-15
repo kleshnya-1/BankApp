@@ -22,7 +22,6 @@ public class Client extends EntityModel {
     @Type(type = "yes_no")
     private boolean isNaturalPerson;
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
-    // без инициализации, в пустой сет, интерфейс сохранять не хочет
     private Set<Account> accounts = new HashSet<>();
 
     @Override
@@ -37,6 +36,6 @@ public class Client extends EntityModel {
         return Integer.compare(
                 getId(), c.getId()) == 0 &&
                 name.equals(c.name) &&
-                isNaturalPerson == c.isNaturalPerson                ;
+                isNaturalPerson == c.isNaturalPerson;
     }
 }

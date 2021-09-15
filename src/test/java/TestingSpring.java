@@ -1,19 +1,8 @@
-import com.mongodb.client.MongoClient;
-import com.mongodb.client.MongoClients;
-import com.mongodb.client.MongoCollection;
 import lombok.SneakyThrows;
 import org.junit.Test;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.laptseu.bankapp.Main;
 import ru.laptseu.bankapp.dao.BankDAOImpl;
@@ -23,7 +12,6 @@ import ru.laptseu.bankapp.exceptions.EntityNotFoundException;
 import ru.laptseu.bankapp.models.*;
 import ru.laptseu.bankapp.services.*;
 
-import javax.sql.DataSource;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -51,46 +39,7 @@ public class TestingSpring {
     @Autowired
     TransferHistoryService transferHistoryService;
     @Autowired
-    MongoTemplate mongoTemplate;
-    @Autowired
     CurrRateDocumentsDAO mongoBankRateDAO;
-//
-//    @Configuration
-//    static class ContextConfiguration {
-//        @Bean
-//        public DataSource dataSourceTest() {
-//            DriverManagerDataSource dataSource = new DriverManagerDataSource();
-//            dataSource.setDriverClassName("org.h2.Driver");
-//            dataSource.setUrl("jdbc:h2:mem:testdb");
-//            dataSource.setUsername("sa");
-//            dataSource.setPassword("password");
-//            return dataSource;
-//        }
-////            @Bean(name = "dataSource")
-////    @ConfigurationProperties(prefix="datasource-test")
-////    public DataSource dataSource(){
-////        return DataSourceBuilder
-////                .create()
-////                .build();
-////    }
-//        private static final String MONGO_URL = "mongodb+srv://1:1@cluster0.vlexj.mongodb.net/test";
-//
-//        @Bean
-//        public MongoClient mongo() {
-//            return MongoClients.create(MONGO_URL);
-//        }
-//
-//        @Bean
-//        public MongoCollection currencyRatesMongoCollection()  {
-//            return mongoTemplate().getCollection("test");
-//        }
-//
-//        @Bean
-//        @Primary
-//        public MongoTemplate mongoTemplate() {
-//            return new MongoTemplate(mongo(), "test");
-//        }
-//    }
 
     @SneakyThrows
     @Test
@@ -112,24 +61,19 @@ public class TestingSpring {
         CurrencyRate currencyRateEur = new CurrencyRate();
         currencyRateUsd.setCurrency(Currency.USD);
         currencyRateUsd.setRateToByn(50);
-        currencyRateUsd.setBank(bank);
+        currencyRateUsd.setBankId(bank.getId());
         currencyRateEur.setCurrency(Currency.EUR);
         currencyRateEur.setRateToByn(100);
-        currencyRateEur.setBank(bank);
+        currencyRateEur.setBankId(bank.getId());
 
         CurrencyRate currencyRateUsd1 = new CurrencyRate();
         CurrencyRate currencyRateEur1 = new CurrencyRate();
         currencyRateUsd1.setCurrency(Currency.USD);
         currencyRateUsd1.setRateToByn(200);
-        currencyRateUsd1.setBank(bank1);
+        currencyRateUsd1.setBankId(bank1.getId());
         currencyRateEur1.setCurrency(Currency.EUR);
         currencyRateEur1.setRateToByn(250);
-        currencyRateEur1.setBank(bank1);
-
-        bank.getCurrencyRates().add(currencyRateUsd);
-        bank.getCurrencyRates().add(currencyRateEur);
-        bank1.getCurrencyRates().add(currencyRateUsd1);
-        bank1.getCurrencyRates().add(currencyRateEur1);
+        currencyRateEur1.setBankId(bank1.getId());
 
         currencyRateService.save(currencyRateUsd);
         currencyRateService.save(currencyRateEur);
@@ -180,7 +124,7 @@ public class TestingSpring {
         Account account2fDB = accountService.read(account2.getId());
 
         double transferAmount = 50;
-       int historyNum= accountService.transferAmount(account1fDB, account2fDB, transferAmount);
+        int historyNum = accountService.transferAmount(account1fDB, account2fDB, transferAmount);
         Account account1fDB2 = accountService.read(account1.getId());
         Account account2fDB2 = accountService.read(account2.getId());
         assertEquals(account1fDB.getAmount(), 962.5);
@@ -190,9 +134,9 @@ public class TestingSpring {
         assertEquals(account1fDB2.getAmount(), 962.5);
         assertEquals(account2fDB2.getAmount(), 2025);
         // TODO: 15.09.2021 bad case test (mockito)
+        // TODO: 15.09.2021 test for array
 
         TransferHistory thFdb = transferHistoryService.read(historyNum);
-
         assertTrue(thFdb.getDate().before(Calendar.getInstance()));
         assertTrue(thFdb.getDate().after(startTime));
         assertEquals(thFdb.getClientSourceName(), account1fDB.getClient().getName());
@@ -205,7 +149,6 @@ public class TestingSpring {
         assertEquals(thFdb.getAmount(), transferAmount);
     }
 
-    // TODO: 15.09.2021 history persisting test
     @SneakyThrows
     @Test
     public void testBankCRUD() {
@@ -228,7 +171,6 @@ public class TestingSpring {
         bankDAO.update(b2);
         assertNotEquals(b1, b1Fdb);
         assertNotEquals(b2, b2Fdb);
-
         b1Fdb = bankDAO.read(n1);
         b2Fdb = bankDAO.read(n2);
         assertEquals(b1, b1Fdb);
@@ -266,7 +208,6 @@ public class TestingSpring {
         clientDAO.update(c2);
         assertNotEquals(c1, c1Fdb);
         assertNotEquals(c2, c2Fdb);
-
         c1Fdb = clientDAO.read(n1);
         c2Fdb = clientDAO.read(n2);
         assertEquals(c1, c1Fdb);
@@ -289,42 +230,38 @@ public class TestingSpring {
         Bank b2 = new Bank();
         b1.setName("TestBank1 for CurrRate CRUD" + Calendar.getInstance().getTime());
         b2.setName("TestBank2 for CurrRate CRUD" + Calendar.getInstance().getTime());
+        bankDAO.save(b1);
+        bankDAO.save(b2);
 
         CurrencyRate cr1 = new CurrencyRate();
         cr1.setCurrency(Currency.EUR);
         cr1.setRateToByn(260);
-        cr1.setBank(b1);
+        cr1.setBankId(b1.getId());
+        CurrencyRate cr01 = new CurrencyRate();
+        cr01.setCurrency(Currency.EUR);
+        cr01.setRateToByn(261);
+        cr01.setBankId(b1.getId());
         CurrencyRate cr2 = new CurrencyRate();
         cr2.setCurrency(Currency.USD);
         cr2.setRateToByn(360);
-        cr2.setBank(b2);
+        cr2.setBankId(b2.getId());
         CurrencyRate cr3 = new CurrencyRate();
         cr3.setCurrency(Currency.USD);
         cr3.setRateToByn(361);
-        cr3.setBank(b2);
+        cr3.setBankId(b2.getId());
         CurrencyRate cr4 = new CurrencyRate();
         cr4.setCurrency(Currency.USD);
         cr4.setRateToByn(362);
-        cr4.setBank(b2);
-
-        b1.getCurrencyRates().add(cr1);
-        b2.getCurrencyRates().add(cr2);
-        b2.getCurrencyRates().add(cr3);
-        b2.getCurrencyRates().add(cr4);
-        bankDAO.save(b1);
-        bankDAO.save(b2);
+        cr4.setBankId(b2.getId());
         currencyRateService.save(cr1);
         currencyRateService.save(cr2);
         currencyRateService.save(cr3);
         currencyRateService.save(cr4);
 
-        CurrencyRate cr1fDB = currencyRateService.read(cr1.getBank().getId(), cr1.getCurrency());
-        CurrencyRate cr4fDB = currencyRateService.read(cr4.getBank().getId(), cr4.getCurrency());
-
-
+        CurrencyRate cr1fDB = currencyRateService.read(cr01.getBankId(), cr01.getCurrency());
+        CurrencyRate cr4fDB = currencyRateService.read(cr4.getBankId(), cr4.getCurrency());
         assertEquals(cr1, cr1fDB);
         assertEquals(cr4, cr4fDB);
-
     }
 
     @SneakyThrows
@@ -334,9 +271,9 @@ public class TestingSpring {
         BankRateListDocument cd2 = new BankRateListDocument();
         BankRateListDocument cd3 = new BankRateListDocument();
 
-        cd1.setBankId(Integer.valueOf("-1000" + Calendar.getInstance().get(Calendar.MILLISECOND)));
-        cd2.setBankId(Integer.valueOf("-2000" + Calendar.getInstance().get(Calendar.MILLISECOND)));
-        cd3.setBankId(Integer.valueOf("-3000" + Calendar.getInstance().get(Calendar.MILLISECOND)));
+        cd1.setBankId(Integer.valueOf("1" + Calendar.getInstance().get(Calendar.MILLISECOND)));
+        cd2.setBankId(Integer.valueOf("2" + Calendar.getInstance().get(Calendar.MILLISECOND)));
+        cd3.setBankId(Integer.valueOf("3" + Calendar.getInstance().get(Calendar.MILLISECOND)));
         Bank b1 = new Bank();
         Bank b2 = new Bank();
         b1.setName("testDocumentInMongoCRUD1 " + Calendar.getInstance().getTime());
@@ -345,19 +282,19 @@ public class TestingSpring {
         CurrencyRate cr1 = new CurrencyRate();
         cr1.setCurrency(Currency.EUR);
         cr1.setRateToByn(260);
-        cr1.setBank(b1);
+        cr1.setBankId(b1.getId());
         CurrencyRate cr2 = new CurrencyRate();
         cr2.setCurrency(Currency.USD);
         cr2.setRateToByn(360);
-        cr2.setBank(b2);
+        cr2.setBankId(b2.getId());
         CurrencyRate cr3 = new CurrencyRate();
         cr3.setCurrency(Currency.USD);
         cr3.setRateToByn(361);
-        cr3.setBank(b2);
+        cr3.setBankId(b2.getId());
         CurrencyRate cr4 = new CurrencyRate();
         cr4.setCurrency(Currency.USD);
         cr4.setRateToByn(362);
-        cr4.setBank(b2);
+        cr4.setBankId(b2.getId());
 
         List<CurrencyRate> l1 = new ArrayList<>();
         List<CurrencyRate> l2 = new ArrayList<>();
@@ -386,7 +323,6 @@ public class TestingSpring {
 
         assertThrows(EntityNotFoundException.class, () -> {
             mongoBankRateDAO.read(s1);
-            ;
         });
         assertThrows(EntityNotFoundException.class, () -> {
             mongoBankRateDAO.read(s2);

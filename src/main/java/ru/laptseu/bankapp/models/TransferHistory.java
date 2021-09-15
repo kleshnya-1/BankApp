@@ -42,7 +42,7 @@ public class TransferHistory extends EntityModel {
         this.amount = amount;
     }
 
-    // TODO: 15.09.2021 ask. нужна была для консоли. в версии ВЕБ я бы ее не делал. вопрос: ее сейас удалить для чистоты?
+    //нужна была для консоли. в версии ВЕБ я бы ее не делал. вопрос: ее сейас удалить для чистоты?
     @Override
     public String toString() {
         return "from acc " + clientSourceName + " with № " + accSourceNum + " in bank " + bankSourceName + "\n" +

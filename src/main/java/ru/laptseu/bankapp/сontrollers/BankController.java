@@ -9,6 +9,7 @@ import ru.laptseu.bankapp.services.BankService;
 import ru.laptseu.bankapp.services.CurrencyRateService;
 
 import java.util.List;
+
 @Log4j2
 @RestController
 @RequestMapping("/banks")
@@ -31,7 +32,7 @@ public class BankController {
         try {
             return bankService.read(id);
         } catch (Throwable e) {
-           log.error(e);
+            log.error(e);
             // TODO: 15.09.2021 что-то сделать с шибкой
             return null;
         }

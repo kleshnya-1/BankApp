@@ -2,27 +2,12 @@ spring:
   application:
     name: bankAppOk
 
-
-
-  datasource:
-    username: postgres
-    password: 1
-    driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/database_bank2
-#
-#  datasource:
-#    driver-class-name: org.h2.Driver
-#    url: jdbc:h2:mem:testdb
-#    username: sa
-#    password: password
-
   jpa:
     hibernate:
       ddl-auto: create
 
-
   data:
     mongodb:
       uri: mongodb+srv://1:1@cluster0.vlexj.mongodb.net/test
-      database: BankDocumentsForTest
+      database: BankDocuments
 
