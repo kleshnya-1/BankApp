@@ -2,9 +2,13 @@ package ru.laptseu.bankapp.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
+
+import javax.sql.DataSource;
 
 @Configuration
 @RequiredArgsConstructor
@@ -13,16 +17,20 @@ import org.springframework.core.env.Environment;
 public class Config {
 
    private final Environment environment;
-// TODO: 15.09.2021 этот бин я использую для доступа к постгрес.на данный момент тут H2 БД, но ПГ тоже работает, если бин создать
-   // @Bean(name = "dataSource")
-//    public DataSource dataSource() {
-//        DriverManagerDataSource dataSource = new DriverManagerDataSource();
-//        dataSource.setDriverClassName(environment.getRequiredProperty("jdbc.driverClassName"));
-//        dataSource.setUrl(environment.getRequiredProperty("jdbc.url"));
-//        dataSource.setUsername(environment.getRequiredProperty("jdbc.username"));
-//        dataSource.setPassword(environment.getRequiredProperty("jdbc.password"));
-//        return dataSource;
-//    }
+
+
+
+
+// этот бин я использую для доступа к постгрес.
+    @Bean(name = "dataSource")
+    public DataSource dataSource() {
+        DriverManagerDataSource dataSource = new DriverManagerDataSource();
+        dataSource.setDriverClassName(environment.getRequiredProperty("jdbc.driverClassName"));
+        dataSource.setUrl(environment.getRequiredProperty("jdbc.url"));
+        dataSource.setUsername(environment.getRequiredProperty("jdbc.username"));
+        dataSource.setPassword(environment.getRequiredProperty("jdbc.password"));
+        return dataSource;
+    }
 
 /*
 вот это не работает. при том апликэйшн он хорошо видит. даже сам создал базу после указания. в properties есть подробнее

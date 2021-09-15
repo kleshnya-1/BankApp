@@ -12,8 +12,6 @@ import ru.laptseu.bankapp.models.Client;
 @Repository
 @RequiredArgsConstructor
 public class ClientDAOImpl implements IMaintainableDAO<Client> {
-
     private final ClientRepo rep;
     private final Client entity = new Client();
-
 }

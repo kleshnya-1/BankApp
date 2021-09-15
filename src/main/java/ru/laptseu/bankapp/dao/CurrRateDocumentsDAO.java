@@ -12,9 +12,7 @@ import ru.laptseu.bankapp.models.BankRateListDocument;
 @Getter
 @Repository
 @RequiredArgsConstructor
-public class CurrRateDocumentsDAO implements  IMaintainableDAO<BankRateListDocument>
-{
+public class CurrRateDocumentsDAO implements  IMaintainableDAO<BankRateListDocument>{
     private final CurrRateDocumentsRepoInMongoExtends rep;
     private final BankRateListDocument entity = new BankRateListDocument();
-
 }

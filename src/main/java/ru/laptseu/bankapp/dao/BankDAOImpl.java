@@ -13,7 +13,6 @@ import ru.laptseu.bankapp.models.Bank;
 @Repository
 @RequiredArgsConstructor
 public class BankDAOImpl implements IMaintainableDAO<Bank> {
-
     private final BankRepo rep;
     private final Bank entity = new Bank();
 }

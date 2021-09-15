@@ -1,9 +1,19 @@
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoCollection;
 import lombok.SneakyThrows;
 import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.laptseu.bankapp.Main;
 import ru.laptseu.bankapp.dao.BankDAOImpl;
@@ -13,6 +23,7 @@ import ru.laptseu.bankapp.exceptions.EntityNotFoundException;
 import ru.laptseu.bankapp.models.*;
 import ru.laptseu.bankapp.services.*;
 
+import javax.sql.DataSource;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -43,7 +54,43 @@ public class TestingSpring {
     MongoTemplate mongoTemplate;
     @Autowired
     CurrRateDocumentsDAO mongoBankRateDAO;
-
+//
+//    @Configuration
+//    static class ContextConfiguration {
+//        @Bean
+//        public DataSource dataSourceTest() {
+//            DriverManagerDataSource dataSource = new DriverManagerDataSource();
+//            dataSource.setDriverClassName("org.h2.Driver");
+//            dataSource.setUrl("jdbc:h2:mem:testdb");
+//            dataSource.setUsername("sa");
+//            dataSource.setPassword("password");
+//            return dataSource;
+//        }
+////            @Bean(name = "dataSource")
+////    @ConfigurationProperties(prefix="datasource-test")
+////    public DataSource dataSource(){
+////        return DataSourceBuilder
+////                .create()
+////                .build();
+////    }
+//        private static final String MONGO_URL = "mongodb+srv://1:1@cluster0.vlexj.mongodb.net/test";
+//
+//        @Bean
+//        public MongoClient mongo() {
+//            return MongoClients.create(MONGO_URL);
+//        }
+//
+//        @Bean
+//        public MongoCollection currencyRatesMongoCollection()  {
+//            return mongoTemplate().getCollection("test");
+//        }
+//
+//        @Bean
+//        @Primary
+//        public MongoTemplate mongoTemplate() {
+//            return new MongoTemplate(mongo(), "test");
+//        }
+//    }
 
     @SneakyThrows
     @Test

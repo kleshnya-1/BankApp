@@ -2,20 +2,27 @@ spring:
   application:
     name: bankAppOk
 
-#вот это вот не работает
-#    datasource:
-#    username: postgres
-#    password: 1
-#    driver-class-name: org.postgresql.Driver
-#    url: jdbc:postgresql://localhost:5432/database_bank2
 
-#  а вот это работает. при том вместе с бином, который тянет это же из db.properties
-#  причины глубоко не искал. если надо, буду ковырять эту часть до(/а)льше
+
+  datasource:
+    username: postgres
+    password: 1
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/database_bank2
+#
+#  datasource:
+#    driver-class-name: org.h2.Driver
+#    url: jdbc:h2:mem:testdb
+#    username: sa
+#    password: password
+
   jpa:
     hibernate:
       ddl-auto: create
-#      и монго работает
+
+
   data:
     mongodb:
-      uri:  mongodb+srv://1:1@cluster0.vlexj.mongodb.net/test
-      database: BankDocuments
+      uri: mongodb+srv://1:1@cluster0.vlexj.mongodb.net/test
+      database: BankDocumentsForTest
+
