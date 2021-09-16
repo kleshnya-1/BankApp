@@ -1,7 +1,7 @@
-import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.laptseu.bankapp.Main;
@@ -21,16 +21,24 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = Main.class)
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
 public class TestingSpring {
-    private final BankDAOImpl bankDAO;
-    private final ClientDAOImpl clientDAO;
-    private final AccountService accountService;
-    private final BankService bankService;
-    private final ClientService clientService;
-    private final CurrencyRateService currencyRateService;
-    private final TransferHistoryService transferHistoryService;
-    private final CurrRateDocumentsDAO mongoBankRateDAO;
+    @Autowired
+    private BankDAOImpl bankDAO;
+    @Autowired
+    private ClientDAOImpl clientDAO;
+    @Autowired
+    private AccountService accountService;
+    @Autowired
+    private BankService bankService;
+    @Autowired
+    private ClientService clientService;
+    @Autowired
+    private CurrencyRateService currencyRateService;
+    @Autowired
+    private TransferHistoryService transferHistoryService;
+    @Autowired
+    private CurrRateDocumentsDAO mongoBankRateDAO;
 
     @SneakyThrows
     @Test
