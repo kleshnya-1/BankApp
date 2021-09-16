@@ -8,7 +8,6 @@ public interface IMaintainableService<T extends EntityModel> {
     IMaintainableDAO getDao();
 
     default T save(T obj) {
-
         return (T) getDao().save(obj);
     }
 
@@ -24,5 +23,4 @@ public interface IMaintainableService<T extends EntityModel> {
     default void delete(int key) {
         getDao().delete(key);
     }
-
 }

@@ -1,7 +1,7 @@
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.laptseu.bankapp.Main;
@@ -21,25 +21,16 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = Main.class)
+@RequiredArgsConstructor
 public class TestingSpring {
-
-    @Autowired
-    BankDAOImpl bankDAO;
-    @Autowired
-    ClientDAOImpl clientDAO;
-
-    @Autowired
-    AccountService accountService;
-    @Autowired
-    BankService bankService;
-    @Autowired
-    ClientService clientService;
-    @Autowired
-    CurrencyRateService currencyRateService;
-    @Autowired
-    TransferHistoryService transferHistoryService;
-    @Autowired
-    CurrRateDocumentsDAO mongoBankRateDAO;
+    private final BankDAOImpl bankDAO;
+    private final ClientDAOImpl clientDAO;
+    private final AccountService accountService;
+    private final BankService bankService;
+    private final ClientService clientService;
+    private final CurrencyRateService currencyRateService;
+    private final TransferHistoryService transferHistoryService;
+    private final CurrRateDocumentsDAO mongoBankRateDAO;
 
     @SneakyThrows
     @Test
@@ -270,7 +261,6 @@ public class TestingSpring {
         BankRateListDocument cd1 = new BankRateListDocument();
         BankRateListDocument cd2 = new BankRateListDocument();
         BankRateListDocument cd3 = new BankRateListDocument();
-
         cd1.setBankId(Integer.valueOf("1" + Calendar.getInstance().get(Calendar.MILLISECOND)));
         cd2.setBankId(Integer.valueOf("2" + Calendar.getInstance().get(Calendar.MILLISECOND)));
         cd3.setBankId(Integer.valueOf("3" + Calendar.getInstance().get(Calendar.MILLISECOND)));
@@ -304,7 +294,6 @@ public class TestingSpring {
         l2.add(cr4);
         cd1.setCurrencies(l1);
         cd2.setCurrencies(l2);
-
         int s1 = mongoBankRateDAO.save(cd1).getBankId();
         int s2 = mongoBankRateDAO.save(cd2).getBankId();
         int s3 = mongoBankRateDAO.save(cd3).getBankId();
@@ -312,11 +301,9 @@ public class TestingSpring {
         BankRateListDocument cd1fDB = mongoBankRateDAO.readByBankId(s1);
         BankRateListDocument cd2fDB = mongoBankRateDAO.readByBankId(s2);
         BankRateListDocument cd3fDB = mongoBankRateDAO.readByBankId(s3);
-
         assertEquals(cd1, cd1fDB);
         assertEquals(cd2, cd2fDB);
         assertEquals(cd3, cd3fDB);
-
         mongoBankRateDAO.delete(s1);
         mongoBankRateDAO.delete(s2);
         mongoBankRateDAO.delete(s3);
@@ -330,7 +317,5 @@ public class TestingSpring {
         assertThrows(EntityNotFoundException.class, () -> {
             mongoBankRateDAO.read(s3);
         });
-
     }
-
 }
