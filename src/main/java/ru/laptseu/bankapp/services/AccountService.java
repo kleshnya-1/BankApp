@@ -25,9 +25,8 @@ public class AccountService implements IMaintainableService<Account> {
     private final CurrencyConverter currencyConverter;
     private final CurrencyRateService currencyRateService;
 
-    //todo ask. тут вопрос по read() запрашиваем пока по Ид. а надо по номеру аккаунта же, а не ИД?
-    // мы из сервисов понятия не имеем, как там у ид дела
-
+    //todo ask. тут вопрос по read() запрашиваем пока по Ид. а надо по ИД или уже по номеру аккаунта?
+    // мы из сервисов понятия же не имеем, какой ИД у базы там.
     public int transferAmount(Account sourceAcc, Account targetAcc, double amount) throws SQLException {
         double commission = 0;
         double totalAmount = amount;

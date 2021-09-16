@@ -11,6 +11,7 @@ import ru.laptseu.bankapp.models.CurrencyRate;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 @Log4j2
@@ -53,26 +54,23 @@ public class CurrencyRateService {
         //в данном случае мы не можем быть 100% уверены в том, что все курсы в листе будут от одного банка. по этой причине такая реализация.
         int firstBankId = list.get(0).getBankId();
         boolean singleBankList = true;
-
         for (CurrencyRate cr : list) {
             if (cr.getBankId() != firstBankId) {
                 singleBankList = false;
                 break;
             }
         }
-
         if (singleBankList) {
             BankRateListDocument bankRateListDocument = findOrCreateDocument(firstBankId);
             bankRateListDocument.getCurrencies().addAll(list);
             dao.save(bankRateListDocument);
         } else {
-            Collections.reverse(list); //для соблюдения LIFO в коллекции сохраняем по одному
             list.forEach(this::save);
         }
     }
 
     public List<CurrencyRate> read(int key) {
-        List<CurrencyRate> rates = new ArrayList<>();
+        List<CurrencyRate> rates = null;
         BankRateListDocument bankRateListDocument;
         try {
             bankRateListDocument = dao.readByBankId(key);
@@ -80,18 +78,21 @@ public class CurrencyRateService {
             log.debug(e);
             return rates;
         }
-
-        if (bankRateListDocument.getCurrencies() != null) {
-            rates = bankRateListDocument.getCurrencies();
-            rates.forEach(currencyRate -> currencyRate.setBankId(key));
-        }
+        rates = bankRateListDocument.getCurrencies();
         return rates;
     }
 
     public CurrencyRate read(int key, Currency c) {
-        List<CurrencyRate> reversed = read(key);
-        Collections.reverse(reversed);
-        return reversed.stream().filter(cr -> cr.getCurrency().equals(c)).findFirst().orElse(null);
+        List<CurrencyRate> singleBankCurrencies = read(key);
+        if (singleBankCurrencies == null) {
+            return null;
+        }
+        singleBankCurrencies.stream().filter(cr -> cr.getCurrency().equals(c));
+        if (singleBankCurrencies.isEmpty()) {
+            return null;
+            // TODO: 16.09.2021 test bad cases
+        }
+        singleBankCurrencies.sort(Comparator.comparing(CurrencyRate::getDate));
+        return singleBankCurrencies.get(singleBankCurrencies.size() - 1);
     }
-
 }

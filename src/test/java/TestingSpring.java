@@ -126,12 +126,12 @@ public class TestingSpring {
         int historyNum = accountService.transferAmount(account1fDB, account2fDB, transferAmount);
         Account account1fDB2 = accountService.read(account1.getId());
         Account account2fDB2 = accountService.read(account2.getId());
-        assertEquals(account1fDB.getAmount(), 962.5);
-        assertEquals(account2fDB.getAmount(), 2025);
+        assertEquals(account1fDB.getAmount(), 967.5);
+        assertEquals(account2fDB.getAmount(), 2020);
         assertEquals(account1fDB, account1fDB2);
         assertEquals(account2fDB, account2fDB2);
-        assertEquals(account1fDB2.getAmount(), 962.5);
-        assertEquals(account2fDB2.getAmount(), 2025);
+        assertEquals(account1fDB2.getAmount(), 967.5);
+        assertEquals(account2fDB2.getAmount(), 2020);
         // TODO: 15.09.2021 bad case test (mockito)
         // TODO: 15.09.2021 test for array
 
