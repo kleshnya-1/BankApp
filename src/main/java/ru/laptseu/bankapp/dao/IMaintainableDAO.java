@@ -20,8 +20,13 @@ public interface IMaintainableDAO<T extends EntitySuperModel> {
     }
 
     //так как читаем из монго мы не по ИД сущности, а по ИД банка
-    default BankRateListDocument readByBankId(int id) throws EntityNotFoundException {
-        CurrRateDocumentsRepoInMongoExtends mr = (CurrRateDocumentsRepoInMongoExtends) getRep();
+    default BankRateListDocument readByBankId(int id) throws RuntimeException {
+        CurrRateDocumentsRepoInMongoExtends mr;
+        try {
+            mr = (CurrRateDocumentsRepoInMongoExtends) getRep();
+        } catch (ClassCastException e) {
+            throw new ClassCastException("Illegal method readByBankId() for " + getRep().toString() + " repository");
+        }
         BankRateListDocument cd = mr.findByBankId(id);
         if (cd == null) {
             throw new EntityNotFoundException(getEntity().getClass() + " with ID " + id + " not found");
