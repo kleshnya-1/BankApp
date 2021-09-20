@@ -5,5 +5,5 @@ import org.springframework.stereotype.Repository;
 import ru.laptseu.bankapp.models.TransferHistory;
 
 @Repository
-public interface TransHisRep extends CrudRepository<TransferHistory, Integer> {
+public interface TransferHistoryRepository extends CrudRepository<TransferHistory, Integer> {
 }

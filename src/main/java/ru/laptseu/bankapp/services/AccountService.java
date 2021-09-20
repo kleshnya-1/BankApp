@@ -43,9 +43,7 @@ public class AccountService implements IMaintainableService<Account> {
         targetAcc.setAmount(targetAcc.getAmount() + totalAmount);
         saveAccsTroughTransaction(sourceAcc, targetAcc);
         // TODO: 15.09.2021 check bad cases
-        TransferHistory saved = new TransferHistory(sourceAcc.getClient().getName(), targetAcc.getClient().getName(), sourceAcc.getAccNumber(),
-                targetAcc.getAccNumber(), sourceAcc.getBank().getName(), targetAcc.getBank().getName(),
-                sourceAcc.getCurrency().toString(), amount);
+        TransferHistory saved = transferHistoryService.createHistory(sourceAcc, targetAcc, amount);
         // TODO: 15.09.2021 ask. сервис взаимодействует с сервисом и в чужое ДАО не лезет. все так?
         return transferHistoryService.save(saved).getId();
     }
