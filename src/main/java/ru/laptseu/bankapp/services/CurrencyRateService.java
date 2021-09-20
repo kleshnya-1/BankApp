@@ -28,13 +28,13 @@ public class CurrencyRateService {
         dao.save(bankRateListDocument);
     }
 
-    private BankRateListDocument findOrCreateDocument(int bankId) {
+    private BankRateListDocument findOrCreateDocument(int bankId) throws Throwable {
         //todo ask. мне кажется, есть смысл заменить на Integer.
         if (bankId == 0)
             throw new NullPointerException("Can't save CurrencyRate without bank ID");
         BankRateListDocument document = null;
         try {
-            document = dao.readByBankId(bankId);
+            document = dao.read(bankId);
         } catch (EntityNotFoundException e) {
             log.debug("bankRateListDocument with ID " + bankId + " not found");
         }
@@ -69,11 +69,11 @@ public class CurrencyRateService {
         }
     }
 
-    public List<CurrencyRate> read(int key) {
+    public List<CurrencyRate> read(int key) throws Throwable {
         List<CurrencyRate> rates = null;
         BankRateListDocument bankRateListDocument;
         try {
-            bankRateListDocument = dao.readByBankId(key);
+            bankRateListDocument = dao.read(key);
         } catch (EntityNotFoundException e) {
             log.debug(e);
             return rates;

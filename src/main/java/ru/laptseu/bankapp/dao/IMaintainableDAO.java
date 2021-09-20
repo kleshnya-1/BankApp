@@ -1,5 +1,6 @@
 package ru.laptseu.bankapp.dao;
 
+import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.repository.CrudRepository;
 import ru.laptseu.bankapp.dao.repos.CurrRateDocumentsRepoInMongoExtends;
 import ru.laptseu.bankapp.exceptions.EntityNotFoundException;
@@ -16,22 +17,14 @@ public interface IMaintainableDAO<T extends EntitySuperModel> {
     }
 
     default T read(int id) throws Throwable {
-        return (T) getRep().findById(id).orElseThrow(() -> new EntityNotFoundException(getEntity().getClass() + " with ID " + id + " not found"));
-    }
-
-    //так как читаем из монго мы не по ИД сущности, а по ИД банка
-    default BankRateListDocument readByBankId(int id) throws RuntimeException {
-        CurrRateDocumentsRepoInMongoExtends mr;
         try {
-            mr = (CurrRateDocumentsRepoInMongoExtends) getRep();
-        } catch (ClassCastException e) {
-            throw new ClassCastException("Illegal method readByBankId() for " + getRep().toString() + " repository");
+            return (T) getRep().findById(id).orElseThrow(() -> new EntityNotFoundException(getEntity().getClass() + " with ID " + id + " not found"));
+        } catch (Exception e){
+            // TODO: 20.09.2021 exception type
+            CurrRateDocumentsRepoInMongoExtends mr = (CurrRateDocumentsRepoInMongoExtends) getRep();
+            BankRateListDocument cd = mr.findByBankId(id);
+            return (T) cd;
         }
-        BankRateListDocument cd = mr.findByBankId(id);
-        if (cd == null) {
-            throw new EntityNotFoundException(getEntity().getClass() + " with ID " + id + " not found");
-        }
-        return cd;
     }
 
     default void update(T obj) {

@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import ru.laptseu.bankapp.models.BankRateListDocument;
 
 @Repository
-@EnableMongoRepositories(basePackages = "ru.laptseu.bankapp.config")
+@EnableMongoRepositories//(basePackages = "ru.laptseu.bankapp.config")
 public interface CurrRateDocumentsRepoInMongoExtends extends MongoRepository<BankRateListDocument, ObjectId> {
     //не костыль, просто на ид сущностей не интересует. мы ищем по ИД банка
     BankRateListDocument findByBankId(int bankId);
