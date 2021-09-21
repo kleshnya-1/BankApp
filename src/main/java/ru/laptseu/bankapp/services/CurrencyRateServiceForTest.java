@@ -3,9 +3,7 @@ package ru.laptseu.bankapp.services;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
-import ru.laptseu.bankapp.dao.repos.CurrRateDocumentsRepoInMongoExtends;
 import ru.laptseu.bankapp.models.BankRateListDocument;
 import ru.laptseu.bankapp.models.Currency;
 
@@ -30,7 +28,6 @@ public class CurrencyRateServiceForTest {
 
     public BankRateListDocument read(int key)  {
           return dao.stream().filter(i -> i.getBankId()==key).sorted(Comparator.comparing(o->o.getDate())).findFirst().orElse(null);
-
     }
 
     public Double read(int key, Currency c) {

@@ -1,9 +1,7 @@
 package ru.laptseu.bankapp.services;
 
 import org.springframework.data.repository.CrudRepository;
-import ru.laptseu.bankapp.dao.IMaintainableDAO;
 import ru.laptseu.bankapp.models.Model;
-import ru.laptseu.bankapp.models.ModelWithIntegerId;
 
 public interface IMaintainableService<T extends Model> {
 

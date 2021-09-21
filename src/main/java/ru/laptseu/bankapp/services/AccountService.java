@@ -6,7 +6,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.laptseu.bankapp.dao.repos.AccountRepo;
+import ru.laptseu.bankapp.repository.AccountRepo;
 import ru.laptseu.bankapp.models.Account;
 import ru.laptseu.bankapp.utilities.CommissionCalculator;
 import ru.laptseu.bankapp.utilities.CurrencyConverter;

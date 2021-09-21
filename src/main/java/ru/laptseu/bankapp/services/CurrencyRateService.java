@@ -4,15 +4,11 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
-import ru.laptseu.bankapp.dao.repos.CurrRateDocumentsRepoInMongoExtends;
-import ru.laptseu.bankapp.exceptions.EntityNotFoundException;
+import ru.laptseu.bankapp.repository.CurrRateDocumentsRepoInMongoExtends;
 import ru.laptseu.bankapp.models.BankRateListDocument;
 import ru.laptseu.bankapp.models.Currency;
 
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Comparator;
-import java.util.List;
 
 @Log4j2
 @Service

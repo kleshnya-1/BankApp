@@ -5,12 +5,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.laptseu.bankapp.Main;
-import ru.laptseu.bankapp.exceptions.EntityNotFoundException;
-import ru.laptseu.bankapp.models.*;
 import ru.laptseu.bankapp.models.Currency;
+import ru.laptseu.bankapp.models.*;
 import ru.laptseu.bankapp.models.testModels.AccountForTest;
 import ru.laptseu.bankapp.models.testModels.BankForTest;
-import ru.laptseu.bankapp.models.testModels.BankRateListDocumentForTest;
 import ru.laptseu.bankapp.models.testModels.ClientForTest;
 import ru.laptseu.bankapp.services.*;
 
@@ -35,7 +33,6 @@ public class TestingSpring {
     @Autowired
     private TransferHistoryService transferHistoryService;
 
-
     @SneakyThrows
     @Test
     public void testTransfer() {
@@ -55,14 +52,14 @@ public class TestingSpring {
         BankRateListDocument bankRateListDocument = new BankRateListDocument();
         bankRateListDocument.setBankId(bank.getId());
         Map<Currency, Double> currencyDoubleMap = new HashMap<>();
-        currencyDoubleMap.put(Currency.USD,50d);
-        currencyDoubleMap.put(Currency.EUR,100d);
+        currencyDoubleMap.put(Currency.USD, 50d);
+        currencyDoubleMap.put(Currency.EUR, 100d);
         bankRateListDocument.setCurrenciesAndRates(currencyDoubleMap);
         currencyRateService.save(bankRateListDocument);
 
         Map<Currency, Double> currencyDoubleMap1 = new HashMap<>();
-        currencyDoubleMap1.put(Currency.USD,200d);
-        currencyDoubleMap1.put(Currency.EUR,250d);
+        currencyDoubleMap1.put(Currency.USD, 200d);
+        currencyDoubleMap1.put(Currency.EUR, 250d);
         BankRateListDocument bankRateListDocument1 = new BankRateListDocument();
         bankRateListDocument1.setBankId(bank1.getId());
         bankRateListDocument1.setCurrenciesAndRates(currencyDoubleMap1);
@@ -108,13 +105,13 @@ public class TestingSpring {
         clientService.update(client1);
         clientService.update(client2);
 
-        AccountForTest account1fDB = (AccountForTest)accountService.read(account1.getId());
-        AccountForTest account2fDB = (AccountForTest)accountService.read(account2.getId());
+        AccountForTest account1fDB = (AccountForTest) accountService.read(account1.getId());
+        AccountForTest account2fDB = (AccountForTest) accountService.read(account2.getId());
 
         double transferAmount = 50;
         int historyNum = accountService.transferAmount(account1fDB, account2fDB, transferAmount);
-        AccountForTest account1fDB2 = (AccountForTest)accountService.read(account1.getId());
-        AccountForTest account2fDB2 = (AccountForTest)accountService.read(account2.getId());
+        AccountForTest account1fDB2 = (AccountForTest) accountService.read(account1.getId());
+        AccountForTest account2fDB2 = (AccountForTest) accountService.read(account2.getId());
         assertEquals(account1fDB.getAmount(), 962.5);
         assertEquals(account2fDB.getAmount(), 2025);
         assertEquals(account1fDB, account1fDB2);
@@ -225,7 +222,7 @@ public class TestingSpring {
         assertEquals(261d, cr1fDB);
 
         BankRateListDocument bankRateListDocument2 = new BankRateListDocument();
-        bankRateListDocument2.setBankId(bankRateListDocument1.getBankId()+1);
+        bankRateListDocument2.setBankId(bankRateListDocument1.getBankId() + 1);
         Map<Currency, Double> map2 = new HashMap<>();
         map2.put(Currency.USD, 360d);
         map2.put(Currency.USD, 361d);
@@ -248,13 +245,13 @@ public class TestingSpring {
         cd2.setBankId(Integer.valueOf("20" + Calendar.getInstance().get(Calendar.MILLISECOND)));
         cd3.setBankId(Integer.valueOf("30" + Calendar.getInstance().get(Calendar.MILLISECOND)));
         Map<Currency, Double> currencyDoubleMap = new HashMap<>();
-        currencyDoubleMap.put(Currency.EUR,260d);
+        currencyDoubleMap.put(Currency.EUR, 260d);
         cd1.setCurrenciesAndRates(currencyDoubleMap);
 
         Map<Currency, Double> currencyDoubleMap1 = new HashMap<>();
-        currencyDoubleMap1.put(Currency.USD,360d);
-        currencyDoubleMap1.put(Currency.USD,361d);
-        currencyDoubleMap1.put(Currency.USD,362d);
+        currencyDoubleMap1.put(Currency.USD, 360d);
+        currencyDoubleMap1.put(Currency.USD, 361d);
+        currencyDoubleMap1.put(Currency.USD, 362d);
         cd2.setCurrenciesAndRates(currencyDoubleMap1);
 
         int s1 = currencyRateService.save(cd1).getBankId();
@@ -278,4 +275,17 @@ public class TestingSpring {
         assertNull(cd2fDBaD);
         assertNull(cd3fDBaD);
     }
+
+    //in progress
+//    @SneakyThrows
+//    @Test
+//    public void testFactory() {
+//
+//        ApplicationContext applicationContext = new AnnotationConfigApplicationContext(Main.class);
+//        AccountRepo oo = applicationContext.getBean(AccountRepo.class);
+//        String[] a = applicationContext.getBeanDefinitionNames();
+//        CrudRepository ccc = daoFactory.get(Account.class);
+//        assertEquals(ccc, AccountRepo.class);
+//        assertEquals(daoFactory.get(Account.class), AccountRepo.class);
+//    }
 }

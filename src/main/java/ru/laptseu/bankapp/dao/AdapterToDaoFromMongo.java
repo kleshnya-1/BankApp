@@ -6,27 +6,33 @@ import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
-import ru.laptseu.bankapp.dao.repos.CurrRateDocumentsRepoInMongoExtends;
 import ru.laptseu.bankapp.models.BankRateListDocument;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
-public class AdapterToDaoFromMongo extends AbstractDao<BankRateListDocument> implements CurrRateDocumentsRepoInMongoExtends {
+public class AdapterToDaoFromMongo extends AbstractDao<BankRateListDocument> implements MongoRepository<BankRateListDocument, ObjectId> {
     //adapter demo class. no usages here, just for practice. right realisation?
-    private final CurrRateDocumentsRepoInMongoExtends dao;
+    private final MongoRepository dao;
 
     @Override
     public BankRateListDocument create(BankRateListDocument obj) {
-        return dao.save(obj);
+        return (BankRateListDocument) dao.save(obj);
     }
 
     @Override
     public BankRateListDocument read(int id) {
-        return dao.findFirstByBankIdOrderByDateDesc(id);
+        //todo test it
+        BankRateListDocument bankRateListDocumentForExample = new BankRateListDocument();
+        bankRateListDocumentForExample.setBankId(id);
+        Example<BankRateListDocument> example = Example.of(bankRateListDocumentForExample);
+        List<BankRateListDocument> bankRateListDocumentList = dao.findAll(example);
+        return bankRateListDocumentList.stream().sorted(Comparator.comparing(o -> o.getDate())).findFirst().get();
     }
 
     @Override
@@ -39,7 +45,7 @@ public class AdapterToDaoFromMongo extends AbstractDao<BankRateListDocument> imp
         dao.delete(obj);
     }
 
-    //from here and below unsupported
+    //below from here are unsupported
     @Override
     public void deleteAllById(Iterable<? extends ObjectId> objectIds) {
         throw new UnsupportedOperationException();
@@ -52,11 +58,6 @@ public class AdapterToDaoFromMongo extends AbstractDao<BankRateListDocument> imp
 
     @Override
     public void deleteAll() {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public BankRateListDocument findFirstByBankIdOrderByDateDesc(int bankId) {
         throw new UnsupportedOperationException();
     }
 
