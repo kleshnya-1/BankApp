@@ -6,4 +6,5 @@ import ru.laptseu.bankapp.models.Account;
 
 @Repository
 public interface AccountRepo extends CrudRepository<Account, Integer> {
+    Account readAccountByAccNumber(String num);
 }

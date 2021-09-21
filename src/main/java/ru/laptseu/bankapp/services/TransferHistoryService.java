@@ -3,6 +3,7 @@ package ru.laptseu.bankapp.services;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.laptseu.bankapp.dao.repos.TransferHistoryRepository;
 import ru.laptseu.bankapp.models.Account;
 import ru.laptseu.bankapp.models.TransferHistory;
 
@@ -12,7 +13,7 @@ import java.util.Calendar;
 @Getter
 @RequiredArgsConstructor
 public class TransferHistoryService implements IMaintainableService<TransferHistory> {
-    private final TransferHistoryDAOImpl dao;
+    private final TransferHistoryRepository dao;
 
     @Override
     public void update(TransferHistory obj) {

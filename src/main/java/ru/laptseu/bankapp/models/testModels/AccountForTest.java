@@ -3,11 +3,9 @@ package ru.laptseu.bankapp.models.testModels;
 import lombok.Getter;
 import lombok.Setter;
 import ru.laptseu.bankapp.models.Account;
-import ru.laptseu.bankapp.models.Currency;
-import ru.laptseu.bankapp.models.ModelWithIntegerId;
 
-import javax.persistence.*;
-import java.util.Calendar;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 @Getter
 @Setter
@@ -26,10 +24,10 @@ public class AccountForTest extends Account {
         AccountForTest c = (AccountForTest) o;
         return Integer.compare(
                 getId(), c.getId()) == 0 &&
-                bank.equals(c.bank) &&
-                client.equals(c.client) &&
-                currency.equals(c.currency) &&
-                accNumber.equals(c.accNumber) &&
-                amount == c.amount;
+                getBank().getId()==c.getBank().getId() &&
+                getClient().getName().equals(c.getClient().getName()) &&
+                getCurrency().equals(c.getCurrency()) &&
+                getAccNumber().equals(c.getAccNumber()) &&
+                getAmount() == c.getAmount();
     }
 }

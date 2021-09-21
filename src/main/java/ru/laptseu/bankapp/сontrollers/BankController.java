@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.web.bind.annotation.*;
 import ru.laptseu.bankapp.models.Bank;
+import ru.laptseu.bankapp.models.BankRateListDocument;
 import ru.laptseu.bankapp.services.BankService;
 import ru.laptseu.bankapp.services.CurrencyRateService;
 
@@ -38,7 +39,7 @@ public class BankController {
     }
 
     @RequestMapping("/{id}/rates")
-    public List<CurrencyRate> openBankRates(@PathVariable Integer id) throws Throwable {
+    public BankRateListDocument openBankRates(@PathVariable Integer id) throws Throwable {
         //хотя их тоже очень много
         return currencyRateService.read(id);
     }

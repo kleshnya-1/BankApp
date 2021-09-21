@@ -5,7 +5,6 @@ import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.mongodb.core.mapping.Document;
 import ru.laptseu.bankapp.models.BankRateListDocument;
-import ru.laptseu.bankapp.models.Model;
 
 @Log4j2
 @Getter

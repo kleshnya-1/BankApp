@@ -6,9 +6,7 @@ import org.springframework.stereotype.Component;
 
 @Log4j2
 @Component
-@RequiredArgsConstructor
 public class CurrencyConverter {
-
     public double convert(Double sourceRate, Double targetRate, Double amount) throws RuntimeException {
         if (sourceRate == null || targetRate == null || amount == null) {
             RuntimeException e = new NullPointerException("source: " + sourceRate + " target: " + targetRate + " amount: " + amount);

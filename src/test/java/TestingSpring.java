@@ -7,12 +7,14 @@ import org.springframework.test.context.junit4.SpringRunner;
 import ru.laptseu.bankapp.Main;
 import ru.laptseu.bankapp.exceptions.EntityNotFoundException;
 import ru.laptseu.bankapp.models.*;
+import ru.laptseu.bankapp.models.Currency;
+import ru.laptseu.bankapp.models.testModels.AccountForTest;
+import ru.laptseu.bankapp.models.testModels.BankForTest;
+import ru.laptseu.bankapp.models.testModels.BankRateListDocumentForTest;
+import ru.laptseu.bankapp.models.testModels.ClientForTest;
 import ru.laptseu.bankapp.services.*;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.List;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -49,36 +51,27 @@ public class TestingSpring {
         bankService.save(bank);
         bankService.save(bank1);
 
+        BankRateListDocument bankRateListDocument = new BankRateListDocument();
+        bankRateListDocument.setBankId(bank.getId());
+        Map<Currency, Double> currencyDoubleMap = new HashMap<>();
+        currencyDoubleMap.put(Currency.USD,50d);
+        currencyDoubleMap.put(Currency.EUR,100d);
+        bankRateListDocument.setCurrenciesAndRates(currencyDoubleMap);
+        currencyRateService.save(bankRateListDocument);
 
-
-        CurrencyRate currencyRateUsd = new CurrencyRate();
-        CurrencyRate currencyRateEur = new CurrencyRate();
-        currencyRateUsd.setCurrency(Currency.USD);
-        currencyRateUsd.setRateToByn(50);
-        currencyRateUsd.setBankId(bank.getId());
-        currencyRateEur.setCurrency(Currency.EUR);
-        currencyRateEur.setRateToByn(100);
-        currencyRateEur.setBankId(bank.getId());
-
-        CurrencyRate currencyRateUsd1 = new CurrencyRate();
-        CurrencyRate currencyRateEur1 = new CurrencyRate();
-        currencyRateUsd1.setCurrency(Currency.USD);
-        currencyRateUsd1.setRateToByn(200);
-        currencyRateUsd1.setBankId(bank1.getId());
-        currencyRateEur1.setCurrency(Currency.EUR);
-        currencyRateEur1.setRateToByn(250);
-        currencyRateEur1.setBankId(bank1.getId());
-
-        currencyRateService.save(currencyRateUsd);
-        currencyRateService.save(currencyRateEur);
-        currencyRateService.save(currencyRateUsd1);
-        currencyRateService.save(currencyRateEur1);
+        Map<Currency, Double> currencyDoubleMap1 = new HashMap<>();
+        currencyDoubleMap1.put(Currency.USD,200d);
+        currencyDoubleMap1.put(Currency.EUR,250d);
+        BankRateListDocument bankRateListDocument1 = new BankRateListDocument();
+        bankRateListDocument1.setBankId(bank1.getId());
+        bankRateListDocument1.setCurrenciesAndRates(currencyDoubleMap1);
+        currencyRateService.save(bankRateListDocument1);
 
         bankService.update(bank);
         bankService.update(bank1);
 
-        Client client1 = new Client();
-        Client client2 = new Client();
+        Client client1 = new ClientForTest();
+        Client client2 = new ClientForTest();
         client1.setName("ClientTransactionTest");
         client1.setNaturalPerson(true);
         client2.setName("ClientTransactionTest1");
@@ -86,9 +79,9 @@ public class TestingSpring {
         clientService.save(client1);
         clientService.save(client2);
 
-        Account account1 = new Account();
-        Account account1p2 = new Account();
-        Account account2 = new Account();
+        Account account1 = new AccountForTest();
+        Account account1p2 = new AccountForTest();
+        Account account2 = new AccountForTest();
         account1.setAmount(1000);
         account1.setBank(bank);
         account1.setCurrency(Currency.EUR);
@@ -114,19 +107,19 @@ public class TestingSpring {
         clientService.update(client1);
         clientService.update(client2);
 
-        Account account1fDB = accountService.read(account1.getId());
-        Account account2fDB = accountService.read(account2.getId());
+        AccountForTest account1fDB = (AccountForTest)accountService.read(account1.getId());
+        AccountForTest account2fDB = (AccountForTest)accountService.read(account2.getId());
 
         double transferAmount = 50;
         int historyNum = accountService.transferAmount(account1fDB, account2fDB, transferAmount);
-        Account account1fDB2 = accountService.read(account1.getId());
-        Account account2fDB2 = accountService.read(account2.getId());
-        assertEquals(account1fDB.getAmount(), 967.5);
-        assertEquals(account2fDB.getAmount(), 2020);
+        AccountForTest account1fDB2 = (AccountForTest)accountService.read(account1.getId());
+        AccountForTest account2fDB2 = (AccountForTest)accountService.read(account2.getId());
+        assertEquals(account1fDB.getAmount(), 962.5);
+        assertEquals(account2fDB.getAmount(), 2025);
         assertEquals(account1fDB, account1fDB2);
         assertEquals(account2fDB, account2fDB2);
-        assertEquals(account1fDB2.getAmount(), 967.5);
-        assertEquals(account2fDB2.getAmount(), 2020);
+        assertEquals(account1fDB2.getAmount(), 962.5);
+        assertEquals(account2fDB2.getAmount(), 2025);
         // TODO: 15.09.2021 bad case test (mockito)
         // TODO: 15.09.2021 test for array
 
@@ -146,116 +139,102 @@ public class TestingSpring {
     @SneakyThrows
     @Test
     public void testBankCRUD() {
-        Bank b1 = new Bank();
-        Bank b2 = new Bank();
+        Bank b1 = new BankForTest();
+        Bank b2 = new BankForTest();
         b1.setName("testBankCRUD" + Calendar.getInstance().getTime());
         b2.setName("testBankCRUD2 " + Calendar.getInstance().getTime());
         b1.setTransferFeeInPercentForNotNaturalPersons(70);
         b2.setTransferFeeInPercentForNotNaturalPersons(70);
-        int n1 = bankDAO.save(b1).getId();
-        int n2 = bankDAO.save(b2).getId();
-        Bank b1Fdb = bankDAO.read(n1);
-        Bank b2Fdb = bankDAO.read(n2);
+        int n1 = bankService.save(b1).getId();
+        int n2 = bankService.save(b2).getId();
+        Bank b1Fdb = bankService.read(n1);
+        Bank b2Fdb = bankService.read(n2);
         assertEquals(b1, b1Fdb);
         assertEquals(b2, b2Fdb);
 
         b1.setTransferFeeInPercent(50);
         b2.setTransferFeeInPercent(50);
-        bankDAO.update(b1);
-        bankDAO.update(b2);
+        bankService.update(b1);
+        bankService.update(b2);
         assertNotEquals(b1, b1Fdb);
         assertNotEquals(b2, b2Fdb);
-        b1Fdb = bankDAO.read(n1);
-        b2Fdb = bankDAO.read(n2);
+        b1Fdb = bankService.read(n1);
+        b2Fdb = bankService.read(n2);
         assertEquals(b1, b1Fdb);
         assertEquals(b2, b2Fdb);
 
-        bankDAO.delete(b1.getId());
-        bankDAO.delete(b2.getId());
-        assertThrows(EntityNotFoundException.class, () -> {
-            bankDAO.read(n1);
+        bankService.delete(b1);
+        bankService.delete(b2);
+        assertThrows(NoSuchElementException.class, () -> {
+            bankService.read(n1);
         });
-        assertThrows(EntityNotFoundException.class, () -> {
-            bankDAO.read(n2);
+        assertThrows(NoSuchElementException.class, () -> {
+            bankService.read(n2);
         });
     }
 
     @SneakyThrows
     @Test
     public void testClientCRUD() {
-        Client c1 = new Client();
-        Client c2 = new Client();
+        Client c1 = new ClientForTest();
+        Client c2 = new ClientForTest();
         c1.setName("testClientCRUD1 " + Calendar.getInstance().getTime());
         c2.setName("testClientCRUD2 " + Calendar.getInstance().getTime());
         c1.setNaturalPerson(true);
         c2.setNaturalPerson(false);
-        int n1 = clientDAO.save(c1).getId();
-        int n2 = clientDAO.save(c2).getId();
-        Client c1Fdb = clientDAO.read(n1);
-        Client c2Fdb = clientDAO.read(n2);
+        int n1 = clientService.save(c1).getId();
+        int n2 = clientService.save(c2).getId();
+        Client c1Fdb = clientService.read(n1);
+        Client c2Fdb = clientService.read(n2);
         assertEquals(c1, c1Fdb);
         assertEquals(c2, c2Fdb);
 
         c1.setNaturalPerson(false);
         c2.setNaturalPerson(true);
-        clientDAO.update(c1);
-        clientDAO.update(c2);
+        clientService.update(c1);
+        clientService.update(c2);
         assertNotEquals(c1, c1Fdb);
         assertNotEquals(c2, c2Fdb);
-        c1Fdb = clientDAO.read(n1);
-        c2Fdb = clientDAO.read(n2);
+        c1Fdb = clientService.read(n1);
+        c2Fdb = clientService.read(n2);
         assertEquals(c1, c1Fdb);
         assertEquals(c2, c2Fdb);
 
-        clientDAO.delete(c1.getId());
-        clientDAO.delete(c2.getId());
-        assertThrows(EntityNotFoundException.class, () -> {
-            clientDAO.read(n1);
+        clientService.delete(c1);
+        clientService.delete(c2);
+        assertThrows(NoSuchElementException.class, () -> {
+            clientService.read(n1);
         });
-        assertThrows(EntityNotFoundException.class, () -> {
-            clientDAO.read(n2);
+        assertThrows(NoSuchElementException.class, () -> {
+            clientService.read(n2);
         });
     }
 
     @SneakyThrows
     @Test
     public void testCurrencyRateServiceCRUD() {
-        Bank b1 = new Bank();
-        Bank b2 = new Bank();
-        b1.setName("TestBank1 for CurrRate CRUD" + Calendar.getInstance().getTime());
-        b2.setName("TestBank2 for CurrRate CRUD" + Calendar.getInstance().getTime());
-        bankDAO.save(b1);
-        bankDAO.save(b2);
+        BankRateListDocument bankRateListDocument1 = new BankRateListDocument();
+        bankRateListDocument1.setBankId(Calendar.getInstance().get(Calendar.MILLISECOND));
+        Map<Currency, Double> map1 = new HashMap<>();
+        map1.put(Currency.EUR, 260d);
+        map1.put(Currency.EUR, 261d);
+        bankRateListDocument1.setCurrenciesAndRates(map1);
+        currencyRateService.save(bankRateListDocument1);
+        Double cr1fDB = currencyRateService.read(bankRateListDocument1.getBankId(), Currency.EUR);
+        assertEquals(261d, cr1fDB);
 
-        CurrencyRate cr1 = new CurrencyRate();
-        cr1.setCurrency(Currency.EUR);
-        cr1.setRateToByn(260);
-        cr1.setBankId(b1.getId());
-        CurrencyRate cr01 = new CurrencyRate();
-        cr01.setCurrency(Currency.EUR);
-        cr01.setRateToByn(261);
-        cr01.setBankId(b1.getId());
-        CurrencyRate cr2 = new CurrencyRate();
-        cr2.setCurrency(Currency.USD);
-        cr2.setRateToByn(360);
-        cr2.setBankId(b2.getId());
-        CurrencyRate cr3 = new CurrencyRate();
-        cr3.setCurrency(Currency.USD);
-        cr3.setRateToByn(361);
-        cr3.setBankId(b2.getId());
-        CurrencyRate cr4 = new CurrencyRate();
-        cr4.setCurrency(Currency.USD);
-        cr4.setRateToByn(362);
-        cr4.setBankId(b2.getId());
-        currencyRateService.save(cr1);
-        currencyRateService.save(cr2);
-        currencyRateService.save(cr3);
-        currencyRateService.save(cr4);
+        BankRateListDocument bankRateListDocument2 = new BankRateListDocument();
+        bankRateListDocument2.setBankId(bankRateListDocument1.getBankId()+1);
+        Map<Currency, Double> map2 = new HashMap<>();
+        map2.put(Currency.USD, 360d);
+        map2.put(Currency.USD, 361d);
+        map2.put(Currency.USD, 362d);
+        bankRateListDocument2.setCurrenciesAndRates(map2);
+        currencyRateService.save(bankRateListDocument2);
+        Double cr2fDB = currencyRateService.read(bankRateListDocument2.getBankId(), Currency.USD);
+        assertEquals(362d, cr2fDB);
+        // TODO: 21.09.2021 delete from Db
 
-        CurrencyRate cr1fDB = currencyRateService.read(cr01.getBankId(), cr01.getCurrency());
-        CurrencyRate cr4fDB = currencyRateService.read(cr4.getBankId(), cr4.getCurrency());
-        assertEquals(cr1, cr1fDB);
-        assertEquals(cr4, cr4fDB);
     }
 
     @SneakyThrows
@@ -264,61 +243,38 @@ public class TestingSpring {
         BankRateListDocument cd1 = new BankRateListDocument();
         BankRateListDocument cd2 = new BankRateListDocument();
         BankRateListDocument cd3 = new BankRateListDocument();
-        cd1.setBankId(Integer.valueOf("1" + Calendar.getInstance().get(Calendar.MILLISECOND)));
-        cd2.setBankId(Integer.valueOf("2" + Calendar.getInstance().get(Calendar.MILLISECOND)));
-        cd3.setBankId(Integer.valueOf("3" + Calendar.getInstance().get(Calendar.MILLISECOND)));
-        Bank b1 = new Bank();
-        Bank b2 = new Bank();
-        b1.setName("testDocumentInMongoCRUD1 " + Calendar.getInstance().getTime());
-        b2.setName("testDocumentInMongoCRUD2 " + Calendar.getInstance().getTime());
+        cd1.setBankId(Integer.valueOf("10" + Calendar.getInstance().get(Calendar.MILLISECOND)));
+        cd2.setBankId(Integer.valueOf("20" + Calendar.getInstance().get(Calendar.MILLISECOND)));
+        cd3.setBankId(Integer.valueOf("30" + Calendar.getInstance().get(Calendar.MILLISECOND)));
+        Map<Currency, Double> currencyDoubleMap = new HashMap<>();
+        currencyDoubleMap.put(Currency.EUR,260d);
+        cd1.setCurrenciesAndRates(currencyDoubleMap);
 
-        CurrencyRate cr1 = new CurrencyRate();
-        cr1.setCurrency(Currency.EUR);
-        cr1.setRateToByn(260);
-        cr1.setBankId(b1.getId());
-        CurrencyRate cr2 = new CurrencyRate();
-        cr2.setCurrency(Currency.USD);
-        cr2.setRateToByn(360);
-        cr2.setBankId(b2.getId());
-        CurrencyRate cr3 = new CurrencyRate();
-        cr3.setCurrency(Currency.USD);
-        cr3.setRateToByn(361);
-        cr3.setBankId(b2.getId());
-        CurrencyRate cr4 = new CurrencyRate();
-        cr4.setCurrency(Currency.USD);
-        cr4.setRateToByn(362);
-        cr4.setBankId(b2.getId());
+        Map<Currency, Double> currencyDoubleMap1 = new HashMap<>();
+        currencyDoubleMap1.put(Currency.USD,360d);
+        currencyDoubleMap1.put(Currency.USD,361d);
+        currencyDoubleMap1.put(Currency.USD,362d);
+        cd2.setCurrenciesAndRates(currencyDoubleMap1);
 
-        List<CurrencyRate> l1 = new ArrayList<>();
-        List<CurrencyRate> l2 = new ArrayList<>();
-        l1.add(cr1);
-        l1.add(cr2);
-        l1.add(cr3);
-        l2.add(cr4);
-        cd1.setCurrencies(l1);
-        cd2.setCurrencies(l2);
-        int s1 = mongoBankRateDAO.save(cd1).getBankId();
-        int s2 = mongoBankRateDAO.save(cd2).getBankId();
-        int s3 = mongoBankRateDAO.save(cd3).getBankId();
+        int s1 = currencyRateService.save(cd1).getBankId();
+        int s2 = currencyRateService.save(cd2).getBankId();
+        int s3 = currencyRateService.save(cd3).getBankId();
 
-        BankRateListDocument cd1fDB = mongoBankRateDAO.readByBankId(s1);
-        BankRateListDocument cd2fDB = mongoBankRateDAO.readByBankId(s2);
-        BankRateListDocument cd3fDB = mongoBankRateDAO.readByBankId(s3);
-        assertEquals(cd1, cd1fDB);
-        assertEquals(cd2, cd2fDB);
-        assertEquals(cd3, cd3fDB);
-        mongoBankRateDAO.delete(s1);
-        mongoBankRateDAO.delete(s2);
-        mongoBankRateDAO.delete(s3);
+        BankRateListDocument cd1fDB = currencyRateService.read(s1);
+        BankRateListDocument cd2fDB = currencyRateService.read(s2);
+        BankRateListDocument cd3fDB = currencyRateService.read(s3);
+        assertEquals(cd1.getDate(), cd1fDB.getDate());
+        assertEquals(cd2.getDate(), cd2fDB.getDate());
+        assertEquals(cd3.getDate(), cd3fDB.getDate());
+        currencyRateService.delete(cd1);
+        currencyRateService.delete(cd2);
+        currencyRateService.delete(cd3);
+        BankRateListDocument cd1fDBaD = currencyRateService.read(s1);
+        BankRateListDocument cd2fDBaD = currencyRateService.read(s2);
+        BankRateListDocument cd3fDBaD = currencyRateService.read(s3);
 
-        assertThrows(EntityNotFoundException.class, () -> {
-            mongoBankRateDAO.read(s1);
-        });
-        assertThrows(EntityNotFoundException.class, () -> {
-            mongoBankRateDAO.read(s2);
-        });
-        assertThrows(EntityNotFoundException.class, () -> {
-            mongoBankRateDAO.read(s3);
-        });
+        assertNull(cd1fDBaD);
+        assertNull(cd2fDBaD);
+        assertNull(cd3fDBaD);
     }
 }

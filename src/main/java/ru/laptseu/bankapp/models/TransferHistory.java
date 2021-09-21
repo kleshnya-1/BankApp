@@ -23,7 +23,6 @@ public class TransferHistory extends ModelWithIntegerId {
     private String clientTargetName;
     private String accSourceNum;
     private String accTargetNum;
-
     private String bankSourceName;
     private String bankTargetName;
     private String currency;

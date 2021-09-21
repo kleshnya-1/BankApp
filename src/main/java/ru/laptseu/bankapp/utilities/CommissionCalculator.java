@@ -9,7 +9,6 @@ import ru.laptseu.bankapp.models.Client;
 @Component
 @Log4j2
 public class CommissionCalculator {
-
     public double calculate(Account targetAcc, double amount) {
         double commission;
         double commissionPercent;

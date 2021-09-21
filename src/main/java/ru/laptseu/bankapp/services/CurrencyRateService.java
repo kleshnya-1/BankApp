@@ -18,7 +18,6 @@ import java.util.List;
 @Service
 @Getter
 @RequiredArgsConstructor
-//особенности чтения курса (нужно знать ИД банка и валюту, а не только ИД банка) не дают имплементировать
 public class CurrencyRateService implements IMaintainableService<BankRateListDocument> {
     private final CurrRateDocumentsRepoInMongoExtends dao;
 

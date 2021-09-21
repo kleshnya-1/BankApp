@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
 import ru.laptseu.bankapp.models.Bank;
-import ru.laptseu.bankapp.models.ModelWithIntegerId;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;

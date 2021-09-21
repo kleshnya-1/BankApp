@@ -1,19 +1,20 @@
 package ru.laptseu.bankapp.services;
 
+import org.springframework.data.repository.CrudRepository;
 import ru.laptseu.bankapp.dao.IMaintainableDAO;
 import ru.laptseu.bankapp.models.Model;
 import ru.laptseu.bankapp.models.ModelWithIntegerId;
 
 public interface IMaintainableService<T extends Model> {
 
-    IMaintainableDAO getDao();
+    CrudRepository getDao();
 
     default T save(T obj) {
         return (T) getDao().save(obj);
     }
 
-    default T read(int id) throws Throwable {
-        return (T) getDao().read(id);
+    default T read(int id) {
+        return (T) getDao().findById(id).get();
     }
 
     default void update(T obj) {
@@ -22,6 +23,9 @@ public interface IMaintainableService<T extends Model> {
     }
 
     default void delete(int key) {
+        getDao().delete(read(key));
+    }
+    default void delete(T key) {
         getDao().delete(key);
     }
 }
