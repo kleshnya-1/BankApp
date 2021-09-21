@@ -3,6 +3,7 @@ package ru.laptseu.bankapp.services;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.laptseu.bankapp.dao.repos.AccountRepo;
@@ -17,8 +18,9 @@ import java.sql.SQLException;
 @Getter
 @RequiredArgsConstructor
 public class AccountService implements IMaintainableService<Account> {
-    private final AccountRepo dao;
     private final CommissionCalculator commissionCalculator;
+   @Autowired
+    private final AccountRepo dao;
     private final TransferHistoryService transferHistoryService;
     private final CurrencyConverter currencyConverter;
     private final CurrencyRateService currencyRateService;

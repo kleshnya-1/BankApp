@@ -30,7 +30,8 @@ public class TestingSpring {
     @Autowired
     private ClientService clientService;
     @Autowired
-    private CurrencyRateService currencyRateService;
+    //ask. initialisation special test-bean for testing without DB. is it what we spoke about?
+    private CurrencyRateServiceForTest currencyRateService;
     @Autowired
     private TransferHistoryService transferHistoryService;
 

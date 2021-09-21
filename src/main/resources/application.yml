@@ -2,9 +2,21 @@ spring:
   application:
     name: bankAppOk
 
+
   jpa:
+    database: postgresql
+    show-sql: true
     hibernate:
       ddl-auto: none
+
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    platform: postgres
+    url: jdbc:postgresql://localhost:5432/database_bank
+    username: postgres
+    password: 1
+
+
 
   data:
     mongodb:
