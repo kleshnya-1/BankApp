@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.web.bind.annotation.*;
 import ru.laptseu.bankapp.models.Bank;
-import ru.laptseu.bankapp.models.CurrencyRate;
 import ru.laptseu.bankapp.services.BankService;
 import ru.laptseu.bankapp.services.CurrencyRateService;
 

@@ -5,10 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.laptseu.bankapp.dao.AccountDAOImpl;
 import ru.laptseu.bankapp.models.Account;
-import ru.laptseu.bankapp.models.CurrencyRate;
-import ru.laptseu.bankapp.models.TransferHistory;
 import ru.laptseu.bankapp.utilities.CommissionCalculator;
 import ru.laptseu.bankapp.utilities.CurrencyConverter;
 
@@ -30,8 +27,8 @@ public class AccountService implements IMaintainableService<Account> {
     public int transferAmount(Account sourceAcc, Account targetAcc, double amount) throws SQLException {
         double commission = 0;
         double totalAmount = amount;
-        CurrencyRate sourceRate = currencyRateService.read(sourceAcc.getBank().getId(), sourceAcc.getCurrency());
-        CurrencyRate targetRate = currencyRateService.read(targetAcc.getBank().getId(), targetAcc.getCurrency());
+        Double sourceRate = currencyRateService.read(sourceAcc.getBank().getId(), sourceAcc.getCurrency());
+        Double targetRate = currencyRateService.read(targetAcc.getBank().getId(), targetAcc.getCurrency());
 
         if (!sourceAcc.getBank().equals(targetAcc.getBank())) {
             commission = commissionCalculator.calculate(targetAcc, amount);
@@ -43,9 +40,9 @@ public class AccountService implements IMaintainableService<Account> {
         targetAcc.setAmount(targetAcc.getAmount() + totalAmount);
         saveAccsTroughTransaction(sourceAcc, targetAcc);
         // TODO: 15.09.2021 check bad cases
-        TransferHistory saved = transferHistoryService.createHistory(sourceAcc, targetAcc, amount);
+
         // TODO: 15.09.2021 ask. сервис взаимодействует с сервисом и в чужое ДАО не лезет. все так?
-        return transferHistoryService.save(saved).getId();
+        return transferHistoryService.save(transferHistoryService.createHistory(sourceAcc, targetAcc, amount)).getId();
     }
 
     @Transactional(rollbackFor = Exception.class)

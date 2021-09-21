@@ -17,25 +17,11 @@ import java.util.Set;
 @Setter
 @Entity
 @Table(name = "clients")
-public class Client extends EntityModel {
+public class Client extends ModelWithIntegerId {
     private String name;
     @Type(type = "yes_no")
     private boolean isNaturalPerson;
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Account> accounts = new HashSet<>();
 
-    @Override
-    public boolean equals(Object o) {
-        if (o == this) {
-            return true;
-        }
-        if (!(o instanceof Client)) {
-            return false;
-        }
-        Client c = (Client) o;
-        return Integer.compare(
-                getId(), c.getId()) == 0 &&
-                name.equals(c.name) &&
-                isNaturalPerson == c.isNaturalPerson;
-    }
 }

@@ -1,20 +1,23 @@
 package ru.laptseu.bankapp.models;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import java.util.Calendar;
-import java.util.GregorianCalendar;
 
 @Log4j2
 @Getter
 @Setter
 @Entity
 @Table(name = "transfer_history")
-public class TransferHistory extends EntityModel {
+@NoArgsConstructor
+@AllArgsConstructor
+public class TransferHistory extends ModelWithIntegerId {
     private Calendar date;
     private String clientSourceName;
     private String clientTargetName;
@@ -25,29 +28,4 @@ public class TransferHistory extends EntityModel {
     private String bankTargetName;
     private String currency;
     private double amount;
-
-    public TransferHistory() {
-    }
-
-    public TransferHistory(String clientSourceName, String clientTargetName,
-                           String accSourceNum, String accTargetNum, String bankSourceName,
-                           String bankTargetName, String currency, double amount) {
-        this.date = new GregorianCalendar();
-        this.clientSourceName = clientSourceName;
-        this.clientTargetName = clientTargetName;
-        this.accSourceNum = accSourceNum;
-        this.accTargetNum = accTargetNum;
-        this.bankSourceName = bankSourceName;
-        this.bankTargetName = bankTargetName;
-        this.currency = currency;
-        this.amount = amount;
-    }
-
-    //нужна была для консоли. в версии ВЕБ я бы ее не делал. вопрос: ее сейас удалить для чистоты?
-    @Override
-    public String toString() {
-        return "from acc " + clientSourceName + " with № " + accSourceNum + " in bank " + bankSourceName + "\n" +
-                "to acc " + clientTargetName + " with № " + accTargetNum + " in bank " + bankTargetName + "\n" +
-                date + " transfered " + amount + currency;
-    }
 }

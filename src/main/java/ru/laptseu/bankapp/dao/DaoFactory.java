@@ -16,7 +16,7 @@ public class DaoFactory {
     private final TransferHistoryDAOImpl transferHistoryDAO;
     private final Map<Class, IMaintainableDAO> factoryMap = new HashMap<>();
 
-    private void fillMap() {
+    static  {
         factoryMap.put(accountDAO.getClass(), accountDAO);
         factoryMap.put(bankDAO.getClass(), bankDAO);
         factoryMap.put(clientDAO.getClass(), clientDAO);
@@ -24,8 +24,8 @@ public class DaoFactory {
         factoryMap.put(transferHistoryDAO.getClass(), transferHistoryDAO);
     }
 
-    public IMaintainableDAO get(Class clazz) {
-        fillMap();
-        return factoryMap.get(clazz);
-    }
+//    public IMaintainableDAO get(Class clazz) {
+//        fillMap();
+//        return factoryMap.get(clazz);
+//    }
 }

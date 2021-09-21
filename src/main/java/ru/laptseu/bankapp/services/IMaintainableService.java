@@ -1,9 +1,10 @@
 package ru.laptseu.bankapp.services;
 
 import ru.laptseu.bankapp.dao.IMaintainableDAO;
-import ru.laptseu.bankapp.models.EntityModel;
+import ru.laptseu.bankapp.models.Model;
+import ru.laptseu.bankapp.models.ModelWithIntegerId;
 
-public interface IMaintainableService<T extends EntityModel> {
+public interface IMaintainableService<T extends Model> {
 
     IMaintainableDAO getDao();
 

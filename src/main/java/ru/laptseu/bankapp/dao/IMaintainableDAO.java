@@ -1,13 +1,12 @@
 package ru.laptseu.bankapp.dao;
 
-import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.repository.CrudRepository;
 import ru.laptseu.bankapp.dao.repos.CurrRateDocumentsRepoInMongoExtends;
 import ru.laptseu.bankapp.exceptions.EntityNotFoundException;
 import ru.laptseu.bankapp.models.BankRateListDocument;
-import ru.laptseu.bankapp.models.EntitySuperModel;
+import ru.laptseu.bankapp.models.Model;
 
-public interface IMaintainableDAO<T extends EntitySuperModel> {
+public interface IMaintainableDAO<T extends Model> {
     T getEntity();
 
     CrudRepository getRep();

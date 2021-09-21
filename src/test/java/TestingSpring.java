@@ -5,9 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.laptseu.bankapp.Main;
-import ru.laptseu.bankapp.dao.BankDAOImpl;
-import ru.laptseu.bankapp.dao.ClientDAOImpl;
-import ru.laptseu.bankapp.dao.CurrRateDocumentsDAO;
 import ru.laptseu.bankapp.exceptions.EntityNotFoundException;
 import ru.laptseu.bankapp.models.*;
 import ru.laptseu.bankapp.services.*;
@@ -23,10 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest(classes = Main.class)
 //@RequiredArgsConstructor
 public class TestingSpring {
-    @Autowired
-    private BankDAOImpl bankDAO;
-    @Autowired
-    private ClientDAOImpl clientDAO;
+
     @Autowired
     private AccountService accountService;
     @Autowired
@@ -37,8 +31,7 @@ public class TestingSpring {
     private CurrencyRateService currencyRateService;
     @Autowired
     private TransferHistoryService transferHistoryService;
-    @Autowired
-    private CurrRateDocumentsDAO mongoBankRateDAO;
+
 
     @SneakyThrows
     @Test
@@ -55,6 +48,8 @@ public class TestingSpring {
         bank1.setName("testTransfer02 " + Calendar.getInstance().getTime());
         bankService.save(bank);
         bankService.save(bank1);
+
+
 
         CurrencyRate currencyRateUsd = new CurrencyRate();
         CurrencyRate currencyRateEur = new CurrencyRate();
