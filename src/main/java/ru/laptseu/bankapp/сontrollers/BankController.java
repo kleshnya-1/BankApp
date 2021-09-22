@@ -45,8 +45,8 @@ public class BankController {
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/new")
-    public void newBank(@RequestBody Bank bank) {
-        bankService.save(bank);
+    public Bank newBank(@RequestBody Bank bank) {
+       return bankService.save(bank);
     }
     // TODO: 15.09.2021 остальные контроллеры будут по такому же принципу. еще будет клиент и админ.
     //  вся разница в реализации их полномочий и поступных страниц.
