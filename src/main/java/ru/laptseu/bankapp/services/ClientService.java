@@ -3,7 +3,7 @@ package ru.laptseu.bankapp.services;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.laptseu.bankapp.repository.ClientRepo;
+import ru.laptseu.bankapp.repositories.ClientRepo;
 import ru.laptseu.bankapp.models.Client;
 
 @Service

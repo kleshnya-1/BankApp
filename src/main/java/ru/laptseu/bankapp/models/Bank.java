@@ -20,8 +20,8 @@ public class Bank extends ModelWithIntegerId {
     private String name;
     private double transferFeeInPercent;
     private double transferFeeInPercentForNotNaturalPersons;
+
     @OneToMany(mappedBy = "bank", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Account> accounts = new HashSet<>();
-
 }
 

@@ -22,6 +22,7 @@ public class BankRateListDocument extends Model {
 
     @BsonProperty("bankId")
     private int bankId;
+
     private Map<Currency, Double> currenciesAndRates;
     private Date date;
 }

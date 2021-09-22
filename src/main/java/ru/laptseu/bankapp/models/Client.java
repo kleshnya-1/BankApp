@@ -23,5 +23,4 @@ public class Client extends ModelWithIntegerId {
     private boolean isNaturalPerson;
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Account> accounts = new HashSet<>();
-
 }

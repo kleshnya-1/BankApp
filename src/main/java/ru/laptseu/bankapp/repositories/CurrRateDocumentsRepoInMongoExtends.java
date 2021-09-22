@@ -1,4 +1,4 @@
-package ru.laptseu.bankapp.repository;
+package ru.laptseu.bankapp.repositories;
 
 import org.bson.types.ObjectId;
 import org.springframework.context.annotation.Primary;

@@ -1,4 +1,4 @@
-package ru.laptseu.bankapp.repository;
+package ru.laptseu.bankapp.repositories;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
