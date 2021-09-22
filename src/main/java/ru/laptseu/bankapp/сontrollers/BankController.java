@@ -39,7 +39,7 @@ public class BankController {
     }
 
     @RequestMapping("/{id}/rates")
-    public BankRateListDocument openBankRates(@PathVariable Integer id) throws Throwable {
+    public BankRateListDocument openBankRates(@PathVariable Integer id) {
         //хотя их тоже очень много
         return currencyRateService.read(id);
     }

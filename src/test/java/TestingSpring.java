@@ -18,7 +18,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = Main.class)
-//@RequiredArgsConstructor
 public class TestingSpring {
 
     @Autowired
@@ -232,7 +231,12 @@ public class TestingSpring {
         Double cr2fDB = currencyRateService.read(bankRateListDocument2.getBankId(), Currency.USD);
         assertEquals(362d, cr2fDB);
         // TODO: 21.09.2021 delete from Db
-
+        assertEquals(bankRateListDocument1, currencyRateService.read(bankRateListDocument1.getBankId()));
+        assertEquals(bankRateListDocument2, currencyRateService.read(bankRateListDocument2.getBankId()));
+        currencyRateService.delete(bankRateListDocument1.getBankId());
+        currencyRateService.delete(bankRateListDocument2.getBankId());
+        assertNull(currencyRateService.read(bankRateListDocument1.getBankId()));
+        assertNull(currencyRateService.read(bankRateListDocument2.getBankId()));
     }
 
     @SneakyThrows

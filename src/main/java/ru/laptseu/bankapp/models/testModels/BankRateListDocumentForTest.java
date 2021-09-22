@@ -17,10 +17,10 @@ public class BankRateListDocumentForTest extends BankRateListDocument {
         if (o == this) {
             return true;
         }
-        if (!(o instanceof BankRateListDocumentForTest)) {
+        if (!(o instanceof BankRateListDocument)) {
             return false;
         }
-        BankRateListDocumentForTest c = (BankRateListDocumentForTest) o;
+        BankRateListDocument c = (BankRateListDocument) o;
         return this.getId().equals(c.getId());
     }
 }
