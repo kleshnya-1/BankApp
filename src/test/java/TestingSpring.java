@@ -7,10 +7,12 @@ import org.springframework.test.context.junit4.SpringRunner;
 import ru.laptseu.bankapp.Main;
 import ru.laptseu.bankapp.models.Currency;
 import ru.laptseu.bankapp.models.*;
-import ru.laptseu.bankapp.models.testModels.AccountForTest;
-import ru.laptseu.bankapp.models.testModels.BankForTest;
-import ru.laptseu.bankapp.models.testModels.ClientForTest;
+import ru.laptseu.bankapp.repositories.AccountRepo;
+import ru.laptseu.bankapp.repositories.RepositoryFactory;
 import ru.laptseu.bankapp.services.*;
+import ru.laptseu.bankapp.testModels.AccountForTest;
+import ru.laptseu.bankapp.testModels.BankForTest;
+import ru.laptseu.bankapp.testModels.ClientForTest;
 
 import java.util.*;
 
@@ -31,6 +33,10 @@ public class TestingSpring {
     private CurrencyRateServiceForTest currencyRateService;
     @Autowired
     private TransferHistoryService transferHistoryService;
+    @Autowired
+    private AccountRepo accountRepo;
+    @Autowired
+    private RepositoryFactory repositoryFactory;
 
     @SneakyThrows
     @Test
@@ -281,15 +287,11 @@ public class TestingSpring {
     }
 
     //in progress
-//    @SneakyThrows
-//    @Test
-//    public void testFactory() {
-//
-//        ApplicationContext applicationContext = new AnnotationConfigApplicationContext(Main.class);
-//        AccountRepo oo = applicationContext.getBean(AccountRepo.class);
-//        String[] a = applicationContext.getBeanDefinitionNames();
-//        CrudRepository ccc = daoFactory.get(Account.class);
-//        assertEquals(ccc, AccountRepo.class);
-//        assertEquals(daoFactory.get(Account.class), AccountRepo.class);
-//    }
+    @SneakyThrows
+    @Test
+    public void testFactory() {
+        var f = repositoryFactory.get(Account.class);
+        var f1 = repositoryFactory.get(Bank.class);
+        var f2 = repositoryFactory.get(BankRateListDocument.class);
+    }
 }

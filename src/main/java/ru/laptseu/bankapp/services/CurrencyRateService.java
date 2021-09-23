@@ -4,9 +4,9 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
-import ru.laptseu.bankapp.repositories.CurrRateDocumentsRepoInMongoExtends;
 import ru.laptseu.bankapp.models.BankRateListDocument;
 import ru.laptseu.bankapp.models.Currency;
+import ru.laptseu.bankapp.repositories.CurrRateDocumentsRepoInMongoExtends;
 
 import java.util.Calendar;
 
@@ -22,10 +22,8 @@ public class CurrencyRateService implements IMaintainableService<BankRateListDoc
         return  dao.save(obj);
     }
 
-
     public BankRateListDocument read(int key)  {
       return dao.findFirstByBankIdOrderByDateDesc(key);
-
     }
 
     public Double read(int key, Currency c) {

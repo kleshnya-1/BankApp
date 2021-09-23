@@ -11,14 +11,12 @@ import ru.laptseu.bankapp.models.Currency;
 import java.util.Calendar;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Set;
 
 @Log4j2
 @Service
 @Getter
 @RequiredArgsConstructor
 public class CurrencyRateServiceForTest {
-
     private final List<BankRateListDocument> dao;
 
     public BankRateListDocument save(BankRateListDocument obj) {
@@ -27,7 +25,6 @@ public class CurrencyRateServiceForTest {
         dao.add(obj);
         return  obj;
     }
-
 
     public BankRateListDocument read(int key)  {
           return dao.stream().filter(i -> i.getBankId()==key).sorted(Comparator.comparing(o->o.getDate())).findFirst().orElse(null);

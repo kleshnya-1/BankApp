@@ -1,9 +1,9 @@
-package ru.laptseu.bankapp.models.testModels;
+package ru.laptseu.bankapp.testModels;
 
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
-import ru.laptseu.bankapp.models.Client;
+import ru.laptseu.bankapp.models.Bank;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -12,22 +12,23 @@ import javax.persistence.Table;
 @Getter
 @Setter
 @Entity
-@Table(name = "clients")
-public class ClientForTest extends Client {
-
+@Table(name = "banks")
+public class BankForTest extends Bank {
 
     @Override
     public boolean equals(Object o) {
         if (o == this) {
             return true;
         }
-        if (!(o instanceof ClientForTest)) {
+        if (!(o instanceof BankForTest)) {
             return false;
         }
-        ClientForTest c = (ClientForTest) o;
+        BankForTest c = (BankForTest) o;
         return Integer.compare(
                 getId(), c.getId()) == 0 &&
                 getName().equals(c.getName()) &&
-                isNaturalPerson() == c.isNaturalPerson();
+                getTransferFeeInPercent() == c.getTransferFeeInPercent() &&
+                getTransferFeeInPercentForNotNaturalPersons() == c.getTransferFeeInPercentForNotNaturalPersons();
     }
 }
+

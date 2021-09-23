@@ -12,10 +12,10 @@ import ru.laptseu.bankapp.Main;
 import ru.laptseu.bankapp.models.Bank;
 import ru.laptseu.bankapp.models.BankRateListDocument;
 import ru.laptseu.bankapp.models.Currency;
-import ru.laptseu.bankapp.models.testModels.BankForTest;
-import ru.laptseu.bankapp.models.testModels.BankRateListDocumentForTest;
 import ru.laptseu.bankapp.services.BankService;
 import ru.laptseu.bankapp.services.CurrencyRateService;
+import ru.laptseu.bankapp.testModels.BankForTest;
+import ru.laptseu.bankapp.testModels.BankRateListDocumentForTest;
 
 import java.util.Calendar;
 import java.util.HashMap;
@@ -30,14 +30,12 @@ import static org.mockito.BDDMockito.given;
 @SpringBootTest(classes = Main.class)
 class BankControllerTest {
 
-
     @Mock
     private BankService bankService;
     @Mock
     private CurrencyRateService currencyRateService;
     @InjectMocks
     private BankController bankController;
-
 
     Bank b1 = new BankForTest();
     Bank b2 = new BankForTest();
@@ -48,7 +46,6 @@ class BankControllerTest {
     Map<Currency, Double> map1 = new HashMap<>();
     BankRateListDocument bankRateListDocument2 = new BankRateListDocumentForTest();
     Map<Currency, Double> map2 = new HashMap<>();
-
 
     @BeforeEach
     void setUp() {

@@ -1,4 +1,4 @@
-package ru.laptseu.bankapp.models.testModels;
+package ru.laptseu.bankapp.testModels;
 
 import lombok.Getter;
 import lombok.Setter;
