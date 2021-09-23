@@ -28,7 +28,7 @@ public class AccountService implements IMaintainableService<Account> {
     public Account read(String num){
         return dao.readAccountByAccNumber(num);
     }
-    public int transferAmount(Account sourceAcc, Account targetAcc, double amount) throws SQLException {
+    public int transferAmount(Account sourceAcc, Account targetAcc, double amount)  {
         double commission = 0;
         double totalAmount = amount;
         Double sourceRate = currencyRateService.read(sourceAcc.getBank().getId(), sourceAcc.getCurrency());
