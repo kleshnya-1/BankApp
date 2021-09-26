@@ -14,6 +14,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 @Component
 public class RepositoryFactory {
+    private static final Map<Class, Class> factoryMap = new HashMap<>();
     static {
         factoryMap.put(Account.class, AccountRepo.class);
         factoryMap.put(Bank.class, BankRepo.class);
@@ -22,7 +23,6 @@ public class RepositoryFactory {
         factoryMap.put(TransferHistory.class, TransferHistoryRepository.class);
 
     }
-    private static final Map<Class, Class> factoryMap = new HashMap<>();
 
     private final ApplicationContext applicationContext;
 
