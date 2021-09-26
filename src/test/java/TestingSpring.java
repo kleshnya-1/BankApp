@@ -13,6 +13,7 @@ import ru.laptseu.bankapp.services.*;
 import ru.laptseu.bankapp.testModels.AccountForTest;
 import ru.laptseu.bankapp.testModels.BankForTest;
 import ru.laptseu.bankapp.testModels.ClientForTest;
+import ru.laptseu.bankapp.testServices.CurrencyRateServiceForTest;
 
 import java.util.*;
 

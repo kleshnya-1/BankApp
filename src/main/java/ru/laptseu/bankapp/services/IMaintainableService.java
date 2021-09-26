@@ -23,6 +23,7 @@ public interface IMaintainableService<T extends Model> {
     default void delete(int key) {
         getDao().delete(read(key));
     }
+
     default void delete(T key) {
         getDao().delete(key);
     }

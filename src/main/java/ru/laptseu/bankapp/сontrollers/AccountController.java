@@ -25,11 +25,12 @@ public class AccountController {
     public Account openPage(@PathVariable Integer id) {
         return accountService.read(id);
     }
+
     @RequestMapping("/{id}/transfer")
     public int doTransfer(@PathVariable Integer id, @RequestBody Integer targetId, @RequestBody Double amount) {
         return accountService.transferAmount(accountService.read(id), accountService.read(targetId), amount);
     }
-    
+
     @RequestMapping(method = RequestMethod.POST, value = "/new")
     public Account newAccount(@RequestBody Account Account) {
         return accountService.save(Account);

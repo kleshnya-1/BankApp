@@ -18,12 +18,12 @@ public class CurrencyRateService implements IMaintainableService<BankRateListDoc
     private final CurrRateDocumentsRepoInMongoExtends dao;
 
     public BankRateListDocument save(BankRateListDocument obj) {
-       obj.setDate(Calendar.getInstance().getTime());
-        return  dao.save(obj);
+        obj.setDate(Calendar.getInstance().getTime());
+        return dao.save(obj);
     }
 
-    public BankRateListDocument read(int key)  {
-      return dao.findFirstByBankIdOrderByDateDesc(key);
+    public BankRateListDocument read(int key) {
+        return dao.findFirstByBankIdOrderByDateDesc(key);
     }
 
     public Double read(int key, Currency c) {

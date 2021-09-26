@@ -15,13 +15,13 @@ import java.util.Map;
 @Component
 public class RepositoryFactory {
     private static final Map<Class, Class> factoryMap = new HashMap<>();
+
     static {
         factoryMap.put(Account.class, AccountRepo.class);
         factoryMap.put(Bank.class, BankRepo.class);
         factoryMap.put(Client.class, ClientRepo.class);
         factoryMap.put(BankRateListDocument.class, CurrRateDocumentsRepoInMongoExtends.class);
         factoryMap.put(TransferHistory.class, TransferHistoryRepository.class);
-
     }
 
     private final ApplicationContext applicationContext;

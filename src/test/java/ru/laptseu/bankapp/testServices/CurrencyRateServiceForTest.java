@@ -1,4 +1,4 @@
-package ru.laptseu.bankapp.services;
+package ru.laptseu.bankapp.testServices;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -20,14 +20,14 @@ public class CurrencyRateServiceForTest {
     private final List<BankRateListDocument> dao;
 
     public BankRateListDocument save(BankRateListDocument obj) {
-       obj.setDate(Calendar.getInstance().getTime());
+        obj.setDate(Calendar.getInstance().getTime());
         obj.setId(new ObjectId());
         dao.add(obj);
-        return  obj;
+        return obj;
     }
 
-    public BankRateListDocument read(int key)  {
-          return dao.stream().filter(i -> i.getBankId()==key).sorted(Comparator.comparing(o->o.getDate())).findFirst().orElse(null);
+    public BankRateListDocument read(int key) {
+        return dao.stream().filter(i -> i.getBankId() == key).sorted(Comparator.comparing(o -> o.getDate())).findFirst().orElse(null);
     }
 
     public Double read(int key, Currency c) {
@@ -37,6 +37,7 @@ public class CurrencyRateServiceForTest {
     public void delete(BankRateListDocument cd1) {
         dao.remove(cd1);
     }
+
     public void delete(int key) {
         dao.remove(read(key));
     }
