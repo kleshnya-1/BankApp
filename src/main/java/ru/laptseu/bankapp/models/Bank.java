@@ -1,5 +1,6 @@
 package ru.laptseu.bankapp.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
@@ -22,6 +23,7 @@ public class Bank extends ModelWithIntegerId {
     private double transferFeeInPercentForNotNaturalPersons;
 
     @OneToMany(mappedBy = "bank", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private Set<Account> accounts = new HashSet<>();
 }
 

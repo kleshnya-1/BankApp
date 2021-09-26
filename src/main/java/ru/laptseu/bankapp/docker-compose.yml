@@ -1,0 +1,22 @@
+version: "3.8"
+
+volumes:
+  pg_volume:
+
+
+
+services:
+
+  pg:
+    image: postgres:13.3
+    volumes:
+      - pg_volume:/var/lib/postgresql/data
+#      - ./db_init:/src/main/resources/pgDbIntit.sql
+    environment:
+      - POSTGRES_DB=bankDb
+      - POSTGRES_PASSWORD=1
+#      - PGDATA=src\main\resources\pgDbIntit.sql
+#    doesn't work
+    restart: always
+    ports:
+      - ${POSTGRES_PORT:-5432}:5432
