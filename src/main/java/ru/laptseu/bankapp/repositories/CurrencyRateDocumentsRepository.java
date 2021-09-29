@@ -8,6 +8,6 @@ import ru.laptseu.bankapp.models.BankRateListDocument;
 
 @Repository
 @Primary//because of adapter
-public interface CurrRateDocumentsRepoInMongoExtends extends MongoRepository<BankRateListDocument, ObjectId> {
+public interface CurrencyRateDocumentsRepository extends MongoRepository<BankRateListDocument, ObjectId> {
     BankRateListDocument findFirstByBankIdOrderByDateDesc(int bankId);
 }

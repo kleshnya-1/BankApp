@@ -24,7 +24,7 @@ public class AccountForTest extends Account {
         AccountForTest c = (AccountForTest) o;
         return Integer.compare(
                 getId(), c.getId()) == 0 &&
-                getBank().getId()==c.getBank().getId() &&
+                getBank().getId() == c.getBank().getId() &&
                 getClient().getName().equals(c.getClient().getName()) &&
                 getCurrency().equals(c.getCurrency()) &&
                 getAccNumber().equals(c.getAccNumber()) &&

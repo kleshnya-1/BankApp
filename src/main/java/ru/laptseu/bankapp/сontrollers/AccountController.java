@@ -1,13 +1,12 @@
 package ru.laptseu.bankapp.сontrollers;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
 import org.springframework.web.bind.annotation.*;
 import ru.laptseu.bankapp.models.Account;
 import ru.laptseu.bankapp.services.AccountService;
 import ru.laptseu.bankapp.services.CurrencyRateService;
 
-@Log4j2
+
 @RestController
 @RequestMapping("/accounts")
 @RequiredArgsConstructor

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.persistence.Entity;
 import javax.persistence.*;
 import java.util.Calendar;
 
@@ -11,7 +12,7 @@ import java.util.Calendar;
 @Setter
 @Entity
 @Table(name = "accounts")
-public class Account extends ModelWithIntegerId {
+public class Account extends EntityWithIntegerId {
     @ManyToOne
     @JoinColumn(name = "bank_id")
     @JsonBackReference

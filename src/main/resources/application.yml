@@ -2,7 +2,6 @@ spring:
   application:
     name: bankAppOk
 
-
   jpa:
     database: postgresql
     show-sql: true
@@ -17,5 +16,5 @@ spring:
 
   data:
     mongodb:
-      uri: mongodb+srv://1:1@cluster0.vlexj.mongodb.net/test
-      database: BankDocuments
+      uri: mongodb://localhost:27017
+      database: bankDocuments

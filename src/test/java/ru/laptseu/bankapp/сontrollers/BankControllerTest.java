@@ -30,22 +30,20 @@ import static org.mockito.BDDMockito.given;
 @SpringBootTest(classes = Main.class)
 class BankControllerTest {
 
+    Bank b1 = new BankForTest();
+    Bank b2 = new BankForTest();
+    int n1 = Calendar.MILLISECOND + Calendar.SECOND + hashCode();
+    int n2 = n1 + 100;
+    BankRateListDocument bankRateListDocument1 = new BankRateListDocumentForTest();
+    Map<Currency, Double> map1 = new HashMap<>();
+    BankRateListDocument bankRateListDocument2 = new BankRateListDocumentForTest();
+    Map<Currency, Double> map2 = new HashMap<>();
     @Mock
     private BankService bankService;
     @Mock
     private CurrencyRateService currencyRateService;
     @InjectMocks
     private BankController bankController;
-
-    Bank b1 = new BankForTest();
-    Bank b2 = new BankForTest();
-    int n1 = Calendar.MILLISECOND + Calendar.SECOND + hashCode();
-    int n2 = n1 + 100;
-
-    BankRateListDocument bankRateListDocument1 = new BankRateListDocumentForTest();
-    Map<Currency, Double> map1 = new HashMap<>();
-    BankRateListDocument bankRateListDocument2 = new BankRateListDocumentForTest();
-    Map<Currency, Double> map2 = new HashMap<>();
 
     @BeforeEach
     void setUp() {

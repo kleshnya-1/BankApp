@@ -2,18 +2,33 @@ version: "3.8"
 
 volumes:
   pg_volume:
+  mongo_volume:
+  mongo_test_volume:
 
 services:
   pg:
     image: postgres:13.3
     volumes:
       - pg_volume:/var/lib/postgresql/data
-#      - ./db_init:/src/main/resources/pgDbIntit.sql
     environment:
       - POSTGRES_DB=bankDb
       - POSTGRES_PASSWORD=1
-#      - PGDATA=src\main\resources\pgDbIntit.sql
-#    doesn't work
     restart: always
     ports:
       - ${POSTGRES_PORT:-5432}:5432
+
+  mongo:
+    image: mongo
+    volumes:
+          - mongo_volume:/data/db
+    restart: always
+    ports:
+          - "27017:27017"
+
+  mongo_test:
+    image: mongo
+    volumes:
+          - mongo_test_volume:/data/db
+    restart: always
+    ports:
+          - "37019:27017"

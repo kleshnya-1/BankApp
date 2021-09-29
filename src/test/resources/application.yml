@@ -2,13 +2,7 @@ spring:
   application:
     name: bankAppOk
 
-  jpa:
-    show-sql: true
-    hibernate:
-      ddl-auto: create
-
   data:
     mongodb:
-      uri: mongodb+srv://1:1@cluster0.vlexj.mongodb.net/test
-      database: BankDocuments_ForTesting
-
+      uri: mongodb://localhost:37019
+      database: bankDocuments_forTest

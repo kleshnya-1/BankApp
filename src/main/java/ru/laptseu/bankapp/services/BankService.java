@@ -4,11 +4,11 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.laptseu.bankapp.models.Bank;
-import ru.laptseu.bankapp.repositories.BankRepo;
+import ru.laptseu.bankapp.repositories.BankRepository;
 
 @Service
 @Getter
 @RequiredArgsConstructor
 public class BankService implements IMaintainableService<Bank> {
-    private final BankRepo dao;
+    private final BankRepository dao;
 }

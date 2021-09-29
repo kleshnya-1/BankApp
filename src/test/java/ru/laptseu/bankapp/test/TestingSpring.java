@@ -1,3 +1,5 @@
+package ru.laptseu.bankapp.test;
+
 import lombok.SneakyThrows;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -7,13 +9,12 @@ import org.springframework.test.context.junit4.SpringRunner;
 import ru.laptseu.bankapp.Main;
 import ru.laptseu.bankapp.models.Currency;
 import ru.laptseu.bankapp.models.*;
-import ru.laptseu.bankapp.repositories.AccountRepo;
+import ru.laptseu.bankapp.repositories.AccountRepository;
 import ru.laptseu.bankapp.repositories.RepositoryFactory;
 import ru.laptseu.bankapp.services.*;
 import ru.laptseu.bankapp.testModels.AccountForTest;
 import ru.laptseu.bankapp.testModels.BankForTest;
 import ru.laptseu.bankapp.testModels.ClientForTest;
-import ru.laptseu.bankapp.testServices.CurrencyRateServiceForTest;
 
 import java.util.*;
 
@@ -24,24 +25,24 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TestingSpring {
 
     @Autowired
+    private CurrencyRateService currencyRateService;
+    @Autowired
     private AccountService accountService;
     @Autowired
     private BankService bankService;
     @Autowired
     private ClientService clientService;
     @Autowired
-    //ask. initialisation special test-bean for testing without DB. is it what we spoke about?
-    private CurrencyRateServiceForTest currencyRateService;
-    @Autowired
     private TransferHistoryService transferHistoryService;
     @Autowired
-    private AccountRepo accountRepo;
+    private AccountRepository accountRepository;
     @Autowired
     private RepositoryFactory repositoryFactory;
 
     @SneakyThrows
     @Test
     public void testTransfer() {
+
         Calendar startTime = new GregorianCalendar();
         Bank bank = new Bank();
         Bank bank1 = new Bank();
@@ -291,8 +292,8 @@ public class TestingSpring {
     @SneakyThrows
     @Test
     public void testFactory() {
-        var f = repositoryFactory.get(Account.class);
-        var f1 = repositoryFactory.get(Bank.class);
-        var f2 = repositoryFactory.get(BankRateListDocument.class);
+//        var f = repositoryFactory.get(Account.class);
+//        var f1 = repositoryFactory.get(Bank.class);
+//        var f2 = repositoryFactory.get(BankRateListDocument.class);
     }
 }

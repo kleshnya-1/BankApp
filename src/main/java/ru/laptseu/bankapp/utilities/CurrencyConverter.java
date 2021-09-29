@@ -7,11 +7,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class CurrencyConverter {
     public double convert(Double sourceRate, Double targetRate, Double amount) throws RuntimeException {
-        if (sourceRate == null || targetRate == null || amount == null) {
-            RuntimeException e = new NullPointerException("source: " + sourceRate + " target: " + targetRate + " amount: " + amount);
-            log.error(e);
-            throw e;
-        }
         return sourceRate * amount / targetRate;
     }
 }

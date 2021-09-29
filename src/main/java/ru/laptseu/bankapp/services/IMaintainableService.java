@@ -1,9 +1,9 @@
 package ru.laptseu.bankapp.services;
 
 import org.springframework.data.repository.CrudRepository;
-import ru.laptseu.bankapp.models.Model;
+import ru.laptseu.bankapp.models.Entity;
 
-public interface IMaintainableService<T extends Model> {
+public interface IMaintainableService<T extends Entity> {
 
     CrudRepository getDao();
 
