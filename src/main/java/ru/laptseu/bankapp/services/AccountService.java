@@ -41,7 +41,7 @@ public class AccountService implements IMaintainableService<Account> {
         targetAcc.setAmount(targetAcc.getAmount() + totalAmount);
         saveAccountsThroughTransaction(sourceAcc, targetAcc);
         // TODO: 15.09.2021 check bad cases
-        return transferHistoryService.save(transferHistoryService.createHistory(sourceAcc, targetAcc, amount)).getId();
+        return transferHistoryService.save(sourceAcc, targetAcc, amount);
     }
 
     @Transactional(rollbackFor = Exception.class)

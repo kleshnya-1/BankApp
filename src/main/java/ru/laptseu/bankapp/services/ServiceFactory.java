@@ -1,24 +1,29 @@
 package ru.laptseu.bankapp.services;
 
+import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationContext;
+import org.springframework.stereotype.Component;
+import ru.laptseu.bankapp.models.*;
+
 import java.util.HashMap;
 import java.util.Map;
 
-// TODO: 14.09.2021 in progress. not for checking 
+@RequiredArgsConstructor
+@Component
 public class ServiceFactory {
-    private static final Map<Class, IMaintainableService> factoryMap = new HashMap<>();
+    private static final Map<Class<? extends Entity>, Class<? extends IMaintainableService>> FACTORY_MAP = new HashMap<>();
 
     static {
-//        factoryMap.put(Account.class, new AccountService());
-//        factoryMap.put(Bank.class, new BankService());
-//        factoryMap.put(Client.class, new ClientService());
-//        factoryMap.put(CurrencyRate.class, new CurrencyRateService());
-//        factoryMap.put(TransferHistory.class, new TransferHistoryService());
+        FACTORY_MAP.put(Account.class, AccountService.class);
+        FACTORY_MAP.put(Bank.class, BankService.class);
+        FACTORY_MAP.put(Client.class, ClientService.class);
+        FACTORY_MAP.put(BankRateListDocument.class, CurrencyRateService.class);
+        FACTORY_MAP.put(TransferHistory.class, TransferHistoryService.class);
     }
 
-    public ServiceFactory() {
-    }
+    private final ApplicationContext applicationContext;
 
-    public static IMaintainableService get(Class clazz) {
-        return factoryMap.get(clazz);
+    public IMaintainableService get(Class clazz) {
+        return applicationContext.getBean(FACTORY_MAP.get(clazz));
     }
 }

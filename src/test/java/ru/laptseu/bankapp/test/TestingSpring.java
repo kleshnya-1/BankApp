@@ -20,6 +20,7 @@ import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+//@DataMongoTest
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = Main.class)
 public class TestingSpring {
@@ -38,6 +39,7 @@ public class TestingSpring {
     private AccountRepository accountRepository;
     @Autowired
     private RepositoryFactory repositoryFactory;
+
 
     @SneakyThrows
     @Test
@@ -217,7 +219,16 @@ public class TestingSpring {
 
     @SneakyThrows
     @Test
+
+//    @Bean
+//    public MongoClient mongo() {
+//        Fongo fongo = new Fongo("new");
+//      return   fongo.getMongo();
+//    }
+
+
     public void testCurrencyRateServiceCRUD() {
+
         BankRateListDocument bankRateListDocument1 = new BankRateListDocument();
         bankRateListDocument1.setBankId(Calendar.getInstance().get(Calendar.MILLISECOND));
         Map<Currency, Double> map1 = new HashMap<>();
