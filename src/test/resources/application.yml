@@ -1,8 +1,3 @@
 spring:
   application:
     name: bankAppOk
-
-#  data:
-#    mongodb:
-#      uri: mongodb://localhost:37019
-#      database: bankDocuments_forTest
