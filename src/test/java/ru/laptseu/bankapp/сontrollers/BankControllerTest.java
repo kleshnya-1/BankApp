@@ -14,8 +14,6 @@ import ru.laptseu.bankapp.models.BankRateListDocument;
 import ru.laptseu.bankapp.models.Currency;
 import ru.laptseu.bankapp.services.BankService;
 import ru.laptseu.bankapp.services.CurrencyRateService;
-import ru.laptseu.bankapp.testModels.BankForTest;
-import ru.laptseu.bankapp.testModels.BankRateListDocumentForTest;
 
 import java.util.Calendar;
 import java.util.HashMap;
@@ -30,13 +28,13 @@ import static org.mockito.BDDMockito.given;
 @SpringBootTest(classes = Main.class)
 class BankControllerTest {
 
-    Bank b1 = new BankForTest();
-    Bank b2 = new BankForTest();
+    Bank b1 = new Bank();
+    Bank b2 = new Bank();
     int n1 = Calendar.MILLISECOND + Calendar.SECOND + hashCode();
     int n2 = n1 + 100;
-    BankRateListDocument bankRateListDocument1 = new BankRateListDocumentForTest();
+    BankRateListDocument bankRateListDocument1 = new BankRateListDocument();
     Map<Currency, Double> map1 = new HashMap<>();
-    BankRateListDocument bankRateListDocument2 = new BankRateListDocumentForTest();
+    BankRateListDocument bankRateListDocument2 = new BankRateListDocument();
     Map<Currency, Double> map2 = new HashMap<>();
     @Mock
     private BankService bankService;
@@ -75,8 +73,8 @@ class BankControllerTest {
     void openBankPage() {
         given(bankService.read(n1)).willReturn(b1);
         given(bankService.read(n2)).willReturn(b2);
-        BankForTest responseEntity1 = (BankForTest) bankController.openBankPage(n1);
-        BankForTest responseEntity2 = (BankForTest) bankController.openBankPage(n2);
+        Bank responseEntity1 = (Bank) bankController.openBankPage(n1);
+        Bank responseEntity2 = (Bank) bankController.openBankPage(n2);
         assertEquals(b1, responseEntity1);
         assertEquals(b2, responseEntity2);
         assertNotEquals(b1, responseEntity2);
@@ -87,10 +85,10 @@ class BankControllerTest {
     void openBankRates() {
         given(currencyRateService.read(n1)).willReturn(bankRateListDocument1);
         given(currencyRateService.read(n2)).willReturn(bankRateListDocument2);
-        assertEquals(bankRateListDocument1, bankController.openBankRates(n1));
-        assertEquals(bankRateListDocument2, bankController.openBankRates(n2));
-        assertNotEquals(bankRateListDocument2, bankController.openBankRates(n1));
-        assertNotEquals(bankRateListDocument1, bankController.openBankRates(n2));
+        assertEquals(bankRateListDocument1.getId(), bankController.openBankRates(n1).getId());
+        assertEquals(bankRateListDocument2.getId(), bankController.openBankRates(n2).getId());
+        assertNotEquals(bankRateListDocument2.getId(), bankController.openBankRates(n1).getId());
+        assertNotEquals(bankRateListDocument1.getId(), bankController.openBankRates(n2).getId());
     }
 
     @Test

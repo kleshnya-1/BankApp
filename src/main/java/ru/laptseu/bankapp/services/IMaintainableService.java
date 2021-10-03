@@ -3,6 +3,8 @@ package ru.laptseu.bankapp.services;
 import org.springframework.data.repository.CrudRepository;
 import ru.laptseu.bankapp.models.Entity;
 
+import java.util.List;
+
 public interface IMaintainableService<T extends Entity> {
 
     CrudRepository getDao();
@@ -13,6 +15,9 @@ public interface IMaintainableService<T extends Entity> {
 
     default T read(int id) {
         return (T) getDao().findById(id).get();
+    }
+    default List<T> read() {
+        return (List<T>) getDao().findAll();
     }
 
     default void update(T obj) {

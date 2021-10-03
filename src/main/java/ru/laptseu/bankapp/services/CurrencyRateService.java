@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.laptseu.bankapp.models.BankRateListDocument;
 import ru.laptseu.bankapp.models.Currency;
-import ru.laptseu.bankapp.repositories.CurrencyRateDocumentsRepository;
+import ru.laptseu.bankapp.repositories.CurrencyRateRepository;
 
 import java.util.Calendar;
 
@@ -14,7 +14,7 @@ import java.util.Calendar;
 @Getter
 @RequiredArgsConstructor
 public class CurrencyRateService implements IMaintainableService<BankRateListDocument> {
-    private final CurrencyRateDocumentsRepository dao;
+    private final CurrencyRateRepository dao;
 
     public BankRateListDocument save(BankRateListDocument obj) {
         obj.setDate(Calendar.getInstance().getTime());
@@ -22,7 +22,7 @@ public class CurrencyRateService implements IMaintainableService<BankRateListDoc
     }
 
     public BankRateListDocument read(int key) {
-        return dao.findFirstByBankIdOrderByDateDesc(key);
+        return dao.findById(key);
     }
 
     public Double read(int key, Currency c) {

@@ -7,7 +7,10 @@ import org.springframework.stereotype.Repository;
 import ru.laptseu.bankapp.models.BankRateListDocument;
 
 @Repository
-@Primary//because of adapter
-public interface CurrencyRateDocumentsRepository extends MongoRepository<BankRateListDocument, ObjectId> {
+public interface CurrencyRateRepository extends MongoRepository<BankRateListDocument, ObjectId> {
     BankRateListDocument findFirstByBankIdOrderByDateDesc(int bankId);
+
+    default BankRateListDocument findById(int bankId) {
+        return findFirstByBankIdOrderByDateDesc(bankId);
+    }
 }

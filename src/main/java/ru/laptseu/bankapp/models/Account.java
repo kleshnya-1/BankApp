@@ -1,7 +1,9 @@
 package ru.laptseu.bankapp.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.Setter;
 
 import javax.persistence.Entity;
@@ -13,14 +15,14 @@ import java.util.Calendar;
 @Entity
 @Table(name = "accounts")
 public class Account extends EntityWithIntegerId {
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "bank_id")
-    @JsonBackReference
+    //@JsonBackReference
     private Bank bank;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "client_id")
-    @JsonBackReference
+    //@JsonBackReference
     private Client client;
 
     @Enumerated(EnumType.STRING)

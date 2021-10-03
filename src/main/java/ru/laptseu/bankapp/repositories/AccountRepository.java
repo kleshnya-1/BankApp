@@ -1,5 +1,6 @@
 package ru.laptseu.bankapp.repositories;
 
+import lombok.SneakyThrows;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 import ru.laptseu.bankapp.models.Account;
@@ -7,4 +8,8 @@ import ru.laptseu.bankapp.models.Account;
 @Repository
 public interface AccountRepository extends CrudRepository<Account, Integer> {
     Account readAccountByAccNumber(String num);
+
+    default Account findById(String num){
+      return   readAccountByAccNumber( num);
+    }
 }

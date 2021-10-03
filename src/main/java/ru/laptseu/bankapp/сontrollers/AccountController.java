@@ -13,11 +13,9 @@ import ru.laptseu.bankapp.services.CurrencyRateService;
 public class AccountController {
     //in progress. not for checking
     private final AccountService accountService;
-    private final CurrencyRateService currencyRateService;
 
     @RequestMapping("/")
     public void openAll() {
-// TODO: 15.09.2021 ask. should this page exist?
     }
 
     @RequestMapping("/{id}")

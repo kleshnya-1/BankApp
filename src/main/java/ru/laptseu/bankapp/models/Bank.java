@@ -22,7 +22,7 @@ public class Bank extends EntityWithIntegerId {
     private double transferFeeInPercentForNotNaturalPersons;
 
     @OneToMany(mappedBy = "bank", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
+    //@JsonManagedReference
     private Set<Account> accounts = new HashSet<>();
 }
 

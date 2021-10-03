@@ -1,8 +1,10 @@
 package ru.laptseu.bankapp.dao;
 
-public abstract class AbstractDao<T> {
+import org.springframework.data.repository.CrudRepository;
 
-    abstract T create(T obj);
+public abstract class AbstractDao<T>  {
+
+    abstract T save(T obj);
 
     abstract T read(int id);
 
