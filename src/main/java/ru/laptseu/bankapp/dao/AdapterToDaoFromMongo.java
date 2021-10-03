@@ -18,7 +18,7 @@ public class AdapterToDaoFromMongo extends AbstractDao<BankRateListDocument> {
 
     @Override
     public BankRateListDocument read(int id) {
-        return  dao.findById(id);
+        return dao.findById(id);
     }
 
     @Override

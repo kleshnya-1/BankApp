@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.laptseu.bankapp.models.Client;
 import ru.laptseu.bankapp.services.ClientService;
 
-
+//in progress
 @RestController
 @RequestMapping("/clients")
 @RequiredArgsConstructor

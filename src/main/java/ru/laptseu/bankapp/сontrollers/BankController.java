@@ -19,14 +19,15 @@ public class BankController {
 
     @GetMapping("/")
     public List<Bank> openAllBanks() {
-        List <Bank> l = bankService.read();
+        List<Bank> l = bankService.read();
         l.stream().forEach(b -> b.getAccounts().forEach(account -> {
             account.setBank(null);
             account.setClient(null);
         }));
         return l;
     }
-    @PostMapping( "/")
+
+    @PostMapping("/")
     public Bank newBank(@RequestBody Bank bank) {
         return bankService.save(bank);
     }
@@ -43,8 +44,8 @@ public class BankController {
     // TODO: 03.10.2021 add update
 
     @DeleteMapping("/{id}")
-    public void deleteBank(@PathVariable Integer id){
-         bankService.delete(id);
+    public void deleteBank(@PathVariable Integer id) {
+        bankService.delete(id);
     }
 
     @RequestMapping("/{id}/rates")
@@ -54,5 +55,4 @@ public class BankController {
     }
 
 
-
-   }
+}

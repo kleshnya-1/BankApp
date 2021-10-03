@@ -16,6 +16,7 @@ public interface IMaintainableService<T extends Entity> {
     default T read(int id) {
         return (T) getDao().findById(id).get();
     }
+
     default List<T> read() {
         return (List<T>) getDao().findAll();
     }
