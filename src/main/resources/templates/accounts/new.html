@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+    <title>new account</title>
+</head>
+<body>
+<header th:insert="blocks/header :: header"></header>
+<h1>new account</h1>
+<form action="#" th:action="@{http://localhost:8080/accounts/}" th:object="${newb}" method="post">
+    <p>account number: <input type="text" th:field="*{accNumber}"/></p>
+    <b>amount </b> <input type="number" th:field="*{amount}" id="amount"/>
+    <br>
+    <b>currency </b>
+    <select name="currency">
+        <option th:each="currency : ${T( ru.laptseu.bankapp.models.Currency).values()}"
+                th:value="${currency}" th:text="${currency.getLabel()}"></option>
+    </select>
+    <br><b>bank </b>
+    <select th:field="*{bankId}">
+        <option th:each="bank : ${bankModel}"
+                th:value="${bank.getId()}" th:text="${bank.getId()+bank.getName()}"></option>
+    </select>
+    <br> <b>client </b>
+    <select th:field="*{clientId}">
+        <option th:each="client : ${clientModel}"
+                th:value="${client.getId()}" th:text="${client.getId() + client.getName()}"></option>
+    </select>
+        <p><input type="submit" value="Submit"/> <input type="reset" value="Reset"/></p>
+</form>
+</body>
+</html>
