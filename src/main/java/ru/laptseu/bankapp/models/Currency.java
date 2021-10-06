@@ -1,5 +1,8 @@
 package ru.laptseu.bankapp.models;
 
+import lombok.Getter;
+
+@Getter
 public enum Currency {
     BYN("byn"),
     USD("usd"),

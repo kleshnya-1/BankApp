@@ -18,3 +18,12 @@ spring:
     mongodb:
       uri: mongodb://localhost:27017
       database: bankDocuments
+  mvc:
+    hiddenmethod:
+      filter:
+        enabled: true
+
+
+#  thymeleaf:
+#    prefix: classpath:/templates
+#    suffix: .html
