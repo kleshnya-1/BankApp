@@ -22,6 +22,5 @@ public class Client extends EntityWithIntegerId {
     private boolean isNaturalPerson;
 
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
-    //@JsonManagedReference
     private Set<Account> accounts = new HashSet<>();
 }

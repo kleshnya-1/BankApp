@@ -27,7 +27,6 @@ public class AccountController {
     private final AccountService accountService;
     private final BankService bankService;
     private final ClientService clientService;
-    // TODO: 05.10.2021 curRateService options
 
     @GetMapping("/")
     public String openAllAccounts(Model model) {

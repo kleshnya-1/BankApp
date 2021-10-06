@@ -12,10 +12,8 @@ import ru.laptseu.bankapp.models.mappers.BankMapper;
 import ru.laptseu.bankapp.services.BankService;
 import ru.laptseu.bankapp.services.CurrencyRateService;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 
@@ -60,14 +58,14 @@ public class BankController {
     }
 
     @GetMapping("/{id}/rates")
-    public String rates(Model model,  @PathVariable("id") int id) {
-       BankRateListDocument bankRateListDocument = currencyRateService.read(id);
+    public String rates(Model model, @PathVariable("id") int id) {
+        BankRateListDocument bankRateListDocument = currencyRateService.read(id);
         model.addAttribute("bank", BankMapper.INSTANCE.toDto(bankService.read(id)));
         model.addAttribute("rates", bankRateListDocument);
         try {
             model.addAttribute("ratesList", bankRateListDocument.getCurrenciesAndRates());
-        } catch (NullPointerException e){
-            model.addAttribute("ratesList",new HashMap());
+        } catch (NullPointerException e) {
+            model.addAttribute("ratesList", new HashMap());
         }
         return "banks/rates";
     }
@@ -92,13 +90,14 @@ public class BankController {
                            @PathVariable("id") int id) {
         BankRateListDocument bankRateListDocument = currencyRateService.read(id);
         model.addAttribute("bankId", id);
-        model.addAttribute("mapKey",  new String());
+        model.addAttribute("mapKey", "");
         model.addAttribute("mapValue", new Double(0.0));
         return "banks/new_rate";
     }
+
     //in progress
     @PostMapping("/{id}/rates")
-    public String submit( @PathVariable("id") int id, @ModelAttribute Model model) {
+    public String submit(@PathVariable("id") int id, @ModelAttribute Model model) {
         // Bank newBank = BankMapper.INSTANCE.fromDto(newb);
         // bankService.save(newBank);
         return "redirect:/banks/{id}/";

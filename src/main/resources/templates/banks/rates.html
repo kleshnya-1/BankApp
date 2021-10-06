@@ -10,15 +10,6 @@
     <div class="w3-container w3-twothird">
         <div class="w3-responsive w3-round-large w3-centered">
             <table class="w3-table w3-striped w3-bordered w3-white w3-card-4 w3-hoverable w3-centered">
-<!--                <thead>-->
-<!--                <tr style="background-color: #817a79">-->
-<!--                    <th>id</th>-->
-<!--                    <th>name</th>-->
-<!--                    <th>% for persons</th>-->
-<!--                    <th>% for org</th>-->
-<!--                    <th>in</th>-->
-<!--                </tr>-->
-<!--                </thead>-->
                 <tr
                         th:each="t : ${ratesList}">
                     <td th:text="${t.getKey()/t.getValue()}">-</td>

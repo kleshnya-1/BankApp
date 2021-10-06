@@ -14,12 +14,10 @@ import java.util.Calendar;
 public class Account extends EntityWithIntegerId {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "bank_id")
-    //@JsonBackReference
     private Bank bank;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "client_id")
-    //@JsonBackReference
     private Client client;
 
     @Enumerated(EnumType.STRING)

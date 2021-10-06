@@ -8,12 +8,6 @@
 <body>
 <header th:insert="blocks/header :: header" ></header>
 <h1>edit bank</h1>
-
-
-
-
-
-
 <form th:method="PATCH" th:action="@{/banks/{id}(id=${bank.id})}" th:object="${bank}">
 <p>name: <input type="text" th:field="*{name}" /></p>
     <p>% natural: <input type="number" th:field="*{transferFeeInPercent}" /></p>
