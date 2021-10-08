@@ -21,12 +21,12 @@
     <br><b>bank </b>
     <select th:field="*{bankId}">
         <option th:each="bank : ${bankModel}"
-                th:value="${bank.getId()}" th:text="${bank.getId()+bank.getName()}"></option>
+                th:value="${bank.getId()}" th:text="${bank.getName()}"></option>
     </select>
     <br> <b>client </b>
     <select th:field="*{clientId}">
         <option th:each="client : ${clientModel}"
-                th:value="${client.getId()}" th:text="${client.getId() + client.getName()}"></option>
+                th:value="${client.getId()}" th:text="${client.getName()}"></option>
     </select>
         <p><input type="submit" value="Submit"/> <input type="reset" value="Reset"/></p>
 </form>

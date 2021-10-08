@@ -14,7 +14,7 @@ import java.util.Map;
 @Getter
 @Setter
 @Document(collection = "documents")
-public class BankRateListDocument extends Entity {
+public class BankRateList extends Entity {
     @BsonProperty("_id")
     @BsonId
     private ObjectId id;

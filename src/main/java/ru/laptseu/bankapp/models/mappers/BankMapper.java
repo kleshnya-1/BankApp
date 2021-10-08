@@ -6,10 +6,8 @@ import ru.laptseu.bankapp.models.Bank;
 import ru.laptseu.bankapp.models.dto.BankDto;
 
 @Mapper(uses = AccountMapper.class)
-public interface BankMapper {
-    BankMapper INSTANCE = Mappers.getMapper(BankMapper.class);
+public interface BankMapper extends MapperInterface{
+        BankDto map(Bank bank);
 
-    BankDto toDto(Bank bank);
-
-    Bank fromDto(BankDto bankDto);
+    Bank map(BankDto bankDto);
 }

@@ -8,8 +8,10 @@ import ru.laptseu.bankapp.models.EntityWithIntegerId;
 @Getter
 @Setter
 @NoArgsConstructor
-public class AccountDto extends EntityWithIntegerId {
+public class AccountDto extends EntityDto  {
+    private String bankName;
     private int bankId;
+    private String clientName;
     private int clientId;
     private String currency;
     private double amount;

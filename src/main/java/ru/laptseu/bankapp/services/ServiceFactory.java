@@ -17,7 +17,7 @@ public class ServiceFactory {
         FACTORY_MAP.put(Account.class, AccountService.class);
         FACTORY_MAP.put(Bank.class, BankService.class);
         FACTORY_MAP.put(Client.class, ClientService.class);
-        FACTORY_MAP.put(BankRateListDocument.class, CurrencyRateService.class);
+        FACTORY_MAP.put(BankRateList.class, CurrencyRateService.class);
         FACTORY_MAP.put(TransferHistory.class, TransferHistoryService.class);
     }
 

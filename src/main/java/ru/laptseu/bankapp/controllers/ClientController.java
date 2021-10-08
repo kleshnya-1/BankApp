@@ -1,4 +1,4 @@
-package ru.laptseu.bankapp.сontrollers;
+package ru.laptseu.bankapp.controllers;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -21,14 +21,14 @@ public class ClientController {
 
     @GetMapping("/")
     public String openAllClients(Model model) {
-        List<ClientDto> clientDtos = clientService.read().stream().map(b -> ClientMapper.INSTANCE.toDto(b)).collect(Collectors.toList());
+        List<ClientDto> clientDtos = clientService.read().stream().map(b -> ClientMapper.INSTANCE.map(b)).collect(Collectors.toList());
         model.addAttribute("clients", clientDtos);
         return "clients/show";
     }
 
     @PostMapping("/")
     public String submit(@ModelAttribute ClientDto newb) {
-        Client newClient = ClientMapper.INSTANCE.fromDto(newb);
+        Client newClient = ClientMapper.INSTANCE.map(newb);
         clientService.save(newClient);
         return "redirect:/clients/";
     }
@@ -36,7 +36,7 @@ public class ClientController {
     @GetMapping("/{id}")
     public String openClient(@PathVariable Integer id, Model model) {
         Client b = clientService.read(id);
-        ClientDto dt = ClientMapper.INSTANCE.toDto(b);
+        ClientDto dt = ClientMapper.INSTANCE.map(b);
         model.addAttribute("client", dt);
         return "clients/showOne";
     }
@@ -54,7 +54,7 @@ public class ClientController {
 
     @PatchMapping("/{id}")
     public String update(@ModelAttribute("client") ClientDto clientDto) {
-        clientService.update(ClientMapper.INSTANCE.fromDto(clientDto));
+        clientService.update(ClientMapper.INSTANCE.map(clientDto));
         return "redirect:/clients/";
     }
 

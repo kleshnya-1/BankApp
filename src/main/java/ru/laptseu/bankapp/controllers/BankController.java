@@ -1,11 +1,11 @@
-package ru.laptseu.bankapp.сontrollers;
+package ru.laptseu.bankapp.controllers;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.laptseu.bankapp.models.Bank;
-import ru.laptseu.bankapp.models.BankRateListDocument;
+import ru.laptseu.bankapp.models.BankRateList;
 import ru.laptseu.bankapp.models.Currency;
 import ru.laptseu.bankapp.models.dto.BankDto;
 import ru.laptseu.bankapp.models.mappers.BankMapper;
@@ -26,14 +26,14 @@ public class BankController {
 
     @GetMapping("/")
     public String openAllBanks(Model model) {
-        List<BankDto> bankDtos = bankService.read().stream().map(b -> BankMapper.INSTANCE.toDto(b)).collect(Collectors.toList());
+        List<BankDto> bankDtos = bankService.read().stream().map(b -> BankMapper.INSTANCE.map(b)).collect(Collectors.toList());
         model.addAttribute("banks", bankDtos);
         return "banks/show";
     }
 
     @PostMapping("/")
     public String submit(@ModelAttribute BankDto newb) {
-        Bank newBank = BankMapper.INSTANCE.fromDto(newb);
+        Bank newBank = BankMapper.INSTANCE.map(newb);
         bankService.save(newBank);
         return "redirect:/banks/";
     }
@@ -41,7 +41,7 @@ public class BankController {
     @GetMapping("/{id}")
     public String openBank(@PathVariable Integer id, Model model) {
         Bank b = bankService.read(id);
-        BankDto dt = BankMapper.INSTANCE.toDto(b);
+        BankDto dt = BankMapper.INSTANCE.map(b);
         model.addAttribute("bank", dt);
         return "banks/showOne";
     }
@@ -53,17 +53,17 @@ public class BankController {
 
     @GetMapping("/{id}/edit")
     public String edit(Model model, @PathVariable("id") int id) {
-        model.addAttribute("bank", BankMapper.INSTANCE.toDto(bankService.read(id)));
+        model.addAttribute("bank", BankMapper.INSTANCE.map(bankService.read(id)));
         return "banks/edit";
     }
 
     @GetMapping("/{id}/rates")
     public String rates(Model model, @PathVariable("id") int id) {
-        BankRateListDocument bankRateListDocument = currencyRateService.read(id);
-        model.addAttribute("bank", BankMapper.INSTANCE.toDto(bankService.read(id)));
-        model.addAttribute("rates", bankRateListDocument);
+        BankRateList bankRateList = currencyRateService.read(id);
+        model.addAttribute("bank", BankMapper.INSTANCE.map(bankService.read(id)));
+        model.addAttribute("rates", bankRateList);
         try {
-            model.addAttribute("ratesList", bankRateListDocument.getCurrenciesAndRates());
+            model.addAttribute("ratesList", bankRateList.getCurrenciesAndRates());
         } catch (NullPointerException e) {
             model.addAttribute("ratesList", new HashMap());
         }
@@ -72,7 +72,7 @@ public class BankController {
 
     @PatchMapping("/{id}")
     public String update(@ModelAttribute("bank") BankDto bankDto) {
-        bankService.update(BankMapper.INSTANCE.fromDto(bankDto));
+        bankService.update(BankMapper.INSTANCE.map(bankDto));
         return "redirect:/banks/";
     }
 
@@ -88,7 +88,7 @@ public class BankController {
                            @ModelAttribute("rate") Double rate,
                            Model model,
                            @PathVariable("id") int id) {
-        BankRateListDocument bankRateListDocument = currencyRateService.read(id);
+        BankRateList bankRateList = currencyRateService.read(id);
         model.addAttribute("bankId", id);
         model.addAttribute("mapKey", "");
         model.addAttribute("mapValue", new Double(0.0));

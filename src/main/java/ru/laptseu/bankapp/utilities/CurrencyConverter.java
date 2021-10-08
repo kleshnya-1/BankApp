@@ -11,9 +11,9 @@ import ru.laptseu.bankapp.services.CurrencyRateService;
 public class CurrencyConverter {
     private final CurrencyRateService currencyRateService;
 
-    public double convert(Bank sourceBank, Currency sourceCurrency, Bank targetBank, Currency targetCurrency, Double amount) {
-        Double sourceRate = currencyRateService.read(sourceBank.getId(), sourceCurrency);
-        Double targetRate = currencyRateService.read(targetBank.getId(), targetCurrency);
+    public double convert(int sourceBankId, Currency sourceCurrency, int targetBankId, Currency targetCurrency, Double amount) {
+        Double sourceRate = currencyRateService.read(sourceBankId, sourceCurrency);
+        Double targetRate = currencyRateService.read(targetBankId, targetCurrency);
         return sourceRate * amount / targetRate;
     }
 }

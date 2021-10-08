@@ -1,7 +1,6 @@
 package ru.laptseu.bankapp.test;
 
 import lombok.SneakyThrows;
-import org.hibernate.Hibernate;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,21 +55,21 @@ public class TestingSpring {
         bankService.save(bank);
         bankService.save(bank1);
 
-        BankRateListDocument bankRateListDocument = new BankRateListDocument();
-        bankRateListDocument.setBankId(bank.getId());
+        BankRateList bankRateList = new BankRateList();
+        bankRateList.setBankId(bank.getId());
         Map<Currency, Double> currencyDoubleMap = new HashMap<>();
         currencyDoubleMap.put(Currency.USD, 50d);
         currencyDoubleMap.put(Currency.EUR, 100d);
-        bankRateListDocument.setCurrenciesAndRates(currencyDoubleMap);
-        currencyRateService.save(bankRateListDocument);
+        bankRateList.setCurrenciesAndRates(currencyDoubleMap);
+        currencyRateService.save(bankRateList);
 
         Map<Currency, Double> currencyDoubleMap1 = new HashMap<>();
         currencyDoubleMap1.put(Currency.USD, 200d);
         currencyDoubleMap1.put(Currency.EUR, 250d);
-        BankRateListDocument bankRateListDocument1 = new BankRateListDocument();
-        bankRateListDocument1.setBankId(bank1.getId());
-        bankRateListDocument1.setCurrenciesAndRates(currencyDoubleMap1);
-        currencyRateService.save(bankRateListDocument1);
+        BankRateList bankRateList1 = new BankRateList();
+        bankRateList1.setBankId(bank1.getId());
+        bankRateList1.setCurrenciesAndRates(currencyDoubleMap1);
+        currencyRateService.save(bankRateList1);
 
         bankService.update(bank);
         bankService.update(bank1);

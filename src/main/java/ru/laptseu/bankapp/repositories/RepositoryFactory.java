@@ -18,7 +18,7 @@ public class RepositoryFactory {
         FACTORY_MAP.put(Account.class, AccountRepository.class);
         FACTORY_MAP.put(Bank.class, BankRepository.class);
         FACTORY_MAP.put(Client.class, ClientRepository.class);
-        FACTORY_MAP.put(BankRateListDocument.class, CurrencyRateRepository.class);
+        FACTORY_MAP.put(BankRateList.class, CurrencyRateRepository.class);
         FACTORY_MAP.put(TransferHistory.class, TransferHistoryRepository.class);
     }
 

@@ -16,8 +16,8 @@
                     <th>number</th>
                     <th>ammount</th>
                     <th>currency</th>
-                    <th>bank ID</th>
-                    <th>client ID</th>
+                    <th>bank</th>
+                    <th>client</th>
                 </tr>
                 </thead>
                 <tr th:each="t : ${accounts}">
@@ -25,8 +25,8 @@
                     <td th:text="${t.getAccNumber()}">-</td>
                     <td th:text="${t.getAmount()}">-</td>
                     <td th:text="${t.getCurrency()}">-</td>
-                    <td th:text="${t.getBankId()}">-</td>
-                    <td th:text="${t.getClientId()}">-</td>
+                    <td th:text="${t.getBankName()}">-</td>
+                    <td th:text="${t.getClientName()}">-</td>
                      <td>
                         <a th:href="@{/accounts/{id}(id=${t.id})}">Open</a>
                     </td>

@@ -7,13 +7,12 @@ import ru.laptseu.bankapp.models.Account;
 import ru.laptseu.bankapp.models.dto.AccountDto;
 
 @Mapper
-public interface AccountMapper {
-    AccountMapper INSTANCE = Mappers.getMapper(AccountMapper.class);
+public interface AccountMapper extends MapperInterface{
 
     @Mapping(source = "bank.id", target = "bankId")
     @Mapping(source = "client.id", target = "clientId")
-    AccountDto toDto(Account account);
+    AccountDto map(Account account);
 
     @Mapping(source = "clientId", target = "client.id")
-    Account fromDto(AccountDto accountDTO);
+    Account map(AccountDto accountDTO);
 }

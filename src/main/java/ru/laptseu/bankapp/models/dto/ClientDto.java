@@ -9,7 +9,7 @@ import ru.laptseu.bankapp.models.EntityWithIntegerId;
 @Setter
 
 @NoArgsConstructor
-public class ClientDto extends EntityWithIntegerId {
+public class ClientDto extends EntityDto {
     private String name;
     private boolean isNaturalPerson;
 }

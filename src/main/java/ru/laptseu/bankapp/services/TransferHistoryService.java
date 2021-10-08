@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.laptseu.bankapp.models.Account;
 import ru.laptseu.bankapp.models.TransferHistory;
+import ru.laptseu.bankapp.repositories.RepositoryFactory;
 import ru.laptseu.bankapp.repositories.TransferHistoryRepository;
 
 import java.util.Calendar;
@@ -15,13 +16,14 @@ import java.util.Calendar;
 public class TransferHistoryService implements IMaintainableService<TransferHistory> {
     private final TransferHistoryRepository dao;
 
+
     @Override
     public void update(TransferHistory obj) {
         throw new UnsupportedOperationException();
     }
 
     public int save(Account sourceAcc, Account targetAcc, double amount) {
-        return save(createHistory(sourceAcc, targetAcc, amount)).getId();
+        return ((TransferHistory) save(createHistory(sourceAcc, targetAcc, amount))).getId();
     }
 
     public TransferHistory createHistory(Account sourceAcc, Account targetAcc, double amount) {

@@ -10,7 +10,7 @@ import ru.laptseu.bankapp.models.EntityWithIntegerId;
 @Setter
 
 @NoArgsConstructor
-public class BankDto extends EntityWithIntegerId {
+public class BankDto extends EntityDto{
     private String name;
     private double transferFeeInPercent;
     private double transferFeeInPercentForNotNaturalPersons;
