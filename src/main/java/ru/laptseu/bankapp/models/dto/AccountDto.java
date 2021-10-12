@@ -3,12 +3,11 @@ package ru.laptseu.bankapp.models.dto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import ru.laptseu.bankapp.models.EntityWithIntegerId;
 
 @Getter
 @Setter
-@NoArgsConstructor
-public class AccountDto extends EntityDto  {
+public class AccountDto extends EntityDto {
+    private int id;
     private String bankName;
     private int bankId;
     private String clientName;

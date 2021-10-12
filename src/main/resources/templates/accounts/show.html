@@ -12,7 +12,6 @@
             <table class="w3-table w3-striped w3-bordered w3-white w3-card-4 w3-hoverable w3-centered">
                 <thead>
                 <tr style="background-color: #817a79">
-                    <th>id</th>
                     <th>number</th>
                     <th>ammount</th>
                     <th>currency</th>
@@ -21,7 +20,6 @@
                 </tr>
                 </thead>
                 <tr th:each="t : ${accounts}">
-                    <td th:text="${t.getId()}">-</td>
                     <td th:text="${t.getAccNumber()}">-</td>
                     <td th:text="${t.getAmount()}">-</td>
                     <td th:text="${t.getCurrency()}">-</td>

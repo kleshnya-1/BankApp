@@ -26,7 +26,7 @@ public class AccountController {
 
     @GetMapping("/")
     public String openAllAccounts(Model model) {
-        List accountDtos = accountService.readDto();
+        List<AccountDto> accountDtos = accountService.readDto();
         model.addAttribute("accounts", accountDtos);
         return "accounts/show";
     }
@@ -57,6 +57,10 @@ public class AccountController {
     @GetMapping("/{id}/edit")
     public String edit(Model model, @PathVariable("id") int id) {
         model.addAttribute("account", accountService.readDto(id));
+        List<BankDto> bankDto = bankService.readDto();
+        List<ClientDto> clientDtos = clientService.readDto();
+        model.addAttribute("bankModel", bankDto);
+        model.addAttribute("clientModel", clientDtos);
         return "accounts/edit";
     }
 

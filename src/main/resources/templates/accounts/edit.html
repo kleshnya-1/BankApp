@@ -9,7 +9,7 @@
 <header th:insert="blocks/header :: header" ></header>
 <h1>edit account</h1>
 
-<form th:method="PATCH" th:action="@{/clients/{id}(id=${client.id})}" th:object="${client}">
+<form th:method="PATCH" th:action="@{/accounts/{id}(id=${account.id})}" th:object="${account}">
     <p>account number: <input type="text" th:field="*{accNumber}"/></p>
     <b>amount </b> <input type="number" th:field="*{amount}" id="amount"/>
     <br>

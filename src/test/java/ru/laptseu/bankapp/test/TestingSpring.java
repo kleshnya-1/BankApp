@@ -55,21 +55,21 @@ public class TestingSpring {
         bankService.save(bank);
         bankService.save(bank1);
 
-        BankRateList bankRateList = new BankRateList();
-        bankRateList.setBankId(bank.getId());
+        CurrencyRateBankList currencyRateBankList = new CurrencyRateBankList();
+        currencyRateBankList.setBankId(bank.getId());
         Map<Currency, Double> currencyDoubleMap = new HashMap<>();
         currencyDoubleMap.put(Currency.USD, 50d);
         currencyDoubleMap.put(Currency.EUR, 100d);
-        bankRateList.setCurrenciesAndRates(currencyDoubleMap);
-        currencyRateService.save(bankRateList);
+        currencyRateBankList.setCurrenciesAndRates(currencyDoubleMap);
+        currencyRateService.save(currencyRateBankList);
 
         Map<Currency, Double> currencyDoubleMap1 = new HashMap<>();
         currencyDoubleMap1.put(Currency.USD, 200d);
         currencyDoubleMap1.put(Currency.EUR, 250d);
-        BankRateList bankRateList1 = new BankRateList();
-        bankRateList1.setBankId(bank1.getId());
-        bankRateList1.setCurrenciesAndRates(currencyDoubleMap1);
-        currencyRateService.save(bankRateList1);
+        CurrencyRateBankList currencyRateBankList1 = new CurrencyRateBankList();
+        currencyRateBankList1.setBankId(bank1.getId());
+        currencyRateBankList1.setCurrenciesAndRates(currencyDoubleMap1);
+        currencyRateService.save(currencyRateBankList1);
 
         bankService.update(bank);
         bankService.update(bank1);

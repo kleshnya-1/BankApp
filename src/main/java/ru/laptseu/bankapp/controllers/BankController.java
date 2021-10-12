@@ -5,17 +5,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.laptseu.bankapp.models.Bank;
-import ru.laptseu.bankapp.models.BankRateList;
-import ru.laptseu.bankapp.models.Currency;
-import ru.laptseu.bankapp.models.Entity;
 import ru.laptseu.bankapp.models.dto.BankDto;
-import ru.laptseu.bankapp.models.dto.EntityDto;
-import ru.laptseu.bankapp.models.mappers.BankMapper;
 import ru.laptseu.bankapp.services.BankService;
 import ru.laptseu.bankapp.services.CurrencyRateService;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 
@@ -28,18 +21,14 @@ public class BankController {
 
     @GetMapping("/")
     public String openAllBanks(Model model) {
-        List<BankDto> bankDtos = new ArrayList<>();
-        for (Entity b : bankService.read()) {
-            EntityDto map = BankMapper.INSTANCE.map(b);
-            bankDtos.add((BankDto) map);
-        }
+        List<BankDto> bankDtos = bankService.readDto();
         model.addAttribute("banks", bankDtos);
         return "banks/show";
     }
 
     @PostMapping("/")
     public String submit(@ModelAttribute BankDto newb) {
-        Bank newBank = (Bank) bankService.fromDto(newb);
+        Bank newBank = bankService.fromDto(newb);
         bankService.save(newBank);
         return "redirect:/banks/";
     }
@@ -61,18 +50,6 @@ public class BankController {
         model.addAttribute("bank", bankService.readDto(id));
         return "banks/edit";
     }
-
-//    @GetMapping("/{id}/rates")
-//    public String rates(Model model, @PathVariable("id") int id) {
-//        BankRateList bankRateList = currencyRateService.read(id);
-//        model.addAttribute("bank", bankService.readDto(id));
-//        try {
-//            model.addAttribute("ratesList", bankRateList.getCurrenciesAndRates());
-//        } catch (NullPointerException e) {
-//            model.addAttribute("ratesList", new HashMap());
-//        }
-//        return "rates";
-//    }
 
     @PatchMapping("/{id}")
     public String update(@ModelAttribute("bank") BankDto bankDto) {

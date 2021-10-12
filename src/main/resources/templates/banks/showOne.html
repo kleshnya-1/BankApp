@@ -13,14 +13,12 @@
             <table class="w3-table w3-striped w3-bordered w3-white w3-card-4 w3-hoverable w3-centered">
                 <thead>
                 <tr style="background-color: #817a79">
-                    <th>id</th>
                     <th>name</th>
                     <th>% for persons</th>
                     <th>% for org</th>
                 </tr>
                 </thead>
                 <tr th:each="t : ${bank}">
-                    <td th:text="${t.getId()}">-</td>
                     <td th:text="${t.getName()}">-</td>
                     <td th:text="${t.getTransferFeeInPercent()}">-</td>
                     <td th:text="${t.getTransferFeeInPercentForNotNaturalPersons()}">-</td>
@@ -28,7 +26,7 @@
             </table>
 
             <a th:href="@{/banks/{id}/edit(id=${bank.id})}">Edit</a>
-            <a th:href="@{/banks/{id}/rates(id=${bank.id})}">Rates</a>
+            <a th:href="@{/rates/{id}/(id=${bank.id})}">Rates</a>
 
             <form th:method="DELETE" th:action="@{http://localhost:8080/banks/{id}(id=${bank.id})}">
                 <input type="submit" value="Delete"/>

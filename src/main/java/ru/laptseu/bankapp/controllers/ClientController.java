@@ -4,9 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import ru.laptseu.bankapp.models.Client;
 import ru.laptseu.bankapp.models.dto.ClientDto;
-import ru.laptseu.bankapp.models.mappers.ClientMapper;
 import ru.laptseu.bankapp.services.ClientService;
 
 

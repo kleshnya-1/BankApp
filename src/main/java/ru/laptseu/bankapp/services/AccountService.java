@@ -3,42 +3,43 @@ package ru.laptseu.bankapp.services;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.laptseu.bankapp.models.Account;
 import ru.laptseu.bankapp.models.dto.AccountDto;
-import ru.laptseu.bankapp.models.mappers.MapperFactory;
-import ru.laptseu.bankapp.models.mappers.MapperInterface;
-import ru.laptseu.bankapp.repositories.RepositoryFactory;
+import ru.laptseu.bankapp.models.mappers.AccountMapper;
 import ru.laptseu.bankapp.utilities.CommissionCalculator;
 import ru.laptseu.bankapp.utilities.CurrencyConverter;
 
-import java.util.Optional;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Log4j2
 @Service
 @Getter
 @RequiredArgsConstructor
-public class AccountService implements IMaintainableService {
-    private final Account entity;
+public class AccountService extends AbstractService {
+    private final Class resourceEntityClass = Account.class;
     private final CommissionCalculator commissionCalculator;
     private final TransferHistoryService transferHistoryService;
     private final CurrencyConverter currencyConverter;
-    private final CurrencyRateService currencyRateService;
     private final BankService bankService;
     private final ClientService clientService;
 
-    private final RepositoryFactory repositoryFactory;
-    private final MapperFactory mapperFactory;
-    private final ServiceFactory serviceFactory;
+    public List<AccountDto> readDto() {
+        List<Account> accountList = (List<Account>) read();
+        return accountList.stream().map(entity -> AccountMapper.INSTANCE.map(entity)).collect(Collectors.toList());
+    }
 
-   // private final CrudRepository dao = repositoryFactory.get(entity.getClass());
-    //private final MapperInterface mapper = mapperFactory.get(entity.getClass());
+    public AccountDto readDto(int id) {
+        return AccountMapper.INSTANCE.map(read(id));
+    }
 
-
-    public Optional<Account> read(String num) {
-        return getDao().findById(num);
+    public Account fromDto(AccountDto newb) {
+        Account newAccount = AccountMapper.INSTANCE.map(newb);
+        newAccount.setClient(clientService.read(Integer.valueOf(newb.getClientId())));
+        newAccount.setBank(bankService.read(Integer.valueOf(newb.getBankId())));
+        return newAccount;
     }
 
     public int transferAmount(Account sourceAcc, Account targetAcc, double amount) {
@@ -60,18 +61,10 @@ public class AccountService implements IMaintainableService {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    //must be overridable. я хотел сделать приватным
     public void saveAccountsThroughTransaction(Account sourceAcc, Account targetAcc) {
-        getDao().save(sourceAcc);
-        getDao().save(targetAcc);
+        getRepository().save(sourceAcc);
+        getRepository().save(targetAcc);
         log.debug("Transaction from " + sourceAcc.getAccNumber() + " to " + targetAcc.getAccNumber() + " finished");
-    }
-
-    public Account fromDto(AccountDto newb) {
-        Account newAccount = (Account) getMapper().map(newb);
-        newAccount.setClient(clientService.read(Integer.valueOf(newb.getClientId())));
-        newAccount.setBank(bankService.read(Integer.valueOf(newb.getBankId())));
-        return newAccount;
     }
 }
 

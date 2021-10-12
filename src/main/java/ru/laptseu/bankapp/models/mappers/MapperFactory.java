@@ -2,10 +2,11 @@ package ru.laptseu.bankapp.models.mappers;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationContext;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Component;
-import ru.laptseu.bankapp.models.*;
-import ru.laptseu.bankapp.repositories.*;
+import ru.laptseu.bankapp.models.Account;
+import ru.laptseu.bankapp.models.Bank;
+import ru.laptseu.bankapp.models.Client;
+import ru.laptseu.bankapp.models.Entity;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,6 +14,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 @Component
 public class MapperFactory {
+    //it doesn't work. autoconfigured beans not loaded by spring context
     private static final Map<Class<? extends Entity>, Class<? extends MapperInterface>> FACTORY_MAP = new HashMap<>();
 
     static {

@@ -2,7 +2,6 @@ package ru.laptseu.bankapp.utilities;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import ru.laptseu.bankapp.models.Bank;
 import ru.laptseu.bankapp.models.Currency;
 import ru.laptseu.bankapp.services.CurrencyRateService;
 
