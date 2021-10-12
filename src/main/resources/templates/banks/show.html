@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Banks</title>
+</head>
+<body>
+<header th:insert="blocks/header :: header" ></header>
+<div class="w3-row">
+    <div class="w3-container w3-twothird">
+        <div class="w3-responsive w3-round-large w3-centered">
+            <table class="w3-table w3-striped w3-bordered w3-white w3-card-4 w3-hoverable w3-centered">
+                <thead>
+                <tr style="background-color: #817a79">
+                    <th>name</th>
+                    <th>% for persons</th>
+                    <th>% for org</th>
+                    <th>in</th>
+                </tr>
+                </thead>
+                <tr th:each="t : ${banks}">
+                    <td th:text="${t.getName()}">-</td>
+                    <td th:text="${t.getTransferFeeInPercent()}">-</td>
+                    <td th:text="${t.getTransferFeeInPercentForNotNaturalPersons()}">-</td>
+                    <td>
+                        <a th:href="@{/banks/{id}(id=${t.id})}">Edit</a>
+                    </td>
+                </tr>
+            </table>
+            <a th:href="@{/banks/new_bank}">New Bank</a>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

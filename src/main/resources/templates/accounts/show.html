@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>accounts</title>
+</head>
+<body>
+<header th:insert="blocks/header :: header" ></header>
+<div class="w3-row">
+    <div class="w3-container w3-twothird">
+        <div class="w3-responsive w3-round-large w3-centered">
+            <table class="w3-table w3-striped w3-bordered w3-white w3-card-4 w3-hoverable w3-centered">
+                <thead>
+                <tr style="background-color: #817a79">
+                    <th>number</th>
+                    <th>ammount</th>
+                    <th>currency</th>
+                    <th>bank</th>
+                    <th>client</th>
+                </tr>
+                </thead>
+                <tr th:each="t : ${accounts}">
+                    <td th:text="${t.getAccNumber()}">-</td>
+                    <td th:text="${t.getAmount()}">-</td>
+                    <td th:text="${t.getCurrency()}">-</td>
+                    <td th:text="${t.getBankName()}">-</td>
+                    <td th:text="${t.getClientName()}">-</td>
+                     <td>
+                        <a th:href="@{/accounts/{id}(id=${t.id})}">Open</a>
+                    </td>
+
+                </tr>
+            </table>
+            <a th:href="@{/accounts/new_account}">New account</a>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

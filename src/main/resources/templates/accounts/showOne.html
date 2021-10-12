@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>accounts</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+<header th:insert="blocks/header :: header" ></header>
+<div class="w3-row">
+    <div class="w3-container w3-twothird">
+        <div class="w3-responsive w3-round-large w3-centered">
+            <table class="w3-table w3-striped w3-bordered w3-white w3-card-4 w3-hoverable w3-centered">
+                <thead>
+                <tr style="background-color: #817a79">
+                    <th>number</th>
+                    <th>ammount</th>
+                    <th>currency</th>
+                    <th>bank</th>
+                    <th>client</th>
+                </tr>
+                </thead>
+                <tr th:each="t : ${account}">
+                    <td th:text="${t.getAccNumber()}">-</td>
+                    <td th:text="${t.getAmount()}">-</td>
+                    <td th:text="${t.getCurrency()}">-</td>
+                    <td th:text="${t.getBankName()}">-</td>
+                    <td th:text="${t.getClientName()}">-</td>
+                </tr>
+            </table>
+
+            <a th:href="@{/accounts/{id}/edit(id=${account.id})}">Edit</a>
+
+            <form th:method="DELETE" th:action="@{http://localhost:8080/accounts/{id}(id=${account.id})}">
+                <input type="submit" value="Delete"/>
+
+
+        </div>
+    </div>
+</div>
+
+
+
+</body>
+</html>
