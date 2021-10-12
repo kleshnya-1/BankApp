@@ -9,9 +9,6 @@ import ru.laptseu.bankapp.models.dto.ClientDto;
 import ru.laptseu.bankapp.models.mappers.ClientMapper;
 import ru.laptseu.bankapp.services.ClientService;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 
 @Controller
 @RequestMapping("/clients")
@@ -21,22 +18,19 @@ public class ClientController {
 
     @GetMapping("/")
     public String openAllClients(Model model) {
-        List<ClientDto> clientDtos = clientService.read().stream().map(b -> ClientMapper.INSTANCE.map(b)).collect(Collectors.toList());
-        model.addAttribute("clients", clientDtos);
+        model.addAttribute("clients", clientService.readDto());
         return "clients/show";
     }
 
     @PostMapping("/")
     public String submit(@ModelAttribute ClientDto newb) {
-        Client newClient = ClientMapper.INSTANCE.map(newb);
-        clientService.save(newClient);
+        clientService.save(clientService.fromDto(newb));
         return "redirect:/clients/";
     }
 
     @GetMapping("/{id}")
     public String openClient(@PathVariable Integer id, Model model) {
-        Client b = clientService.read(id);
-        ClientDto dt = ClientMapper.INSTANCE.map(b);
+        ClientDto dt = clientService.readDto(id);
         model.addAttribute("client", dt);
         return "clients/showOne";
     }
@@ -48,13 +42,13 @@ public class ClientController {
 
     @GetMapping("/{id}/edit")
     public String edit(Model model, @PathVariable("id") int id) {
-        model.addAttribute("client", clientService.read(id));
+        model.addAttribute("client", clientService.readDto(id));
         return "clients/edit";
     }
 
     @PatchMapping("/{id}")
     public String update(@ModelAttribute("client") ClientDto clientDto) {
-        clientService.update(ClientMapper.INSTANCE.map(clientDto));
+        clientService.update(clientService.fromDto(clientDto));
         return "redirect:/clients/";
     }
 

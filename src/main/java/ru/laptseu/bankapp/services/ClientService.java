@@ -5,12 +5,17 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.laptseu.bankapp.models.Bank;
 import ru.laptseu.bankapp.models.Client;
+import ru.laptseu.bankapp.models.mappers.MapperFactory;
 import ru.laptseu.bankapp.repositories.ClientRepository;
+import ru.laptseu.bankapp.repositories.RepositoryFactory;
 
 @Service
 @Getter
 @RequiredArgsConstructor
 public class ClientService implements IMaintainableService {
-    private final ClientRepository dao;
-    private final Client entity;
+      private final Client entity;
+
+    private final RepositoryFactory repositoryFactory;
+    private final MapperFactory mapperFactory;
+    private final ServiceFactory serviceFactory;
 }

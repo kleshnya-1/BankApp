@@ -8,10 +8,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.laptseu.bankapp.models.Account;
 import ru.laptseu.bankapp.models.dto.AccountDto;
-import ru.laptseu.bankapp.models.mappers.AccountMapper;
 import ru.laptseu.bankapp.models.mappers.MapperFactory;
 import ru.laptseu.bankapp.models.mappers.MapperInterface;
-import ru.laptseu.bankapp.repositories.AccountRepository;
 import ru.laptseu.bankapp.repositories.RepositoryFactory;
 import ru.laptseu.bankapp.utilities.CommissionCalculator;
 import ru.laptseu.bankapp.utilities.CurrencyConverter;
@@ -23,21 +21,24 @@ import java.util.Optional;
 @Getter
 @RequiredArgsConstructor
 public class AccountService implements IMaintainableService {
-    private final CommissionCalculator commissionCalculator;
     private final Account entity;
-    private final RepositoryFactory factory;
+    private final CommissionCalculator commissionCalculator;
     private final TransferHistoryService transferHistoryService;
     private final CurrencyConverter currencyConverter;
     private final CurrencyRateService currencyRateService;
     private final BankService bankService;
     private final ClientService clientService;
+
+    private final RepositoryFactory repositoryFactory;
     private final MapperFactory mapperFactory;
-    private final CrudRepository dao = factory.get(entity.getClass());
-    private final MapperInterface mapper = mapperFactory.get(entity.getClass());
+    private final ServiceFactory serviceFactory;
+
+   // private final CrudRepository dao = repositoryFactory.get(entity.getClass());
+    //private final MapperInterface mapper = mapperFactory.get(entity.getClass());
 
 
     public Optional<Account> read(String num) {
-        return dao.findById(num);
+        return getDao().findById(num);
     }
 
     public int transferAmount(Account sourceAcc, Account targetAcc, double amount) {
@@ -61,13 +62,13 @@ public class AccountService implements IMaintainableService {
     @Transactional(rollbackFor = Exception.class)
     //must be overridable. я хотел сделать приватным
     public void saveAccountsThroughTransaction(Account sourceAcc, Account targetAcc) {
-        dao.save(sourceAcc);
-        dao.save(targetAcc);
+        getDao().save(sourceAcc);
+        getDao().save(targetAcc);
         log.debug("Transaction from " + sourceAcc.getAccNumber() + " to " + targetAcc.getAccNumber() + " finished");
     }
 
-    public Account createFromDto(AccountDto newb) {
-        Account newAccount = getMapper.map(newb);
+    public Account fromDto(AccountDto newb) {
+        Account newAccount = (Account) getMapper().map(newb);
         newAccount.setClient(clientService.read(Integer.valueOf(newb.getClientId())));
         newAccount.setBank(bankService.read(Integer.valueOf(newb.getBankId())));
         return newAccount;

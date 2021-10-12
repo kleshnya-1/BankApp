@@ -1,4 +1,4 @@
 package ru.laptseu.bankapp.models;
 
-public abstract class Entity {
+public class Entity {
 }
